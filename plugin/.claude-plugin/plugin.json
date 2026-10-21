@@ -1,6 +1,6 @@
 {
   "name": "spell-report",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Write, check, sign and send test reports on agent skills, plugins and MCP servers.",
   "author": { "name": "VibeRPGSimulator" },
   "skills": "./skills"

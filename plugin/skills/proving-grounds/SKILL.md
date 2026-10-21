@@ -1,7 +1,7 @@
 ---
 name: proving-grounds
 description: Run the library's fixed quests with your own harness and spell loadout, compare reliability and effectiveness against an Unarmed control, then include self-measured results in a spell report.
-compatibility: Node 22 or newer. Codex or Claude Code runs sealed. OMP runs warded on macOS; elsewhere it requires explicit acceptance of an open arena. Every run spends the tester's own plan allowance.
+compatibility: Node 22 or newer, on macOS (grading needs its Seatbelt sandbox). Codex or Claude Code runs sealed. OMP runs warded and needs explicit acceptance, because its agent can read OMP's sign-in files. Every run spends the tester's own plan allowance.
 ---
 
 # Proving Grounds
@@ -26,7 +26,7 @@ Commands below go after that same `node` invocation. Read the sibling [spell-rep
 
    Use `trial --help` for supported flags. A workflow or combo takes the place of `--spell`. `--control` interleaves Unarmed runs with no skills under the same setup. An invoked cast names the equipped skills in the prompt; an ambient cast leaves the choice to the agent. Results and fetched spells stay under `VIBERPG_DATA_DIR`, or `~/.viberpg` by default.
 
-   The arena is the sandbox. Codex and Claude Code run sealed: agent commands have no network, the home folder is hidden and writes stay in the arena. OMP runs warded on macOS: the same protections without the network block. OMP is refused elsewhere unless the tester explicitly accepts running without a sandbox and passes `--allow-open-arena`. Do not add that flag silently. Read safety-screen findings before asking whether to use `--allow-hazards`.
+   The arena is the sandbox. Codex and Claude Code run sealed: agent commands have no network, the home folder is hidden and writes stay in the arena; in Claude Code, hooks and skills' inline shell commands are turned off. OMP runs warded: the home folder is hidden except OMP's own folders, so its agent can read OMP's sign-in files and reach the network. An OMP trial therefore needs `--allow-open-arena`; ask the tester first and never add that flag silently. Trials refuse to start outside macOS, because grading runs the agent's code and needs the Seatbelt sandbox. Read safety-screen findings before asking whether to use `--allow-hazards`.
 4. Run `trials` to read aggregate results. These are self-measured, not independently verified. Compare the same quest version, hero/version, weapon, charge, arena and machine; a different setup is not a control. Published commands fetch current upstream commits, so check recorded versions and commits before comparing an older result.
 
 ## Read results

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/plugin/cli.ts; spell-report 0.3.0. Rebuild with bun run build:plugin.
+// Generated from src/plugin/cli.ts; spell-report 0.3.1. Rebuild with bun run build:plugin.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -18,7 +18,7 @@ var __export = (target, all) => {
 // src/plugin/cli.ts
 import { spawn as spawn3 } from "node:child_process";
 import { constants as constants3 } from "node:fs";
-import { access, lstat as lstat3, mkdir as mkdir6, open as open2, readFile as readFile7, writeFile as writeFile5 } from "node:fs/promises";
+import { access, lstat as lstat4, mkdir as mkdir6, open as open2, readFile as readFile7, writeFile as writeFile5 } from "node:fs/promises";
 import { homedir as homedir4 } from "node:os";
 import { basename as basename3, dirname as dirname5, extname, join as join9, resolve as resolve4, sep as sep3 } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19450,6 +19450,7 @@ var FOES = ["bug-slime", "flaky-wisp", "fog-wraith", "tangle-hydra", "blank-mimi
 var EFFORTS = ["none", "low", "medium", "high", "xhigh", "max"];
 var WEAPONS = ["greatsword", "longsword", "dagger", "warhammer", "staff"];
 var LOADOUT_LIMITS = { perPhase: 3, spells: 12, title: 60, task: 90, notes: 300, author: 32 };
+var SINGLE_LINE = /^[^\r\n\u0085\u2028\u2029]*$/;
 
 // src/shared/content.ts
 var AGENTS = ["claude-code", "codex"];
@@ -19542,8 +19543,8 @@ var ArmorySchema = exports_external.object({
 });
 var LoadoutSpellSchema = exports_external.object({ spell: SlugSchema, phase: exports_external.enum(PHASES) });
 var LoadoutBuildSchema = exports_external.object({
-  title: exports_external.string().trim().min(3).max(LOADOUT_LIMITS.title),
-  task: exports_external.string().trim().min(3).max(LOADOUT_LIMITS.task),
+  title: exports_external.string().trim().min(3).max(LOADOUT_LIMITS.title).regex(SINGLE_LINE, "Keep this to a single line"),
+  task: exports_external.string().trim().min(3).max(LOADOUT_LIMITS.task).regex(SINGLE_LINE, "Keep this to a single line"),
   school: SlugSchema,
   harness: exports_external.enum(AGENTS),
   model: ModelIdSchema,
@@ -20946,12 +20947,21 @@ import { parseArgs } from "node:util";
 // src/trials/arena.ts
 import { createHash as createHash2 } from "node:crypto";
 import { constants as constants2, existsSync } from "node:fs";
-import { chmod, copyFile, cp, mkdir, mkdtemp, readdir as readdir2, realpath, rename, rm, stat, writeFile } from "node:fs/promises";
+import { chmod, copyFile, cp, lstat as lstat2, mkdir, mkdtemp, readdir as readdir2, realpath, rename, rm, stat, writeFile } from "node:fs/promises";
 import { homedir as homedir2, tmpdir } from "node:os";
 import { dirname as dirname2, join as join2 } from "node:path";
 var WARD_AVAILABLE = process.platform === "darwin" && existsSync("/usr/bin/sandbox-exec");
+async function privateDir(path) {
+  await mkdir(path, { recursive: true, mode: 448 });
+  const info = await lstat2(path);
+  if (!info.isDirectory() || process.getuid && info.uid !== process.getuid())
+    throw new Error(`${path} is not a folder you own. Remove it and run the trial again.`);
+  if ((info.mode & 63) !== 0)
+    await chmod(path, 448);
+  return path;
+}
 async function openArena(quest, base = join2(tmpdir(), "viberpg-arena")) {
-  await mkdir(base, { recursive: true });
+  await privateDir(base);
   const root = await realpath(await mkdtemp(join2(base, `${quest.id}-`)));
   const arena = { root, workspace: join2(root, "ws"), home: join2(root, "home"), scratch: join2(root, "grade"), tmp: join2(root, "tmp") };
   for (const dir of [arena.home, arena.scratch, arena.tmp])
@@ -20983,10 +20993,8 @@ function wardProfile(arenaRoot, rules, home = homedir2()) {
 }
 async function ward(arena, name, rules) {
   if (!WARD_AVAILABLE)
-    return [];
-  const file2 = join2(arena.root, `${name}.sb`);
-  await writeFile(file2, wardProfile(arena.root, rules));
-  return ["/usr/bin/sandbox-exec", "-f", file2];
+    throw new Error(`The ${name} step needs a sandbox, and macOS Seatbelt is not available on this system.`);
+  return ["/usr/bin/sandbox-exec", "-p", wardProfile(rules.root ?? arena.root, rules)];
 }
 async function commandReadPaths(command) {
   const home = homedir2();
@@ -21002,6 +21010,8 @@ async function commandReadPaths(command) {
 async function cloneOutOfHome(commands, cacheRoot = join2(tmpdir(), "viberpg-arena", ".bin")) {
   const home = homedir2();
   const folders = [];
+  await privateDir(dirname2(cacheRoot));
+  await privateDir(cacheRoot);
   for (const command of commands) {
     const dir = (process.env.PATH ?? "").split(":").find((entry) => entry && existsSync(join2(entry, command)));
     if (!dir)
@@ -21343,7 +21353,9 @@ var claudeCode = {
         autoAllowBashIfSandboxed: true,
         filesystem: { denyRead: [realHome], allowRead: [arena.workspace] }
       },
-      permissions: { deny: ["WebFetch", "WebSearch", `Read(/${realHome}/**)`] }
+      permissions: { deny: ["WebFetch", "WebSearch", `Read(/${realHome}/**)`] },
+      disableAllHooks: true,
+      disableSkillShellExecution: true
     };
     const argv = [
       "claude",
@@ -21583,10 +21595,12 @@ import { join as join6 } from "node:path";
 
 // src/trials/checks.ts
 import { spawn as spawn2 } from "node:child_process";
-import { cp as cp3, lstat as lstat2, mkdir as mkdir4, mkdtemp as mkdtemp2, readdir as readdir4, readFile as readFile4, rm as rm2 } from "node:fs/promises";
+import { cp as cp3, lstat as lstat3, mkdir as mkdir4, mkdtemp as mkdtemp2, readdir as readdir4, readFile as readFile4, rm as rm2 } from "node:fs/promises";
 import { basename as basename2, join as join5 } from "node:path";
+var OUTPUT_LIMIT = 1e6;
 function nodeRunner(prefix = []) {
-  return (args, { cwd, timeoutMs }) => new Promise((resolve3) => {
+  return (args, { cwd, timeoutMs }) => {
+    const { promise: promise2, resolve: resolve3 } = Promise.withResolvers();
     const [command, ...commandArgs] = [...prefix, "node", ...args];
     const child = spawn2(command, commandArgs, {
       cwd,
@@ -21594,15 +21608,8 @@ function nodeRunner(prefix = []) {
       stdio: ["ignore", "pipe", "pipe"],
       env: { PATH: process.env.PATH ?? "", HOME: cwd, TMPDIR: cwd, LANG: "C.UTF-8" }
     });
-    let stdout = "", stderr = "", timedOut = false;
-    child.stdout.on("data", (chunk) => {
-      stdout += chunk.toString();
-    });
-    child.stderr.on("data", (chunk) => {
-      stderr += chunk.toString();
-    });
-    const timer = setTimeout(() => {
-      timedOut = true;
+    let stdout = "", stderr = "", timedOut = false, overflowed = false;
+    const stop = () => {
       if (child.pid && process.platform !== "win32") {
         try {
           process.kill(-child.pid, "SIGKILL");
@@ -21611,6 +21618,26 @@ function nodeRunner(prefix = []) {
         }
       } else
         child.kill("SIGKILL");
+    };
+    const keep = (text, chunk) => {
+      if (overflowed)
+        return text;
+      if (text.length + chunk.length <= OUTPUT_LIMIT)
+        return text + chunk.toString();
+      overflowed = true;
+      stop();
+      return `${text}
+[output limit reached; the check was stopped]`;
+    };
+    child.stdout.on("data", (chunk) => {
+      stdout = keep(stdout, chunk);
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr = keep(stderr, chunk);
+    });
+    const timer = setTimeout(() => {
+      timedOut = true;
+      stop();
     }, timeoutMs);
     child.once("error", () => {
       clearTimeout(timer);
@@ -21618,14 +21645,15 @@ function nodeRunner(prefix = []) {
     });
     child.once("close", (code) => {
       clearTimeout(timer);
-      resolve3({ code, stdout, stderr, timedOut });
+      resolve3({ code: overflowed ? null : code, stdout, stderr, timedOut });
     });
-  });
+    return promise2;
+  };
 }
 var runNode = nodeRunner();
 var OMIT = new Set([".git", "node_modules", ".agents", ".claude", ".codex", ".omp"]);
 async function copyWorkspace(source, dest) {
-  await cp3(source, dest, { recursive: true, filter: async (path) => !OMIT.has(basename2(path)) && !(await lstat2(path)).isSymbolicLink() });
+  await cp3(source, dest, { recursive: true, filter: async (path) => !OMIT.has(basename2(path)) && !(await lstat3(path)).isSymbolicLink() });
 }
 async function testFiles(root, dir) {
   const folder = join5(root, dir);
@@ -21880,7 +21908,7 @@ async function runTrial(plan) {
   let clearedAtPrompt = null;
   let durationMs = 0;
   try {
-    const grader = nodeRunner(await ward(arena, "grade", { read: await commandReadPaths("node"), write: [], network: false }));
+    const grader = nodeRunner(await ward(arena, "grade", { read: await commandReadPaths("node"), write: [], network: false, root: arena.scratch }));
     session = await hero.start({ arena, spells, caster: plan.caster, focus: plan.focus, timeLimitMs: plan.quest.timeLimitSec * 1000 });
     for (let n = 1;n <= plan.quest.maxPrompts; n++) {
       const invocation = plan.cast === "invoked" && spells.length > 0 ? `
@@ -22192,7 +22220,7 @@ var BATCH_HELP = `  --spell <slug>       Equip one library spell (repeatable; ea
   --runs <n>           Runs per quest and loadout (default: 3)
   --keep               Keep arenas for inspection
   --allow-hazards      Run spells the safety screen flagged (after reading the findings)
-  --allow-open-arena   Run a hero that has no sandbox on this system`;
+  --allow-open-arena   Accept an OMP trial: its agent can read OMP's own sign-in files and reach the network`;
 function parseBatchArgs(args) {
   const { values } = parseArgs({
     args,
@@ -22264,8 +22292,10 @@ function runLine(run, quest) {
 }
 async function runBatch(request, ctx) {
   const hero = HEROES[request.hero];
-  if (hero.containment === "open" && !request.allowOpenArena)
-    throw new Error(`${HARNESS_NAMES[request.hero]} has no sandbox on this system. Use a sealed hero, or pass --allow-open-arena to accept running unsandboxed.`);
+  if (!WARD_AVAILABLE)
+    throw new Error("Trials need a sandbox to grade the agent's code. For now that means macOS (Seatbelt); this system has none, so trials cannot run here.");
+  if (request.hero === "omp" && !request.allowOpenArena)
+    throw new Error("In an OMP trial the agent can read OMP's own sign-in files and reach the network. Trial only spells you have reviewed, and pass --allow-open-arena to accept that.");
   const skill = (slug) => {
     const found = ctx.catalog.skills.find((item) => item.slug === slug);
     if (!found)
@@ -22350,7 +22380,7 @@ function doctorLines() {
   };
   const lines = [
     `Node: ${said(["node", "--version"]).text.trim() || "not found"} (quests and grading need Node 20 or newer)`,
-    `Ward (macOS Seatbelt): ${WARD_AVAILABLE ? "available" : "not available; OMP arenas would run open"}`
+    `Ward (macOS Seatbelt): ${WARD_AVAILABLE ? "available" : "not available, so trials cannot run on this system"}`
   ];
   const commands = { codex: "codex", "claude-code": "claude", omp: "omp" };
   for (const id of USAGE_AGENTS) {
@@ -22466,7 +22496,7 @@ ${problems.join(`
 
 // src/plugin/cli.ts
 var DEFAULT_ENDPOINT = "https://vibe-rpg-simulator.vercel.app/api/submit";
-var VERSION = "0.3.0";
+var VERSION = "0.3.1";
 var PARSERS = {
   codex: parseCodexFile,
   "claude-code": parseClaudeFile,
@@ -22500,7 +22530,7 @@ async function readLocal(path, limit) {
   if (resolve4(path).split(sep3).some((part) => SENSITIVE_NAME.test(part) || part.startsWith(".env") || part === ".ssh")) {
     throw new Error("Refusing to read a sensitive path.");
   }
-  if ((await lstat3(path)).isSymbolicLink())
+  if ((await lstat4(path)).isSymbolicLink())
     throw new Error("Refusing to read a symbolic link.");
   const file2 = await open2(path, constants3.O_RDONLY | constants3.O_NOFOLLOW);
   try {
@@ -22648,7 +22678,7 @@ async function attach(path, source, alt, out) {
   if (resolve4(target) !== resolve4(source)) {
     if (previous) {
       try {
-        if ((await lstat3(target)).isSymbolicLink())
+        if ((await lstat4(target)).isSymbolicLink())
           throw new Error("Refusing to replace a symbolic link.");
       } catch (error62) {
         if (!(error62 instanceof Error && ("code" in error62) && error62.code === "ENOENT"))
@@ -22800,7 +22830,7 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
         if (!dir || positionals.length !== 1)
           throw new Error(HELP.new);
         try {
-          await lstat3(join9(dir, "spell-report.md"));
+          await lstat4(join9(dir, "spell-report.md"));
           throw new Error("spell-report.md already exists; choose a new directory.");
         } catch (error62) {
           if (!(error62 instanceof Error && ("code" in error62) && error62.code === "ENOENT"))
