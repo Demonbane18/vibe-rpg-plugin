@@ -21119,6 +21119,7 @@ async function summaries(root, agent, parse5) {
 var skillNames = (files) => [...new Set(files.flatMap((file2) => file2.session?.spells ?? []).map((spell) => spell.id).filter((id) => id.startsWith("skill:")).map((id) => id.slice(6).split(":").pop()))].sort();
 var asFocus = (value, fallback) => typeof value === "string" && FOCUS_LEVELS.includes(value) ? value : fallback;
 var baseEnv = (home, tmp) => ({ PATH: process.env.PATH ?? "/usr/bin:/bin", HOME: home, TMPDIR: tmp, LANG: "en_US.UTF-8", USER: process.env.USER ?? "quester" });
+var TRANSCRIPT_LIMIT = 64000000;
 var CODEX_TOOL_ITEMS = new Set(["command_execution", "file_change", "mcp_tool_call", "web_search"]);
 function codexConfig(caster, focus, realHome) {
   return [
@@ -21387,12 +21388,16 @@ var claudeCode = {
         stderr += chunk;
     });
     const transcript = [];
+    let transcriptBytes = 0;
     const waiting = [];
     const backlog = [];
     createInterface({ input: child.stdout }).on("line", (line) => {
       if (!line.startsWith("{"))
         return;
-      transcript.push(line);
+      if (transcriptBytes + line.length <= TRANSCRIPT_LIMIT) {
+        transcript.push(line);
+        transcriptBytes += line.length;
+      }
       try {
         const event = JSON.parse(line);
         if (event.type !== "result")
