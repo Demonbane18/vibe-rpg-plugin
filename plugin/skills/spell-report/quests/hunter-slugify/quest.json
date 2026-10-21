@@ -1,0 +1,15 @@
+{
+  "id": "hunter-slugify",
+  "version": 2,
+  "name": "Rune Trail: Slug Function",
+  "school": "testing-debugging",
+  "rank": "apprentice",
+  "summary": "Write tests first, then implement a Unicode-aware slug function with word-boundary limits.",
+  "prompt": "Implement slugify in src/slugify.mjs according to README.md. Write tests first in test/slugify.test.mjs, covering at least five cases including ordinary input and edge cases, then complete the implementation and get the tests passing. Use node:test and only Node.js built-ins; do not install packages or use the network.",
+  "maxPrompts": 2,
+  "timeLimitSec": 600,
+  "checks": [
+    { "id": "own-tests", "label": "At least five passing slug tests", "type": "own-tests", "dir": "test", "minTests": 5 },
+    { "id": "slug-behavior", "label": "Slug behavior matches the specification", "type": "node-test", "files": ["quest-checks/slugify.test.mjs"] }
+  ]
+}

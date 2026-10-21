@@ -1,0 +1,73 @@
+{
+  "id": "scribe-readme-pass",
+  "version": 2,
+  "name": "Scribe's manual: plain README rewrite",
+  "school": "documents-productivity",
+  "rank": "journeyman",
+  "summary": "Rewrite a padded README while preserving its commands, inline code, link targets and technical facts.",
+  "prompt": "The prose in README.md sounds machine-written. Rewrite it in place so a person can understand and use the tool: plain and specific, no hype. Keep every fact and do not invent facts or figures. Keep it about as long or shorter. Leave all code blocks, inline code and link targets exactly as they are, in their original order.",
+  "maxPrompts": 2,
+  "timeLimitSec": 420,
+  "checks": [
+    {
+      "id": "code-unchanged",
+      "label": "Keep fenced examples byte-identical and ordered",
+      "type": "keeps-blocks",
+      "file": "README.md",
+      "source": "README.md",
+      "blocks": ["code"]
+    },
+    {
+      "id": "plain-readme",
+      "label": "Remove hype and dash connectors from prose",
+      "type": "avoids",
+      "file": "README.md",
+      "patterns": [
+        "[—–]| -- ",
+        "\\b(?:delve|tapestry|testament|pivotal|seamless|showcase|vibrant|game[ -]changer|unlock|elevate)\\b",
+        "\\bnot\\s+(?:just|only)\\b|\\blet['’]s\\s+dive\\b|\\bin\\s+conclusion\\b"
+      ],
+      "skip": ["code", "inline-code", "link-url"]
+    },
+    {
+      "id": "readme-facts-tokens",
+      "label": "Keep technical facts and exact protected tokens",
+      "type": "contains",
+      "file": "README.md",
+      "values": [
+        "Mossparcel",
+        "1.8",
+        "local Markdown",
+        "Node.js 20",
+        "25 files",
+        "Sela Venn",
+        "weekday afternoons",
+        "never uploads",
+        "refuses to overwrite",
+        "`mossparcel --help`",
+        "`--delve`",
+        "`TAPESTRY_MODE`",
+        "`bundle.md`",
+        "`help@mossparcel.example`",
+        "(https://docs.mossparcel.example/unlock?mode=seamless)",
+        "(https://docs.mossparcel.example/guide#vibrant)"
+      ]
+    },
+    {
+      "id": "no-new-figures",
+      "label": "Do not invent technical numbers",
+      "type": "no-new-numbers",
+      "file": "README.md",
+      "source": "README.md"
+    },
+    {
+      "id": "readme-length",
+      "label": "Keep the README within its length budget",
+      "type": "word-ratio",
+      "file": "README.md",
+      "source": "README.md",
+      "min": 0.5,
+      "max": 1.05
+    }
+  ]
+}

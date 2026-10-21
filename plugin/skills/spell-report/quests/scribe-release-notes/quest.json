@@ -1,0 +1,78 @@
+{
+  "id": "scribe-release-notes",
+  "version": 2,
+  "name": "Scribe's ledger: plain release notes",
+  "school": "documents-productivity",
+  "rank": "master",
+  "summary": "Rewrite release notes without hype while preserving a customer quote, a data table and every release fact.",
+  "prompt": "Rewrite NOTES.md in place for existing customers. It sounds machine-written; make it sound like a person wrote it, plain and specific, with no hype. Keep every fact, invent no facts or figures, and keep it about as long or shorter. Leave the code, inline code, link targets, table and customer quote exactly as they are, in their original order.",
+  "maxPrompts": 3,
+  "timeLimitSec": 600,
+  "checks": [
+    {
+      "id": "protected-blocks",
+      "label": "Keep the table and quote exact and ordered",
+      "type": "keeps-blocks",
+      "file": "NOTES.md",
+      "source": "NOTES.md",
+      "blocks": ["quote", "table"]
+    },
+    {
+      "id": "plain-release-prose",
+      "label": "Remove hype labels and staged closing lines",
+      "type": "avoids",
+      "file": "NOTES.md",
+      "patterns": [
+        "[—–]| -- ",
+        "\\b(?:delve|tapestry|testament|pivotal|seamless|showcase|vibrant|game[ -]changer|unlock|elevate)\\b",
+        "\\bnot\\s+(?:just|only)\\b|\\blet['’]s\\s+dive\\b",
+        "^\\s*-\\s+\\*\\*[^\\n*]+:\\*\\*\\s+",
+        "\\b(?:that is the real win|let that sink in|the future looks bright|exciting times lie ahead|in conclusion)\\b"
+      ],
+      "skip": ["quote", "table", "code"]
+    },
+    {
+      "id": "release-facts",
+      "label": "Keep release facts figures names and conditions",
+      "type": "contains",
+      "file": "NOTES.md",
+      "values": [
+        "Fenmast",
+        "3.2",
+        "2026-08-19",
+        "Iona Mere",
+        "48 workspaces",
+        "CSV",
+        "archived rows",
+        "opt in",
+        "existing subscriptions",
+        "no extra charge",
+        "24 seconds",
+        "9 seconds",
+        "1,200",
+        "Blank owner names",
+        "no longer stop an export",
+        "Friday",
+        "16:00 UTC",
+        "Tavi Rell",
+        "Brindle Lantern"
+      ]
+    },
+    {
+      "id": "no-invented-figures",
+      "label": "Do not add unsupported release numbers",
+      "type": "no-new-numbers",
+      "file": "NOTES.md",
+      "source": "NOTES.md"
+    },
+    {
+      "id": "release-length",
+      "label": "Keep release notes within their length budget",
+      "type": "word-ratio",
+      "file": "NOTES.md",
+      "source": "NOTES.md",
+      "min": 0.45,
+      "max": 1
+    }
+  ]
+}

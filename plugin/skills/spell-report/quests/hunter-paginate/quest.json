@@ -1,0 +1,17 @@
+{
+  "id": "hunter-paginate",
+  "version": 2,
+  "name": "Broken Trail: Pagination Repair",
+  "school": "testing-debugging",
+  "rank": "journeyman",
+  "summary": "Reproduce a missing pagination item, repair the boundary, and add a regression test.",
+  "prompt": "Investigate the pagination problem in BUG_REPORT.md using README.md as the API reference. Fix src/paginate.mjs and add regression coverage in a new test/regression.test.mjs. Leave the existing test/paginate.test.mjs unchanged and get the tests passing. Use only Node.js built-ins; do not install packages or use the network.",
+  "maxPrompts": 3,
+  "timeLimitSec": 900,
+  "checks": [
+    { "id": "existing-tests", "label": "Existing pagination tests stay unchanged", "type": "unchanged", "paths": ["test/paginate.test.mjs"] },
+    { "id": "own-tests", "label": "Existing tests and a passing regression", "type": "own-tests", "dir": "test", "minTests": 4 },
+    { "id": "catches-original", "label": "Regression tests catch the original bug", "type": "catches-original", "dir": "test", "restore": ["src/paginate.mjs"] },
+    { "id": "page-behavior", "label": "Pagination matches the documented API", "type": "node-test", "files": ["quest-checks/paginate.test.mjs"] }
+  ]
+}

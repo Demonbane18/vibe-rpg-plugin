@@ -1,0 +1,11 @@
+{
+  "id": "inquisitor-null-guard", "version": 2,
+  "name": "Inquisitor: missing-profile review", "school": "code-review", "rank": "apprentice",
+  "summary": "Review a display-name change for a crash on missing profiles.",
+  "prompt": "Review change.diff and the post-change src/member.mjs for Cragpost. Look for an introduced runtime error when a member profile is missing. Do not fix or edit src/member.mjs. Write review.json as {\"findings\":[{\"file\":\"src/member.mjs\",\"line\":1,\"severity\":\"high\",\"title\":\"Describe the bug and its impact\"}]}, replacing the example with your findings. Use positive integer line numbers from the post-change file. Report actionable bugs, not style preferences. Do not install packages or use the network.",
+  "maxPrompts": 2, "timeLimitSec": 420,
+  "checks": [
+    { "id": "review", "label": "Find the introduced bug", "type": "findings", "file": "review.json", "expected": [{ "id": "null-access", "file": "src/member.mjs", "lines": [1, 5] }], "minFound": 1, "maxExtra": 3 },
+    { "id": "preserve-source", "label": "Leave reviewed source unchanged", "type": "unchanged", "paths": ["src/member.mjs"] }
+  ]
+}

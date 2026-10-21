@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Spell report book">
+  <rect width="64" height="64" rx="12" fill="#0f1630"/>
+  <path d="M10 14h16l6 4 6-4h16v34H38l-6 4-6-4H10z" fill="#f1e3c4"/>
+  <path d="M32 18v34M16 23h9m-9 8h9m-9 8h9m14-16h9m-9 8h9m-9 8h9" fill="none" stroke="#7c5823" stroke-width="3"/>
+</svg>

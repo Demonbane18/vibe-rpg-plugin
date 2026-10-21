@@ -1,0 +1,69 @@
+{
+  "id": "scribe-launch-note",
+  "version": 2,
+  "name": "Scribe's dispatch: plain launch note",
+  "school": "documents-productivity",
+  "rank": "apprentice",
+  "summary": "Rewrite a padded launch draft as a short, factual announcement without changing names, dates or figures.",
+  "prompt": "Read draft.md and write a finished launch announcement in final.md. This reads like a machine wrote it. Rewrite it so it sounds like a person wrote it: plain and specific, no hype. Keep every fact, including the names, version, date, figures, availability and support details. Do not invent facts or figures. Keep it about as long or shorter, with enough detail for a customer to understand what changed. Leave draft.md unchanged.",
+  "maxPrompts": 2,
+  "timeLimitSec": 300,
+  "checks": [
+    {
+      "id": "launch-facts",
+      "label": "Keep the launch facts and figures",
+      "type": "contains",
+      "file": "final.md",
+      "values": [
+        "Pebblequay",
+        "2.4",
+        "2026-09-14",
+        "Mara Fen",
+        "Oren Vale",
+        "18 teams",
+        "1,200 notes",
+        "35%",
+        "12 minutes",
+        "CSV",
+        "Existing subscribers",
+        "no extra cost",
+        "email",
+        "weekday mornings"
+      ]
+    },
+    {
+      "id": "plain-language",
+      "label": "Remove hype words and dash connectors",
+      "type": "avoids",
+      "file": "final.md",
+      "patterns": [
+        "[—–]| -- ",
+        "\\b(?:delve|tapestry|testament|pivotal|seamless|showcase|vibrant|game[ -]changer|unlock|elevate)\\b",
+        "\\bnot\\s+(?:just|only)\\b|\\blet['’]s\\s+dive\\b|\\bin\\s+conclusion\\b"
+      ],
+      "skip": []
+    },
+    {
+      "id": "source-unchanged",
+      "label": "Leave the original draft unchanged",
+      "type": "unchanged",
+      "paths": ["draft.md"]
+    },
+    {
+      "id": "no-invented-figures",
+      "label": "Use only figures present in the draft",
+      "type": "no-new-numbers",
+      "file": "final.md",
+      "source": "draft.md"
+    },
+    {
+      "id": "announcement-length",
+      "label": "Keep the announcement within its length budget",
+      "type": "word-ratio",
+      "file": "final.md",
+      "source": "draft.md",
+      "min": 0.4,
+      "max": 1
+    }
+  ]
+}

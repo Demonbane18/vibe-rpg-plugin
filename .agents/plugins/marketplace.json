@@ -1,0 +1,12 @@
+{
+  "name": "viberpg",
+  "interface": { "displayName": "VibeRPGSimulator" },
+  "plugins": [
+    {
+      "name": "spell-report",
+      "source": { "source": "local", "path": "./plugin" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "inquisitor-sql-handler", "version": 2,
+  "name": "Inquisitor: receipts security review", "school": "code-review", "rank": "master",
+  "summary": "Review a receipts migration and search handler for security and scaling faults.",
+  "prompt": "Review change.diff and the post-change migrations/014_receipts.sql and src/receipts.mjs for Cairnledger. Report actionable bugs introduced by the change in review.json as {\"findings\":[{\"file\":\"src/receipts.mjs\",\"line\":1,\"severity\":\"high\",\"title\":\"Describe the bug and its impact\"}]}, replacing the example with your findings and using positive integer line numbers from the post-change files. Leave migrations/014_receipts.sql and src/receipts.mjs unchanged. Do not install packages or use the network.",
+  "maxPrompts": 2, "timeLimitSec": 900,
+  "checks": [
+    { "id": "review", "label": "Find security and scaling issues", "type": "findings", "file": "review.json", "expected": [
+      { "id": "sql-injection", "file": "src/receipts.mjs", "lines": [4, 8] },
+      { "id": "missing-rls", "file": "migrations/014_receipts.sql", "lines": [1, 5] },
+      { "id": "missing-index", "file": "migrations/014_receipts.sql", "lines": [3, 7] },
+      { "id": "secret-log", "file": "src/receipts.mjs", "lines": [9, 13] }
+    ], "minFound": 3, "maxExtra": 4 },
+    { "id": "preserve-source", "label": "Leave migration and handler unchanged", "type": "unchanged", "paths": ["migrations/014_receipts.sql", "src/receipts.mjs"] }
+  ]
+}

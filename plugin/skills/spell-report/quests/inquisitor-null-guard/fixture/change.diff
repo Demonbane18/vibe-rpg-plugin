@@ -1,0 +1,11 @@
+diff --git a/src/member.mjs b/src/member.mjs
+--- a/src/member.mjs
++++ b/src/member.mjs
+@@ -1,5 +1,6 @@
+ // Cragpost member display names accept a missing profile.
+ export function displayName(profile) {
++  const name = profile.name.trim();
+   if (profile == null) return 'Guest';
+-  return profile.name.trim() || 'Guest';
++  return name || 'Guest';
+ }

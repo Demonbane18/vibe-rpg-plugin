@@ -1,0 +1,17 @@
+{
+  "id": "hunter-ttl-cache",
+  "version": 2,
+  "name": "Fading Tracks: TTL Cache Repair",
+  "school": "testing-debugging",
+  "rank": "master",
+  "summary": "Diagnose interacting expiry, recency, and overwrite faults using a deterministic clock.",
+  "prompt": "Resolve ISSUE.md in src/cache.mjs according to README.md and add regression coverage in a new test/regression.test.mjs. Leave test/cache.test.mjs unchanged. Deliver the fix with passing tests. Use only Node.js built-ins; do not install packages or use the network.",
+  "maxPrompts": 3,
+  "timeLimitSec": 1200,
+  "checks": [
+    { "id": "existing-tests", "label": "Existing cache tests stay unchanged", "type": "unchanged", "paths": ["test/cache.test.mjs"] },
+    { "id": "own-tests", "label": "Existing tests and two passing regressions", "type": "own-tests", "dir": "test", "minTests": 6 },
+    { "id": "catches-original", "label": "Regression tests expose the original cache", "type": "catches-original", "dir": "test", "restore": ["src/cache.mjs"] },
+    { "id": "cache-behavior", "label": "TTL and LRU behavior match the API", "type": "node-test", "files": ["quest-checks/cache.test.mjs"] }
+  ]
+}

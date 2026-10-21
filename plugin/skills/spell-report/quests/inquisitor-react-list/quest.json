@@ -1,0 +1,15 @@
+{
+  "id": "inquisitor-react-list", "version": 2,
+  "name": "Inquisitor: queue component review", "school": "code-review", "rank": "journeyman",
+  "summary": "Review a reorderable editing queue for state, subscription and access bugs.",
+  "prompt": "Review change.diff and the post-change src/Queue.jsx for Mossbasket's editing queue. Report actionable bugs introduced by the change, not style preferences. Do not fix or edit src/Queue.jsx. Write review.json as {\"findings\":[{\"file\":\"src/Queue.jsx\",\"line\":1,\"severity\":\"high\",\"title\":\"Describe the bug and its impact\"}]}, replacing the example with your findings and using positive integer line numbers from the post-change file. Do not install packages or use the network.",
+  "maxPrompts": 2, "timeLimitSec": 600,
+  "checks": [
+    { "id": "review", "label": "Find interacting component issues", "type": "findings", "file": "review.json", "expected": [
+      { "id": "keyboard-access", "file": "src/Queue.jsx", "lines": [4, 8] },
+      { "id": "stale-effect", "file": "src/Queue.jsx", "lines": [14, 18] },
+      { "id": "index-keys", "file": "src/Queue.jsx", "lines": [17, 21] }
+    ], "minFound": 2, "maxExtra": 3 },
+    { "id": "preserve-source", "label": "Leave reviewed component unchanged", "type": "unchanged", "paths": ["src/Queue.jsx"] }
+  ]
+}

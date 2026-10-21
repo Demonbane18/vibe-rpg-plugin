@@ -1,0 +1,56 @@
+---
+name: proving-grounds
+description: Run the library's fixed quests with your own harness and spell loadout, compare reliability and effectiveness against an Unarmed control, then include self-measured results in a spell report.
+compatibility: Node 22 or newer. Codex or Claude Code runs sealed. OMP runs warded on macOS; elsewhere it requires explicit acceptance of an open arena. Every run spends the tester's own plan allowance.
+---
+
+# Proving Grounds
+
+Use the helper in the sibling spell-report skill. Resolve its installed path first:
+
+```text
+node "<spell-report-skill-directory>/scripts/spell-report.mjs" doctor
+```
+
+Commands below go after that same `node` invocation. Read the sibling [spell-report skill](../spell-report/SKILL.md) before creating or sending a report. Its consent, signing and privacy rules apply here too.
+
+## Run quests
+
+1. Run `doctor` to check Node, heroes (harnesses), sign-in and sandbox support. Run `quests` to list bundled fixed tasks by school, rank (difficulty), id and summary.
+2. Let the tester choose a library spell (`--spell <slug>`), a workflow (`--workflow <slug>`) or a published combo (`--combo <slug-a>+<slug-b>`). The site's `/trials/` page has a “Try this loadout” command for each result. A loadout is the skills given to the agent; nothing is installed globally. Confirm the hero (agent app), weapon (AI model), charge (reasoning effort), quests and number of runs. Every run, including Unarmed controls, spends the tester's own plan allowance.
+3. Run with `--control` and explicit `--weapon` and `--charge`. Replace the example values with the chosen library slug, quest id and model id:
+
+   ```text
+   trial --spell <library-slug> --quest <quest-id> --hero codex --weapon <model-id> --charge high --cast invoked --runs 3 --control
+   ```
+
+   Use `trial --help` for supported flags. A workflow or combo takes the place of `--spell`. `--control` interleaves Unarmed runs with no skills under the same setup. An invoked cast names the equipped skills in the prompt; an ambient cast leaves the choice to the agent. Results and fetched spells stay under `VIBERPG_DATA_DIR`, or `~/.viberpg` by default.
+
+   The arena is the sandbox. Codex and Claude Code run sealed: agent commands have no network, the home folder is hidden and writes stay in the arena. OMP runs warded on macOS: the same protections without the network block. OMP is refused elsewhere unless the tester explicitly accepts running without a sandbox and passes `--allow-open-arena`. Do not add that flag silently. Read safety-screen findings before asking whether to use `--allow-hazards`.
+4. Run `trials` to read aggregate results. These are self-measured, not independently verified. Compare the same quest version, hero/version, weapon, charge, arena and machine; a different setup is not a control. Published commands fetch current upstream commits, so check recorded versions and commits before comparing an older result.
+
+## Read results
+
+Terms follow the site's glossary:
+
+- **Cleared** means every hidden check passed. **Instant cast** means one-shot; **channeled** means follow-up prompts were needed. **Fizzled** means checks still failed after the prompt or time limit. A **mishap** is an outside error, such as sign-in, rate limit or crash, excluded from rates.
+- **Clear rate** is the pass rate. **Steadiness** is reliability: the Wilson 95% lower bound of clear rate. A few runs support a low number even when every run passed.
+- **Buff** is effectiveness: clear-rate percentage points over the matching Unarmed control. A negative buff is a debuff. No matching control means no buff claim.
+- **Mastery** is partial credit: average share of checks passed, failed runs included. **Casts** is median prompts needed by cleared runs. **Cast time** is median agent runtime, grading excluded.
+- **Mana** is median tokens, cached input included; compare within one hero. **Gold** is estimated API-list-price cost when reported, not subscription billing. **Actions** means tool calls. **Attunement** means the agent opened an equipped skill, found in that run's own log.
+
+## Report results
+
+Follow the spell-report skill to confirm the public spell identity and local match ids, then create a report with the chosen name:
+
+```text
+new "<report-directory>" --name "<spell name>" --kind skill --source "<public HTTPS URL>" --match "skill:<id>" --agent codex --submitter "<chosen name>" --trials <library-slug>
+```
+
+Repeat `--trials` for more library slugs. It includes cells whose spell, workflow or combo equips that slug, plus matching Unarmed controls. The helper prints how many cells were added and marks their source with the submitter's name. Only aggregates go into the header, never run logs, prompts or local paths. Trial cells include OS and CPU architecture; `--no-environment` only omits the separate local-session environment evidence.
+
+Fill the report's sections and verdict with the tester's findings. Run `check "<report-directory>/spell-report.md"`, review all cells, files, destination and warnings, then optionally sign following the spell-report skill. A signature attributes the exact report bytes; it does not prove the measurements. Show a local preview with `submit` without `--yes`. Ask explicitly whether to send these files to that destination. Only an explicit yes authorizes `submit ... --yes`; do not silently retry a possibly delivered email.
+
+## Invocation
+
+Claude Code: `/spell-report:proving-grounds`. Codex: `$spell-report:proving-grounds`.

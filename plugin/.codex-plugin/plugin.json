@@ -1,0 +1,17 @@
+{
+  "name": "spell-report",
+  "version": "0.3.0",
+  "description": "Write, check, sign and send test reports on agent skills, plugins and MCP servers.",
+  "author": { "name": "VibeRPGSimulator" },
+  "skills": "./skills",
+  "interface": {
+    "displayName": "Spell Report",
+    "shortDescription": "Write, sign and send spell test reports",
+    "longDescription": "Report how a skill, plugin or MCP server worked in Claude Code or Codex. Review local usage counts, attach chosen media and optionally sign before sending to the VibeRPGSimulator curator.",
+    "developerName": "VibeRPGSimulator",
+    "category": "Productivity",
+    "capabilities": [],
+    "composerIcon": "./skills/spell-report/assets/icon.svg",
+    "logo": "./skills/spell-report/assets/icon.svg"
+  }
+}

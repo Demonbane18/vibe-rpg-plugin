@@ -1,0 +1,24 @@
+diff --git a/src/Queue.jsx b/src/Queue.jsx
+--- a/src/Queue.jsx
++++ b/src/Queue.jsx
+@@ -3,7 +3,7 @@
+ // Mossbasket lets editors reorder a queue while each row keeps its draft.
+ function Row({ item, onPick }) {
+   const [draft, setDraft] = useState(item.title);
+-  return <button onClick={() => onPick(item.id)}>
++  return <div onClick={() => onPick(item.id)}>
+     <input aria-label="Draft title" value={draft} onChange={e => setDraft(e.target.value)} />
+     <span>{item.title}</span>
+-  </button>;
++  </div>;
+@@ -14,8 +14,8 @@
+   useEffect(() => {
+     return subscribe(channelId, setMessage);
+-  }, [channelId, subscribe]);
++  }, []);
+   return <section aria-label="Editing queue">
+     <p>{message}</p>
+-    {items.map(item => <Row key={item.id} item={item} onPick={onPick} />)}
++    {items.map((item, index) => <Row key={index} item={item} onPick={onPick} />)}
+   </section>;
+ }
