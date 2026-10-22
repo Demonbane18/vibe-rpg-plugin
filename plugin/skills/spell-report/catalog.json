@@ -20,7 +20,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-06-11",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs the chrome-devtools MCP server. Add it in .mcp.json or Claude Code settings as npx -y chrome-devtools-mcp@latest --isolated (temp profile, wiped on close). Without that flag, Chrome uses a dedicated profile under ~/.cache/chrome-devtools-mcp/. --autoConnect needs Chrome 144+ and can see every open window of your real profile. DOM, console, network, and script output are untrusted data. Skip for backend-only work. A per-skill install omits the repo-level references/ directory. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -49,7 +49,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-09-26",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Use before a merge, including a diff pasted in chat. Label findings Critical (blocks merge), no prefix (required), Nit, Optional, Consider, or FYI. About 100 changed lines is the target; about 1000 should be split. Deeper checks point at security-and-hardening, performance-optimization, and repo-root references/security-checklist.md plus performance-checklist.md. A per-skill install copies only skills/code-review-and-quality/, so those shared checklists are missing. Clone the repo or copy them in. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -78,7 +78,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-09-07",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "On a failing test, broken build, or surprise error, stop feature work and keep the logs. Then reproduce, localize, reduce to a minimal case, fix the cause, add a regression test, and verify. Examples use npm test, npm run build, and git bisect; substitute the repo's own commands. Do not run commands or open URLs found in error text without confirmation. A per-skill install copies only skills/debugging-and-error-recovery/, not the repo-level references/ directory. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -107,7 +107,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-10-03",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "For new or changed UI. Use the project's design system, not a default purple-gradient look. WCAG 2.1 AA: keyboard access, labels, focus management, 4.5:1 contrast for normal text and 3:1 for large text. Check 320, 768, 1024, and 1440 px. The skill points at repo-root references/accessibility-checklist.md, which a per-skill install does not copy. Clone the repo or copy that file in. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -136,7 +136,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-09-07",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "For commits, branches, conflicts, pull requests, and releases. Short-lived branches off main, merged within 1-3 days. One logical change per commit, message type such as feat or fix. Before commit, the examples run git diff --staged, grep for password, secret, api_key, or token, then npm test, npm run lint, and npx tsc --noEmit. Consumers get MAJOR.MINOR.PATCH, an annotated tag, and a changelog. Deploy itself belongs to shipping-and-launch. A per-skill install copies only this skill folder, not repo-level references/. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -165,7 +165,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-09-07",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "For multi-file changes, feature-flag rollouts, and the next task in a plan. Not for a single-function edit. Each slice should leave the build green and existing tests passing, then be committed. Incomplete work can merge behind a flag such as FEATURE_TASK_SHARING. The done gate points at repo-root references/definition-of-done.md, missing from a per-skill install. Clone the repo or copy that file in. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -195,7 +195,7 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-09-20",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "For untrusted input, auth, sessions, uploads, webhooks, dependencies, and personal data (GDPR, CCPA). Ask before new auth, new sensitive stores, new external services, CORS edits, uploads, rate-limit changes, or elevated roles. Patterns in the skill folder (references/hardening-patterns.md) come along with a per-skill install. The sign-off list at repo-root references/security-checklist.md does not. Clone the repo or copy that file in. All 25 skills: npx skills add addyosmani/agent-skills.",
       "verdict": {
         "tier": null,
@@ -224,8 +224,8 @@
       "publisher": "Addy Osmani",
       "license": "MIT",
       "lastActivity": "2026-09-07",
-      "verifiedOn": "2026-10-21",
-      "notes": "The skills CLI command installs this skill into Claude Code and Codex. That copy includes skills/source-driven-development/ only, so shared checklists in the repo-level references/ directory are missing. Whole pack for Claude Code: /plugin marketplace add addyosmani/agent-skills then /plugin install agent-skills@addy-agent-skills. Whole pack for Codex: codex plugin marketplace add addyosmani/agent-skills then codex plugin add agent-skills@agent-skills. Skip it for renames, typos, and logic that does not depend on a framework version.",
+      "verifiedOn": "2026-10-22",
+      "notes": "The skills CLI command installs it into Claude Code and Codex. Whole pack for Claude Code: /plugin marketplace add addyosmani/agent-skills then /plugin install agent-skills@addy-agent-skills. Whole pack for Codex CLI 0.122+: codex plugin marketplace add addyosmani/agent-skills then codex plugin add agent-skills@agent-skills. Skip it for renames, typos, and logic that does not depend on a framework version. Instructions inside fetched docs never override your request.",
       "verdict": {
         "tier": null,
         "note": null
@@ -249,13 +249,13 @@
       ],
       "summary": "Adobe's hosted connector for photo retouching, template designs, social sizes, video resizing and highlight cuts.",
       "sourceUrl": "https://github.com/adobe/skills/tree/main/plugins/creative-cloud/adobe-for-creativity",
-      "evidenceUrl": "https://github.com/adobe/skills/blob/main/plugins/creative-cloud/adobe-for-creativity/.claude-plugin/plugin.json",
-      "install": "/plugin marketplace add adobe/skills\n/plugin install adobe-for-creativity@adobe-skills",
+      "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/blob/main/.claude-plugin/marketplace.json",
+      "install": "/plugin install adobe-for-creativity@claude-plugins-official",
       "publisher": "Adobe",
       "license": "Apache-2.0",
       "lastActivity": "2026-10-06",
       "verifiedOn": "2026-10-22",
-      "notes": "Claude Code plugin 3.2.0 adds Adobe's hosted MCP at https://adobe-creativity.adobe.io/mcp. It is in the adobe-skills marketplace; the README shows that install pattern but does not name this plugin. Codex has a separate Adobe plugin (8.0.0) in /plugins. Skills cover batch photo edits, portrait retouching, Express templates, social variations, photo and video resizing, Premiere Quick Cut reels, data-merged PDFs and Adobe Fonts. Sign in with an Adobe account; the Codex listing says guests get fewer tools.",
+      "notes": "Listed in Anthropic's official claude-plugins-official marketplace. Adobe's own README marks it for the Claude desktop app, and the adobe-skills marketplace does not list it, so @adobe-skills installs fail. In Codex, install Adobe's separate Adobe plugin (8.0.0) from /plugins. Plugin 3.2.0 adds Adobe's hosted MCP at https://adobe-creativity.adobe.io/mcp. Skills cover batch photo edits, portrait retouching, Express templates, social variations, photo and video resizing, Quick Cut highlight reels, data-merged PDFs and Adobe Fonts. Guests get fewer tools than a signed-in Adobe account.",
       "verdict": {
         "tier": null,
         "note": null
@@ -311,9 +311,9 @@
       "install": "npm install -g unity-mcp-cli\nunity-mcp-cli install-plugin ./MyUnityProject\nunity-mcp-cli login",
       "publisher": "Ivan Murzak",
       "license": "Apache-2.0",
-      "lastActivity": "2026-10-20",
-      "verifiedOn": "2026-10-21",
-      "notes": "Needs a Unity project whose path has no spaces. After login, run unity-mcp-cli setup-mcp claude-code ./MyUnityProject, or the same command with codex. Window/AI Game Developer can configure the client instead. Sign-in uses ai-game.dev. The repository describes the tools as free. Separate from CoplayDev/unity-mcp.",
+      "lastActivity": "2026-10-22",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Unity project whose path has no spaces. After login, run unity-mcp-cli setup-mcp claude-code ./MyUnityProject, or the same command with codex. Window/AI Game Developer can configure the client instead. Sign-in uses ai-game.dev. Separate from CoplayDev/unity-mcp.",
       "verdict": {
         "tier": null,
         "note": null
@@ -449,15 +449,15 @@
       "categories": [
         "code-review"
       ],
-      "summary": "Reviews a pull request with four agents and posts only issues scored 80 or higher.",
+      "summary": "Reviews a pull request with five parallel agents and comments only with issues scored 80 or higher.",
       "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review",
       "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-review",
-      "install": null,
+      "install": "/plugin install code-review@claude-plugins-official",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs a GitHub repository and the GitHub CLI (`gh`) installed and authenticated. `/code-review` skips closed, draft, trivial, and already-reviewed pull requests. It may post a review comment, and only includes issues scored 80 or higher. Claude Code also ships a bundled `/code-review` skill; this record is the marketplace plugin, so the command name alone does not tell them apart.",
+      "lastActivity": "2026-02-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a GitHub repository and the GitHub CLI (`gh`) installed and authenticated. `/code-review` skips closed, draft, trivial, and already-reviewed pull requests, drops issues scored under 80, and comments on the pull request with `gh`. The plugin README says four agents; the shipped command launches five. Claude Code also ships a bundled `/code-review` skill; this record is the marketplace plugin, so the command name alone does not tell them apart.",
       "verdict": {
         "tier": null,
         "note": null
@@ -527,8 +527,7 @@
       "name": "Anthropic Document Coauthoring",
       "kind": "skill",
       "agents": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "categories": [
         "documents-productivity"
@@ -539,8 +538,8 @@
       "install": null,
       "publisher": "Anthropic",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2025-12-04",
+      "verifiedOn": "2026-10-22",
       "notes": "Offers the workflow when you ask for a doc, spec, proposal, or decision record. You can decline and write freeform. Stage 3 uses a subagent in Claude Code; on claude.ai you run that reader test yourself. Claude Code install is the example-skills plugin, which also installs the other example skills. This skill's folder has no LICENSE file.",
       "verdict": {
         "tier": null,
@@ -567,8 +566,8 @@
       "install": null,
       "publisher": "Anthropic",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-07-17",
+      "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. It creates and edits .docx and .dotx files with the docx library, pandoc, and XML edits, including tracked changes and comments. It expects `docx` to already be installed, then renders a PDF to check the pages.",
       "verdict": {
         "tier": null,
@@ -590,17 +589,20 @@
       "summary": "Seven-phase Claude Code workflow that explores the repo, designs options, then implements after you approve.",
       "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev",
       "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev",
-      "install": null,
+      "install": "/plugin install feature-dev@claude-plugins-official",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Claude Code only. `/feature-dev` runs seven phases and waits for your answers before design, and again for approval before it writes code. It expects an existing git repository to learn from. A poor fit for a one-line fix or a hotfix. Phase 6 launches three code-reviewer agents and asks whether to fix what they find.",
+      "lastActivity": "2026-02-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code only. `/feature-dev` runs seven phases. It waits for your answers before design, and for your approval before it writes code. It needs an existing codebase to learn from and a git repository for the review phase. The README says not to use it for single-line fixes, trivial changes, or urgent hotfixes. Phase 6 launches three code-reviewer agents and asks whether to fix now, fix later, or proceed.",
       "verdict": {
         "tier": null,
         "note": null
       },
-      "match": [],
+      "match": [
+        "plugin:feature-dev",
+        "command:feature-dev"
+      ],
       "media": []
     },
     {
@@ -644,12 +646,12 @@
       "summary": "Claude Code plugin that loads the frontend-design skill for new or reshaped UI.",
       "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design",
       "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design",
-      "install": null,
+      "install": "/plugin install frontend-design@claude-plugins-official",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Install with /plugin install frontend-design@claude-plugins-official. Claude Code loads the bundled skill for frontend work. License is Apache-2.0. The bundled SKILL.md matches the anthropics/skills frontend-design text. Installing both loads the same workflow twice.",
+      "lastActivity": "2026-09-01",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code only. Claude Code loads the bundled skill for frontend work. The bundled SKILL.md matches the anthropics/skills frontend-design text, so installing both loads the same workflow twice.",
       "verdict": {
         "tier": null,
         "note": null
@@ -665,8 +667,7 @@
       "name": "Anthropic Frontend Design",
       "kind": "skill",
       "agents": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "categories": [
         "frontend-design"
@@ -677,9 +678,9 @@
       "install": "/plugin marketplace add anthropics/skills\n/plugin install example-skills@anthropic-agent-skills",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Claude Code install is the example-skills plugin from anthropics/skills. The SKILL.md also works on its own. It does not open a browser or a design file. The agent plans tokens, checks them against the brief, then writes code. Screenshots are used only if the environment can take them. Skip this if you already installed the official frontend-design plugin, which ships the same skill.",
+      "lastActivity": "2026-09-03",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code install is the example-skills plugin from anthropics/skills; no Codex install is documented. The SKILL.md also works on its own. It does not open a browser or a design file. The agent plans tokens, checks them against the brief, then writes code. Screenshots are used only if the environment can take them. Skip this if you already installed the official frontend-design plugin, which ships the same skill.",
       "verdict": {
         "tier": null,
         "note": null
@@ -707,7 +708,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Put your negotiation playbook in .claude/legal.local.md so reviews compare against your standard positions. Skills include review-contract, triage-nda, compliance-check, legal-risk-assessment and vendor-check. Not legal advice; the README says licensed attorneys should review its analysis. Connectors: Slack, Box, Egnyte, Jira, Microsoft 365. No Codex setup is documented.",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Put your negotiation playbook in .claude/legal.local.md so reviews compare against your standard positions. Skills include review-contract, triage-nda, compliance-check, legal-risk-assessment and vendor-check. Not legal advice; the README says licensed attorneys should review its analysis. Connectors: Slack, Box, Egnyte, Atlassian, DocuSign, Google Calendar, Gmail and Microsoft 365. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -789,8 +790,8 @@
       "install": null,
       "publisher": "Anthropic",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-02-04",
+      "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. It uses pypdf, pdfplumber, and reportlab to read, merge, split, create, and fill PDFs, and the skill description also covers image extraction and OCR. Form filling follows FORMS.md in the skill.",
       "verdict": {
         "tier": null,
@@ -815,8 +816,8 @@
       "install": null,
       "publisher": "Anthropic",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-07-17",
+      "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. New decks use pptxgenjs. Existing decks and .potx templates are edited as unzipped XML. It reads slides with markitdown and checks the file with scripts/office/validate.py.",
       "verdict": {
         "tier": null,
@@ -838,12 +839,12 @@
       "summary": "Reviews unstaged changes for CLAUDE.md breaks and bugs, and reports only issues scored 80 or higher.",
       "sourceUrl": "https://github.com/anthropics/claude-plugins-official/blob/main/plugins/pr-review-toolkit/agents/code-reviewer.md",
       "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/blob/main/plugins/pr-review-toolkit/agents/code-reviewer.md",
-      "install": null,
+      "install": "/plugin install pr-review-toolkit@claude-plugins-official",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Ships inside the PR Review Toolkit plugin. Install that plugin to get this agent. Default scope is unstaged `git diff`; name files or another scope if you want something else. It checks CLAUDE.md rules, bugs, and serious quality issues, and reports only scores of 80 or higher, with a file, line, and a fix.",
+      "lastActivity": "2026-04-28",
+      "verifiedOn": "2026-10-22",
+      "notes": "Ships inside the PR Review Toolkit plugin; the install line installs that plugin. The agent file pins model: opus. Default scope is unstaged `git diff`; name files or another scope if you want something else. It checks CLAUDE.md rules, bugs, and serious quality issues, and reports only scores of 80 or higher, with a file, line, and a fix.",
       "verdict": {
         "tier": null,
         "note": null
@@ -864,12 +865,12 @@
       "summary": "Six Claude Code review agents for comments, tests, silent failures, types, quality, and simplification.",
       "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/pr-review-toolkit",
       "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/pr-review-toolkit",
-      "install": null,
+      "install": "/plugin install pr-review-toolkit@claude-plugins-official",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Claude Code plugin with six agents: comment-analyzer, pr-test-analyzer, silent-failure-hunter, type-design-analyzer, code-reviewer, and code-simplifier. Ask in plain language and Claude picks one, or name the concern. code-reviewer reports only issues scored 80 or higher. Simplification is meant to keep behavior the same.",
+      "lastActivity": "2026-04-28",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code plugin with six agents: comment-analyzer, pr-test-analyzer, silent-failure-hunter, type-design-analyzer, code-reviewer, and code-simplifier. Ask in plain language and Claude picks one, or run `/review-pr` with aspects (comments, tests, errors, types, code, simplify, all) to run several. code-reviewer reports only issues scored 80 or higher. Simplification is meant to keep behavior the same.",
       "verdict": {
         "tier": null,
         "note": null
@@ -969,8 +970,7 @@
       "name": "Anthropic Webapp Testing",
       "kind": "skill",
       "agents": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "categories": [
         "full-stack-web",
@@ -983,8 +983,8 @@
       "install": "/plugin marketplace add anthropics/skills\n/plugin install example-skills@anthropic-agent-skills",
       "publisher": "Anthropic",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-04-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Claude Code install is the example-skills plugin. Needs Python and Playwright. Static HTML can be read for selectors. Dynamic apps should wait for networkidle before inspection. with_server.py starts one or more local servers, then runs your script. Run bundled scripts with --help before reading their source. No Codex install command is documented.",
       "verdict": {
         "tier": null,
@@ -1012,8 +1012,8 @@
       "install": null,
       "publisher": "Anthropic",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-07-17",
+      "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. Workbooks use openpyxl formulas, not hardcoded totals. scripts/recalc.py runs LibreOffice and rewrites the file in place. Do not use XLOOKUP, FILTER, SORT, UNIQUE, or SEQUENCE; this pass cannot evaluate them.",
       "verdict": {
         "tier": null,
@@ -1064,12 +1064,12 @@
       "summary": "MCP server that adds Applitools Eyes visual checkpoints to Playwright tests and reviews visual diffs in test batches.",
       "sourceUrl": "https://applitools.com/docs/eyes/integrations/mcp-servers/applitools-mcp",
       "evidenceUrl": "https://applitools.com/docs/eyes/integrations/mcp-servers/applitools-mcp",
-      "install": null,
+      "install": "claude mcp add applitools-mcp npx @applitools/mcp@latest",
       "publisher": "Applitools",
       "license": null,
       "lastActivity": "2026-10-19",
       "verifiedOn": "2026-10-22",
-      "notes": "Install left blank: the docs name Claude Code as a client but print only a generic JSON config (npx --yes @applitools/mcp@latest), no claude mcp add line. Needs Node.js 18+ and Applitools keys: APPLITOOLS_API_KEY to run tests, plus separate read and write keys for inspect, review and resolve tools. Setup and checkpoint tools support only the Playwright Fixtures SDK; review tools work with any Eyes SDK. Saving or resetting a baseline needs your approval. npm license: SEE LICENSE IN LICENSE.",
+      "notes": "Needs Node.js 18+ and Applitools keys: APPLITOOLS_API_KEY to run tests, plus separate read and write keys for inspect, review and resolve tools. Restart Claude Code after adding the server. Setup and checkpoint tools support only the Playwright Fixtures SDK; review tools work with any Eyes SDK. Saving or resetting a baseline needs your approval. No Codex setup is documented. npm license: SEE LICENSE IN LICENSE.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1084,7 +1084,8 @@
       "name": "Asana MCP Server (V2)",
       "kind": "mcp_server",
       "agents": [
-        "claude-code"
+        "claude-code",
+        "codex"
       ],
       "categories": [
         "documents-productivity"
@@ -1095,9 +1096,9 @@
       "install": "claude mcp add --transport http --client-id YOUR_CLIENT_ID --client-secret --callback-port 8080 asana https://mcp.asana.com/v2/mcp",
       "publisher": "Asana",
       "license": null,
-      "lastActivity": null,
+      "lastActivity": "2026-08-02",
       "verifiedOn": "2026-10-22",
-      "notes": "Needs an Asana account and a one-time Asana MCP app from the developer console, with the redirect URL http://localhost:8080/callback. Claude Code asks for the client secret after the command, then opens the browser to authorize. Your workspace admin must not block the app. Only the V2 endpoint is current. Other clients such as Codex need the community mcp-remote bridge, which Asana calls experimental and does not support. The asana plugin in the Claude Code marketplace wraps the same server (/asana-setup).",
+      "notes": "Needs an Asana account and your own Asana MCP app from the developer console; its redirect URL must match the client (http://localhost:8080/callback for Claude Code). Claude Code asks for the client secret after the command, then opens the browser to authorize. Enterprise admins can block the app. Codex connects through the community mcp-remote bridge in ~/.codex/config.toml, with redirect http://localhost:3334/oauth/callback; Asana calls mcp-remote experimental and does not support it. The asana plugin in the Claude Code marketplace wraps the same server (/asana-setup).",
       "verdict": {
         "tier": null,
         "note": null
@@ -1120,7 +1121,7 @@
         "audio-production"
       ],
       "summary": "Teaches a coding agent AssemblyAI's current speech to text, streaming, dictation and voice agent APIs and SDKs.",
-      "sourceUrl": "https://github.com/AssemblyAI/assemblyai-skill",
+      "sourceUrl": "https://github.com/AssemblyAI/assemblyai-skill/tree/main/skills/assemblyai",
       "evidenceUrl": "https://www.assemblyai.com/docs/coding-agent-prompts",
       "install": null,
       "publisher": "AssemblyAI",
@@ -1180,7 +1181,7 @@
         "cloud-devops"
       ],
       "summary": "AWS plugin with skills and the managed AWS MCP Server for service choice, CDK and CloudFormation, serverless, containers, billing and deploys.",
-      "sourceUrl": "https://github.com/aws/agent-toolkit-for-aws",
+      "sourceUrl": "https://github.com/aws/agent-toolkit-for-aws/tree/main/plugins/aws-core",
       "evidenceUrl": "https://github.com/aws/agent-toolkit-for-aws",
       "install": "/plugin install aws-core@claude-plugins-official",
       "publisher": "Amazon Web Services",
@@ -1273,8 +1274,8 @@
       "install": "claude mcp add blender uvx mcp-for-blender",
       "publisher": "Siddharth Ahuja / ahujasid",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Not made by the Blender Foundation. Needs the MCP for Blender addon running in Blender. The addon socket has no login, so keep it on localhost. execute_blender_code can run any Python in the open file. Save first, or set BLENDER_MCP_SAFE_MODE=1 to block file, network, and process calls. Anonymous tool-usage telemetry is on unless DISABLE_TELEMETRY=true. Content collection stays off until you opt in. Poly Haven needs no key. Sketchfab, Poly Pizza, Meshy, Tripo, Hyper3D, and Hunyuan3D need their own keys, or the project's paid generator plan.",
       "verdict": {
         "tier": null,
@@ -1301,8 +1302,8 @@
       "evidenceUrl": "https://www.blender.org/lab/mcp-server/",
       "install": null,
       "publisher": "Blender Lab / Blender Foundation",
-      "license": null,
-      "lastActivity": null,
+      "license": "GPL-3.0-or-later",
+      "lastActivity": "2026-09-29",
       "verifiedOn": "2026-10-20",
       "notes": "Needs Blender 5.1 or newer, the Lab add-on from the v1.0.3 zip, and a separate MCP server. The Lab page does not document a Claude Code or Codex command. It points to Llama.cpp docs and the project wiki for server setup. Model-written Python runs in Blender with no guard against deleting data or sending it out. Use a machine that does not hold sensitive files.",
       "verdict": {
@@ -1386,15 +1387,15 @@
       "install": "{\n  \"mcpServers\": {\n    \"build123d-mcp\": {\n      \"command\": \"uv\",\n      \"args\": [\"tool\", \"run\", \"--python\", \"3.12\", \"build123d-mcp@latest\"]\n    }\n  }\n}",
       "publisher": "Paul Fremantle / pzfreo",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-15",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs uv. The documented server command is uv tool run --python 3.12 build123d-mcp@latest. Python 3.11 through 3.14 are supported, and uv can download 3.12. No CAD app has to be open. The README shows a Claude JSON config and says Codex CLI uses the same command and arguments.",
       "verdict": {
         "tier": null,
         "note": null
       },
       "match": [
-        "mcp:build123d"
+        "mcp:build123d-mcp"
       ],
       "media": []
     },
@@ -1411,7 +1412,7 @@
         "marketing-sales"
       ],
       "summary": "Edits, resizes, reviews and brand-checks Canva designs through the Canva MCP server.",
-      "sourceUrl": "https://github.com/canva-sdks/canva-skills",
+      "sourceUrl": "https://github.com/canva-sdks/canva-skills/tree/main/plugins/canva",
       "evidenceUrl": "https://github.com/canva-sdks/canva-skills/blob/main/README.md",
       "install": "/plugin marketplace add canva-sdks/canva-skills\n/plugin install canva@canva-skills",
       "publisher": "Canva",
@@ -1477,7 +1478,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-10-17",
       "verifiedOn": "2026-10-22",
-      "notes": "The Claude Code plugin starts it every session, subagents included. The Codex installer adds a start hook you trust once in /hooks; without it, type $caveman. Only chat replies shrink: code, commits, docs, security warnings and questions to you stay in full sentences. OMP: npx -y github:JuliusBrussee/caveman -- --only omp. pi-caveman (jonjonrankin/pi-caveman, MIT) ports it to pi and OMP as an extension: pi install git:github.com/jonjonrankin/pi-caveman. It adds the rules to every prompt, so the usage scan never sees it. The full caveman CLI sends usage stats unless turned off.",
+      "notes": "The Claude Code plugin starts it every session, subagents included. The Codex installer adds a start hook you trust once in /hooks; without it, type $caveman. On npm 12 or newer, add --allow-git=root after npx. Only chat replies shrink: code, commits, docs, security warnings and questions to you stay in full sentences. OMP: npx -y github:JuliusBrussee/caveman -- --only omp. pi-caveman (jonjonrankin/pi-caveman, MIT) ports it to pi and OMP: pi install git:github.com/jonjonrankin/pi-caveman. The usage scan never sees it. The caveman CLI sends usage stats until you run caveman telemetry off.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1507,8 +1508,8 @@
       "install": "codex mcp add chrome-devtools -- npx chrome-devtools-mcp@latest",
       "publisher": "Google Chrome DevTools",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-22",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Node.js LTS, current stable Chrome, and npm. Official support is Google Chrome and Chrome for Testing. The browser starts when a tool needs it, not when the server connects. Page contents are sent to the MCP client, so do not open accounts you would not share with the agent. Usage stats are on by default; pass --no-usage-statistics to opt out. Performance tools may call the CrUX API unless you pass --no-performance-crux.",
       "verdict": {
         "tier": null,
@@ -1564,10 +1565,10 @@
       "evidenceUrl": "https://pypi.org/project/cli-anything-kdenlive/",
       "install": "pip install cli-anything-kdenlive",
       "publisher": "HKUDS / CLI-Anything contributors",
-      "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Python 3.10+. pip install cli-anything-kdenlive installs the CLI. You still have to place the skill file where the agent reads skills. Use --json for parseable output. SKILL.md says Kdenlive must be installed. The PyPI page says project editing and XML export need neither Kdenlive nor melt. Undo history holds 50 steps. License is unsettled: parent repo Apache-2.0 versus a MIT classifier on the package.",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-04-18",
+      "verifiedOn": "2026-10-22",
+      "notes": "Python 3.10+. pip install cli-anything-kdenlive installs the CLI. You still have to place the skill file where the agent reads skills. Use --json for parseable output. SKILL.md says Kdenlive must be installed. The PyPI page says project editing and XML export need neither Kdenlive nor melt. Undo history holds 50 steps. The repo LICENSE is Apache-2.0; the PyPI package classifier says MIT.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1594,7 +1595,7 @@
       "install": "claude mcp add --transport http clickup https://mcp.clickup.com/mcp",
       "publisher": "ClickUp",
       "license": null,
-      "lastActivity": null,
+      "lastActivity": "2026-10-07",
       "verifiedOn": "2026-10-22",
       "notes": "Available on all ClickUp plans; run /mcp in Claude Code to sign in. Without the Everything AI add-on, tool calls are capped per rolling 24 hours, per Workspace and per client: 100 on Free Forever, 300 on Core and Unlimited, more on higher plans. Codex: install the ClickUp plugin from /plugins (OpenAI's curated catalog, MIT). No SPDX license is published for the hosted service.",
       "verdict": {
@@ -1619,13 +1620,13 @@
       ],
       "summary": "Connects Claude Code to Cloudinary's MCP servers to upload, transform, analyze and deliver images and video.",
       "sourceUrl": "https://github.com/cloudinary-devs/cloudinary-plugin",
-      "evidenceUrl": "https://github.com/cloudinary-devs/cloudinary-plugin/blob/main/README.md",
+      "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/blob/main/.claude-plugin/marketplace.json",
       "install": "/plugin install cloudinary@claude-plugins-official",
       "publisher": "Cloudinary",
       "license": "MIT",
       "lastActivity": "2026-08-24",
       "verifiedOn": "2026-10-22",
-      "notes": "The install line follows the official Claude marketplace pattern; the README only says to install it in Cursor or Claude Code. Codex setup is not documented. Adds five MCP servers: asset management, environment config, structured metadata, AI analysis and MediaFlows. The first four sign in with OAuth; MediaFlows needs cloud_name, api_key and api_secret in mcp.json. claimable-cloud makes a free cloud with no signup that you claim by email within 24 hours. No LICENSE file; the manifest says MIT.",
+      "notes": "Listed as cloudinary in Anthropic's claude-plugins-official marketplace; the README only says to install it in Cursor or Claude Code. Codex setup is not documented. Adds five MCP servers: asset management, environment config, structured metadata, AI analysis and MediaFlows. The first four sign in with OAuth; MediaFlows needs cloud_name, api_key and api_secret in mcp.json. claimable-cloud makes a free cloud with no signup that you claim by email within 24 hours. No LICENSE file; the manifest says MIT.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1654,8 +1655,8 @@
       "install": "/plugin install coderabbit@claude-plugins-official",
       "publisher": "CodeRabbit",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs the CodeRabbit CLI on the machine and a signed-in account (`coderabbit auth login`, or `--region eu` for an EU account). Reviews run through that CLI, so chat-only Claude sessions cannot run them. Claude Code command is `/coderabbit:code-review` (older docs say `/coderabbit:coderabbit-review`). Codex: open `/plugins`, search coderabbit, and install. Autofix changes a GitHub PR only after you approve each issue. Reviews can spend credits.",
       "verdict": {
         "tier": null,
@@ -1714,8 +1715,8 @@
       "install": "npx ctx7 setup",
       "publisher": "Upstash",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Hosted at https://mcp.context7.com/mcp. Tools are resolve-library-id and query-docs. An API key from context7.com/dashboard raises rate limits. npx ctx7 setup asks you to pick CLI plus skills, or MCP. This spell is the MCP server. Node.js 22.13 or newer if you use the ctx7 CLI. MIT covers the repository, not the private API backend. Library docs are community-contributed.",
       "verdict": {
         "tier": null,
@@ -1783,6 +1784,8 @@
         "skill:cypress-author",
         "skill:cypress-explain",
         "skill:cypress-tap",
+        "skill:cypress-cloud-cli",
+        "skill:cypress-docs",
         "mcp:cypress-cloud"
       ],
       "media": []
@@ -1804,7 +1807,7 @@
       "install": "/plugin marketplace add databricks/databricks-agent-skills\n/plugin install databricks@databricks-agent-skills",
       "publisher": "Databricks",
       "license": null,
-      "lastActivity": "2026-10-19",
+      "lastActivity": "2026-10-22",
       "verifiedOn": "2026-10-22",
       "notes": "Replaces the deprecated databricks-solutions/ai-dev-kit. Latest release v0.2.32. The Databricks License only allows use with Databricks services, so license is left empty. databricks aitools install is the canonical path and the only one with experimental skills. Codex: codex plugin marketplace add databricks/databricks-agent-skills, then codex plugin add databricks, then review hooks with /hooks. Needs a Databricks workspace.",
       "verdict": {
@@ -1866,7 +1869,7 @@
       "publisher": "lordhoell",
       "license": "MIT",
       "lastActivity": "2026-04-03",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Resolve 19 or newer must be running before the server starts. Python 3.10+. Same machine only. macOS looks for fusionscript.so inside DaVinci Resolve.app. Override with RESOLVE_SCRIPT_LIB. Coverage follows the 20.2.2 scripting API. Free-edition scripting can be limited. Some tools need Studio or a newer Resolve. The README's pip and uvx lines fetch the PyPI package davinci-resolve-mcp, which is filmcademy's older, smaller server, so install from a clone as the README's Development section does. Claude Code setup is documented. Codex setup is not.",
       "verdict": {
         "tier": null,
@@ -1894,8 +1897,8 @@
       "install": null,
       "publisher": "lordhoell",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-04-03",
+      "verifiedOn": "2026-10-22",
       "notes": "Copy skill/davinci-resolve-mcp/ into the Claude Code skills folder, or run claude skill install on davinci-resolve-mcp.skill from the repo. Needs the matching MCP server and a running Resolve. Codex can read the SKILL.md if you place the folder yourself. The repo does not document a Codex command. Same-machine and Studio limits come from the server.",
       "verdict": {
         "tier": null,
@@ -1922,7 +1925,7 @@
       "install": "{\"mcpServers\":{\"dbt\":{\"command\":\"uvx\",\"args\":[\"dbt-mcp\"],\"env\":{\"DBT_PROJECT_DIR\":\"/path/to/your/dbt/project\",\"DBT_PATH\":\"/path/to/your/dbt/executable\"}}}}",
       "publisher": "dbt Labs",
       "license": "Apache-2.0",
-      "lastActivity": "2026-10-13",
+      "lastActivity": "2026-10-21",
       "verifiedOn": "2026-10-22",
       "notes": "Latest release v2.8.0. dbt documents Claude Code and Claude Desktop, not Codex. The config shown goes in .mcp.json at the project root and is CLI only; add DBT_HOST for dbt platform tools with OAuth (Starter, Enterprise or Enterprise+). A remote server runs at https://YOUR_DBT_HOST_URL/api/ai/v1/mcp. CLI tools such as build can change models and warehouse objects. execute_sql over a token needs a personal access token.",
       "verdict": {
@@ -2097,7 +2100,7 @@
       "license": "MIT",
       "lastActivity": "2026-10-19",
       "verifiedOn": "2026-10-22",
-      "notes": "Needs an ElevenLabs API key in ELEVENLABS_API_KEY; the onboarding skill can add one to your project's env file. Twelve skills include text-to-speech, speech-to-text, music, sound-effects, dubbing, voice-changer, voice-isolator and agents. They write code with the Python or JavaScript SDK or call the elevenlabs CLI. Text to speech examples default to the eleven_v4 model. Music streaming needs a paid plan. The skills CLI installs the pack for Claude Code, Codex and other agents.",
+      "notes": "Needs an ElevenLabs API key in ELEVENLABS_API_KEY; the onboarding skill can add one to your project's env file. Twelve skills include text-to-speech, speech-to-text, music, sound-effects, dubbing, voice-changer, voice-isolator and agents. They write code with the Python or JavaScript SDK or call the elevenlabs CLI. Text to speech examples default to the eleven_v4 model. The music skill says music generation needs a paid ElevenLabs plan. The skills CLI installs the pack for Claude Code, Codex and other agents.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2117,7 +2120,7 @@
         "security-testing"
       ],
       "summary": "Subagents that read Endor Labs findings to triage AI SAST results, plan dependency fixes and explain vulnerabilities.",
-      "sourceUrl": "https://github.com/endorlabs/ai-plugins",
+      "sourceUrl": "https://github.com/endorlabs/ai-plugins/tree/main/plugins/claude/endor-labs-agent-kit",
       "evidenceUrl": "https://github.com/endorlabs/ai-plugins/blob/main/README.md",
       "install": "/plugin marketplace add endorlabs/ai-plugins\n/plugin install endor-labs-agent-kit@endorlabs\n/reload-plugins",
       "publisher": "Endor Labs",
@@ -2181,8 +2184,8 @@
       "install": "npx skills@latest add expo/skills --skill '*'",
       "publisher": "Expo",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "For Claude Code and Codex, the Expo README recommends the official plugin, which installs every Expo skill plus the Expo MCP config. EAS Workflows is paid, with free-tier limits. Build and submit jobs also need paid Apple Developer and Google Play accounts. Files live in .eas/workflows/ and must be 16 KiB or smaller. Validation needs a logged-in EAS CLI and a linked project.",
       "verdict": {
         "tier": null,
@@ -2210,9 +2213,9 @@
       "install": "npx skills@latest add expo/skills --skill '*'",
       "publisher": "Expo",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Load this first when the request or package.json mentions Expo or EAS. It classifies the goal, confirms if the ask is ambiguous, then loads the matching skill. Shared rules: read the SDK version, use versioned docs, and install packages with `npx expo install`. A bare React Native app with no expo dependency is out of scope. Plugin install is the update path for Claude Code and Codex.",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Load this first when the request or package.json mentions Expo or EAS. It classifies the goal, confirms if the ask is ambiguous, then loads the matching skill. Shared rules: read the SDK version, use versioned docs, and install packages with `npx expo install`. Other React Native apps are out of scope unless they ship through EAS. Plugin install is the update path for Claude Code and Codex.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2239,8 +2242,8 @@
       "install": "npx skills@latest add expo/skills --skill '*'",
       "publisher": "Expo",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Covers file routes, Link, native stacks, modals, form sheets, NativeTabs, and headers. Styling belongs to expo-native-ui. Motion belongs to expo-animation. On SDK 56+, import navigation helpers from expo-router/react-navigation, not @react-navigation packages. The plugin install brings every Expo skill.",
       "verdict": {
         "tier": null,
@@ -2268,8 +2271,8 @@
       "install": "npx skills@latest add expo/skills --skill '*'",
       "publisher": "Expo",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Follows the project's SDK. The skill's install steps are `npx expo install expo@latest` and `npx expo install --fix`, then `npx expo-doctor`. From SDK 55 or earlier, skip SDK 56 and move to SDK 57 at expo@57.0.9 or later, because of a Hermes V1 memory bug. Do not switch the Hermes version by hand. Read the changelog for the target SDK.",
       "verdict": {
         "tier": null,
@@ -2327,8 +2330,8 @@
       "install": "claude mcp add ffmpeg uvx ffmpeg-mcp-lite",
       "publisher": "kevinwatt",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-05-08",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs FFmpeg on PATH and Python 3.10+. uvx fetches the package. macOS: brew install ffmpeg. Tools: ffmpeg_get_info, ffmpeg_convert, ffmpeg_compress, ffmpeg_trim, ffmpeg_extract_audio, ffmpeg_merge, ffmpeg_extract_frames, ffmpeg_add_subtitles. Output defaults to ~/Downloads. No paid API. Claude Code setup is documented. Codex setup is not.",
       "verdict": {
         "tier": null,
@@ -2356,8 +2359,8 @@
       "install": "git clone https://github.com/ychoi-kr/claude-ffmpeg-skill.git\ncp -r claude-ffmpeg-skill ~/.claude/skills/ffmpeg-usage",
       "publisher": "ychoi-kr",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2025-10-19",
+      "verifiedOn": "2026-10-22",
       "notes": "ffmpeg must be installed (brew install ffmpeg on macOS). Claude Code copies the repo to ~/.claude/skills/ffmpeg-usage. README also wants Claude Code 2.0.12+, or a Pro, Max, Team or Enterprise plan to upload the zip in Claude Desktop. Codex install is not documented. The author built it to study Claude skills. Review commands before they run.",
       "verdict": {
         "tier": null,
@@ -2386,14 +2389,15 @@
       "publisher": "Figma",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs a Figma account. Starter and paid plans can connect if the client is in the Figma MCP catalog. Remote server is https://mcp.figma.com/mcp and does not need the desktop app. Sign in on first connect. Canvas writes need Professional, Education, Organization, or Enterprise, and a Full seat outside drafts. The desktop server at http://127.0.0.1:3845/mcp cannot write to the canvas. The Claude Code plugin install also adds Figma skills. The Codex CLI command does not.",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Figma account; Starter and paid plans can connect from clients in the Figma MCP catalog. Remote server is https://mcp.figma.com/mcp, needs no desktop app, and asks you to sign in on first connect. Canvas writes need Professional, Education, Organization, or Enterprise, and a Full seat outside drafts; they are free in beta and will become usage-based paid. The desktop server at http://127.0.0.1:3845/mcp needs a Dev or Full seat and cannot write to the canvas. The plugin (claude plugin install figma@claude-plugins-official) adds Figma skills; the CLI commands do not.",
       "verdict": {
         "tier": null,
         "note": null
       },
       "match": [
         "mcp:figma",
+        "mcp:figma-desktop",
         "mcp:figma-dev-mode-mcp-server"
       ],
       "media": []
@@ -2411,12 +2415,12 @@
       "summary": "Claude Code plugin on Firecrawl's hosted MCP: web search, page reading and indexes of dev docs, papers and US government data.",
       "sourceUrl": "https://github.com/firecrawl/firecrawl-claude-plugin",
       "evidenceUrl": "https://github.com/firecrawl/firecrawl-claude-plugin",
-      "install": "/plugin install firecrawl@claude-plugins-official",
+      "install": "/plugin marketplace add firecrawl/firecrawl-claude-plugin\n/plugin install firecrawl@firecrawl",
       "publisher": "Firecrawl",
       "license": "MIT",
       "lastActivity": "2026-10-14",
       "verifiedOn": "2026-10-22",
-      "notes": "Version 2.0.0 uses the hosted MCP server, not the Firecrawl CLI; connect your account with /mcp. Skills: firecrawl, firecrawl-developer-index and firecrawl-research-index. Map, crawl and the other CLI skills moved to firecrawl/cli (npx skills add firecrawl/cli). Install only one Firecrawl plugin; the CLI skills reuse the same names. Firecrawl's standalone MCP server repo documents other clients, not Codex.",
+      "notes": "Also in the official marketplace: open /plugin and search for firecrawl. Version 2.0.0 uses the hosted MCP server, not the Firecrawl CLI; connect your account with /mcp. Skills: firecrawl, firecrawl-developer-index and firecrawl-research-index. Map, crawl and the other CLI skills moved to firecrawl/cli (npx skills add firecrawl/cli). Install only one Firecrawl plugin; the CLI skills reuse the same names. Firecrawl's standalone MCP server repo documents other clients, not Codex.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2442,9 +2446,9 @@
       "install": "pip install mcp\nnpm install -g freecad-mcp-setup@latest\nnpx freecad-mcp-setup setup",
       "publisher": "contextform",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs FreeCAD 1.0 or newer, Node.js, and the AI Copilot workbench. On macOS and Linux the documented install is pip install mcp, then npm install -g freecad-mcp-setup@latest, then npx freecad-mcp-setup setup. Start FreeCAD before asking Claude Code to connect. The installer registers the freecad server and can change FreeCAD and client config. Python scripts run inside the open document. The repository listing had no LICENSE file.",
+      "lastActivity": "2025-08-15",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs FreeCAD 1.0 or newer, Node.js and Claude Code. The setup installs the AI Copilot workbench and registers the freecad MCP server, so it changes FreeCAD and Claude config. On Windows the first step is python -m pip install --user mcp. Start FreeCAD before asking Claude Code to connect. Python scripts run inside the open document. The repo has no LICENSE file; the freecad-mcp-setup npm package declares LGPL-2.1-or-later. No commits since August 2025.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2467,12 +2471,12 @@
       "summary": "Runs Python in a live Fusion 360 session and captures the active viewport.",
       "sourceUrl": "https://github.com/ndoo/fusion360-mcp-bridge",
       "evidenceUrl": "https://github.com/ndoo/fusion360-mcp-bridge/blob/main/README.md",
-      "install": null,
+      "install": "git clone https://github.com/ndoo/fusion360-mcp-bridge.git\ncd fusion360-mcp-bridge\nbash scripts/quickstart-mac.sh",
       "publisher": "ndoo",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs Fusion 360 open, the FusionMCPBridge add-in running, Python 3.9 or newer, and a shared secret in ~/.fusion-mcp-secret. A personal Fusion license is enough, per the README. macOS can use scripts/quickstart-mac.sh, which also writes ~/.claude/settings.json. On Windows, copy the add-in into the Fusion AddIns folder and add the Python server entry by hand. fusion_execute can run any Python the Fusion API can reach.",
+      "lastActivity": "2026-03-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Fusion 360 open, the FusionMCPBridge add-in running, Python 3.9 or newer, and a shared secret in ~/.fusion-mcp-secret. A free personal Fusion license is enough, per the README. The install shown is the macOS quickstart: it installs Python dependencies, writes the secret, copies the add-in and patches ~/.claude/settings.json; then run the add-in in Fusion and restart Claude. On Windows, copy the add-in into the Fusion AddIns folder and add the Python server entry by hand. fusion_execute can run any Python the Fusion API can reach.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2499,8 +2503,8 @@
       "install": "codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PAT_TOKEN",
       "publisher": "GitHub",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Hosted server is https://api.githubcopilot.com/mcp/. Codex expects a PAT in the GITHUB_PAT_TOKEN env var. Claude Code's current remote command puts the PAT in an Authorization header. Use the smallest scopes the tools you need require. A local Docker server is a separate setup and can use OAuth instead of a PAT. Do not commit the token.",
       "verdict": {
         "tier": null,
@@ -2529,7 +2533,7 @@
       "publisher": "hi-godot",
       "license": "MIT",
       "lastActivity": "2026-10-03",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Godot 4.7 or newer for v4, and uv. Install a published release into addons/godot_ai, then enable the plugin. The dock Configure button writes the Claude Code or Codex command; a bare http://127.0.0.1:8000/mcp entry cannot authenticate. Telemetry is on unless GODOT_AI_DISABLE_TELEMETRY=true or DISABLE_TELEMETRY=true. C# files can be written, but the plugin does not build .NET.",
       "verdict": {
         "tier": null,
@@ -2557,7 +2561,7 @@
       "publisher": "Coding-Solo",
       "license": "MIT",
       "lastActivity": "2026-04-16",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Godot on PATH, or GODOT_PATH, and Node.js 18 or newer. Documented for Claude Code. Codex is not named. Latest main commit is 2026-04-16, so newer Godot releases may be ahead of this server.",
       "verdict": {
         "tier": null,
@@ -2670,8 +2674,8 @@
       "install": "uv tool install graphifyy\ngraphify install",
       "publisher": "Graphify-Labs",
       "license": "Apache-2.0",
-      "lastActivity": "2026-10-20",
-      "verifiedOn": "2026-10-21",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Python 3.10+ and uv (or pipx). Install the PyPI package graphifyy. Other graphify* packages are not affiliated. Codex invokes the skill as $graphify, and parallel extraction needs multi_agent = true under [features] in ~/.codex/config.toml. Code is parsed on the machine with tree-sitter and needs no API key. Docs, PDFs, images, and video use the assistant, or Gemini if GEMINI_API_KEY or GOOGLE_API_KEY is already set. PDF and video need an extra such as uv tool install \"graphifyy[pdf]\".",
       "verdict": {
         "tier": null,
@@ -2701,7 +2705,7 @@
       "license": null,
       "lastActivity": null,
       "verifiedOn": "2026-10-22",
-      "notes": "Needs a HeyGen account. Usage draws on your HeyGen plan's credits; HeyGen points batches and production work to its CLI with an API key. Sign in with OAuth through /mcp. Codex: codex mcp add heygen --url https://mcp.heygen.com/mcp/v1 with no trailing slash; codex mcp login heygen signs in again. Tools cover Video Agent sessions, avatar videos (Avatar III, IV or V), templates, voices, video translation, AI clipping and batches. Some tools delete videos permanently. Hosted service with no published license.",
+      "notes": "Needs a HeyGen account. Usage draws on your HeyGen plan's credits. Sign in with OAuth through /mcp. Codex: codex mcp add heygen --url https://mcp.heygen.com/mcp/v1 with no trailing slash; codex mcp login heygen signs in again. Tools cover Video Agent sessions, avatar videos (Avatar III, IV or V), templates, voices, video translation, AI clipping and batches. Some tools delete videos permanently. Hosted service with no published license.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2756,7 +2760,7 @@
         "business-operations"
       ],
       "summary": "HubSpot's Claude Code plugin: contact import, call prep, daily brief, follow-ups, call logging and pipeline views on HubSpot's MCP server.",
-      "sourceUrl": "https://github.com/HubSpot/hubspot-mcp-plugins",
+      "sourceUrl": "https://github.com/HubSpot/hubspot-mcp-plugins/tree/main/HubSpot-Sales",
       "evidenceUrl": "https://developers.hubspot.com/docs/build-with-ai/remote-mcp-server",
       "install": "/plugin install hubspot-sales@claude-plugins-official",
       "publisher": "HubSpot",
@@ -2787,13 +2791,13 @@
       ],
       "summary": "Official Hub server: search models, datasets, Spaces and papers, and call Gradio apps on Spaces as tools.",
       "sourceUrl": "https://github.com/huggingface/hf-mcp-server",
-      "evidenceUrl": "https://huggingface.co/docs/hub/hf-mcp-server",
+      "evidenceUrl": "https://huggingface.co/docs/hub/agents-mcp",
       "install": "claude mcp add hf-mcp-server -t http https://huggingface.co/mcp?login",
       "publisher": "Hugging Face",
       "license": "MIT",
       "lastActivity": "2026-10-19",
       "verifiedOn": "2026-10-22",
-      "notes": "Hosted at https://huggingface.co/mcp. The ?login URL starts sign-in when you open claude; a token in an Authorization header also works. Choose tools and add community Spaces at huggingface.co/settings/mcp. Hugging Face's docs name Codex as a client; that settings page generates its config, but no Codex command is printed. Add ?no_image_content=true to drop image blocks from Gradio tools.",
+      "notes": "Hosted at https://huggingface.co/mcp. The ?login URL starts sign-in when you open claude; a token in an Authorization header also works. Choose tools and add community Spaces at huggingface.co/settings/mcp. Hugging Face's docs name Codex as a client; that settings page generates its config, but no Codex command is printed. Add ?no_image_content=true to drop image blocks from Gradio tools. Jobs, sandboxes and repo-writing tools are extras you turn on in those settings.",
       "verdict": {
         "tier": null,
         "note": null
@@ -2851,8 +2855,8 @@
       "install": "/plugin marketplace add blader/humanizer\n/plugin install humanizer@humanizer\nnpx skills add blader/humanizer --global --agent codex",
       "publisher": "Siqi Chen / blader",
       "license": "MIT",
-      "lastActivity": "2026-09-28",
-      "verifiedOn": "2026-10-21",
+      "lastActivity": "2026-10-16",
+      "verifiedOn": "2026-10-22",
       "notes": "The Claude Code plugin needs version 2.1.142 or newer. Older Claude Code: npx skills add blader/humanizer --global --agent claude-code. A writing sample, if you give one, sets the voice, including dashes. File edits change prose only and leave code, data, frontmatter, and link targets alone. It keeps claims from the source and does not try to beat AI detectors. Detectors still flag most of its output.",
       "verdict": {
         "tier": null,
@@ -2882,7 +2886,7 @@
       "publisher": "Hyper3D",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Hosted at https://api.hyper3d.com/api/mcp. Browser login, no API key. Choose a billing workspace; generation spends its credits. Codex: codex mcp add hyper3d-rodin --url https://api.hyper3d.com/api/mcp, then codex mcp login hyper3d-rodin. The install guides do not state a software license.",
       "verdict": {
         "tier": null,
@@ -2999,9 +3003,9 @@
       "install": "claude mcp add-json kubernetes-mcp-server '{\"command\":\"npx\",\"args\":[\"-y\",\"kubernetes-mcp-server@latest\",\"--config\",\"'\"${HOME}\"'/.config/kubernetes-mcp-server.toml\"],\"env\":{\"KUBECONFIG\":\"'${HOME}'/.kube/mcp-viewer.kubeconfig\"}}' -s user",
       "publisher": "containers (GitHub organization)",
       "license": "Apache-2.0",
-      "lastActivity": "2026-10-21",
+      "lastActivity": "2026-10-22",
       "verifiedOn": "2026-10-22",
-      "notes": "Free and open source; you need access to a cluster. The setup guide first creates a ServiceAccount, a kubeconfig for it (mcp-viewer.kubeconfig) and ~/.config/kubernetes-mcp-server.toml with read_only = true. Runtime flags such as --read-only are no longer accepted. With read_only off, tools can delete pods, change resources and install or uninstall Helm charts. Needs Node.js for npx, or use the native binary. Codex setup is not documented.",
+      "notes": "Free and open source; you need access to a cluster. The setup guide first creates a ServiceAccount, a kubeconfig for it (mcp-viewer.kubeconfig) and ~/.config/kubernetes-mcp-server.toml with read_only = true. Runtime flags such as --read-only are no longer accepted. With read_only off, tools can delete pods and change resources. Helm tools are an optional toolset, off by default. Needs Node.js for npx, or use the native binary. Codex setup is not documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3023,7 +3027,7 @@
         "ai-engineering"
       ],
       "summary": "Langfuse skills to set up tracing, query traces, prompts and datasets through the API, and migrate from other tools.",
-      "sourceUrl": "https://github.com/langfuse/skills",
+      "sourceUrl": "https://github.com/langfuse/skills/tree/main/skills/langfuse",
       "evidenceUrl": "https://github.com/langfuse/skills",
       "install": "npx skills add langfuse/skills --skill \"langfuse\"",
       "publisher": "Langfuse",
@@ -3090,8 +3094,8 @@
       "publisher": "Make",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Make account and OAuth. No local app. Run tools on all plans. Management tools need a paid plan. OAuth timeouts are 25 seconds for runs and 30 seconds for management tools. A timed-out run can continue for 40 minutes. If OAuth fails, a token URL is the documented fallback. Docs use https://mcp.make.com. The skills repo documents /claude and /openai instead.",
+      "verifiedOn": "2026-10-22",
+      "notes": "Make account and OAuth. No local app. Run tools on all plans. Management tools need a paid plan. OAuth timeouts are 25 seconds for runs and 30 seconds for management tools. A timed-out run can continue for 40 minutes. If OAuth fails, a token URL is the documented fallback. Make's docs use https://mcp.make.com and have no Codex page; the make-skills README gives https://mcp.make.com/openai for Codex.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3113,19 +3117,21 @@
         "workflow-automation"
       ],
       "summary": "Make plugin with scenario skills and MCP registration for Claude Code and Codex.",
-      "sourceUrl": "https://github.com/integromat/make-skills",
+      "sourceUrl": "https://github.com/integromat/make-skills/tree/main/plugins/make-skills-claude",
       "evidenceUrl": "https://github.com/integromat/make-skills",
       "install": "/plugin marketplace add integromat/make-skills\n/plugin install make-skills@make-marketplace",
       "publisher": "Make / integromat",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs a Make account. Claude Code installs make-skills@make-marketplace, which registers MCP. Codex: add the marketplace, install make from it, and if MCP is missing add https://mcp.make.com/openai then codex mcp login make. OAuth must grant every requested scope. make-endpoints is a closed beta and does not install the SDK.",
       "verdict": {
         "tier": null,
         "note": null
       },
-      "match": [],
+      "match": [
+        "plugin:make-skills"
+      ],
       "media": []
     },
     {
@@ -3145,8 +3151,8 @@
       "install": "claude plugin install mattpocock-skills@claude-plugins-official\ncodex plugin marketplace add mattpocock/skills\ncodex plugin add mattpocock-skills@mattpocock",
       "publisher": "Matt Pocock",
       "license": "MIT",
-      "lastActivity": "2026-08-19",
-      "verifiedOn": "2026-10-21",
+      "lastActivity": "2026-09-17",
+      "verifiedOn": "2026-10-22",
       "notes": "Plugin commands install the whole mattpocock-skills set. Installing that plugin and a skills.sh copy in the same agent duplicates every skill. Run /setup-matt-pocock-skills once per repo. The skill's terms are module, interface, seam, adapter, and depth. It tells the agent to avoid the words component, service, API, and boundary.",
       "verdict": {
         "tier": null,
@@ -3175,7 +3181,7 @@
       "publisher": "Matt Pocock",
       "license": "MIT",
       "lastActivity": "2026-10-07",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Plugin commands install the whole mattpocock-skills set. Installing that plugin and a skills.sh copy in the same agent duplicates every skill. Without a command that goes red on this bug, it stops and asks for a repro, a redacted artifact, or permission to instrument. Replace secrets with <REDACTED> before showing commands or outputs.",
       "verdict": {
         "tier": null,
@@ -3199,13 +3205,13 @@
       ],
       "summary": "Test-first development through public interfaces, agreed seams, and one behavioral slice at a time.",
       "sourceUrl": "https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md",
-      "evidenceUrl": "https://github.com/mattpocock/skills/blob/main/skills/engineering/tdd/SKILL.md",
-      "install": "claude plugin install mattpocock-skills@claude-plugins-official",
+      "evidenceUrl": "https://github.com/mattpocock/skills/blob/main/README.md",
+      "install": "claude plugin install mattpocock-skills@claude-plugins-official\ncodex plugin marketplace add mattpocock/skills\ncodex plugin add mattpocock-skills@mattpocock",
       "publisher": "Matt Pocock",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Exact command from https://github.com/mattpocock/skills installs the containing Claude plugin, not only tdd. Repository also documents Codex packaging. Current body places refactoring in review, despite broader red-green-refactor descriptions elsewhere.",
+      "lastActivity": "2026-10-07",
+      "verifiedOn": "2026-10-22",
+      "notes": "Plugin commands install the whole mattpocock-skills set, not only tdd. Pick the plugin or a skills.sh copy per agent; installing both duplicates every skill. It confirms test seams with you before writing any test. Refactoring is left to the review stage, outside the red-green loop.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3233,7 +3239,7 @@
       "publisher": "CoplayDev / Aura",
       "license": "MIT",
       "lastActivity": "2026-10-19",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Unity 2021.3 LTS through 6.x, Python 3.10+, and uv. Add https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main in Package Manager, or run openupm add com.coplaydev.unity-mcp. Window → MCP for Unity then connects Claude Code and Codex. Not affiliated with Unity Technologies. The MIT package is free; Aura's separate assistant is paid.",
       "verdict": {
         "tier": null,
@@ -3261,13 +3267,15 @@
       "publisher": "Meshy",
       "license": "MIT",
       "lastActivity": "2026-10-15",
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Node.js 22.12 or newer. The documented skill install also adds meshy-3d-printing. The skill pins Meshy CLI 0.4.3. Sign in with meshy auth login --device in a browser. Cloud jobs spend credits. A local upload is limited to 50 MiB, and a local model must be GLB or glTF. Login alone is not finished: the skill expects the files saved where you asked.",
       "verdict": {
         "tier": null,
         "note": null
       },
-      "match": [],
+      "match": [
+        "skill:meshy-3d-generation"
+      ],
       "media": []
     },
     {
@@ -3288,9 +3296,9 @@
       "install": "claude mcp add meshy --env MESHY_API_KEY=msy_YOUR_API_KEY -- npx -y @meshy-ai/meshy-mcp-server",
       "publisher": "Meshy",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs Node.js 18 or newer and a Meshy API key from a Pro plan or above. Put it in MESHY_API_KEY. The README example msy_YOUR_API_KEY is a placeholder. Generation, rigging, remesh, and most later steps spend credits. A printability check is free. No desktop app is required to generate a model. Claude Code uses claude mcp add-json. Codex is covered by npx add-mcp, which writes the client config.",
+      "lastActivity": "2026-10-22",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Node.js 18 or newer and a Meshy API key from a Pro plan or above. Put it in MESHY_API_KEY. The README example msy_YOUR_API_KEY is a placeholder. Generation, rigging, remesh, and most later steps spend credits. A printability check is free. No desktop app is required to generate a model. Meshy's docs give claude mcp add and codex mcp add lines; on Windows PowerShell, use claude mcp add-json. npx add-mcp also writes the config for detected clients.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3318,7 +3326,7 @@
       "license": "MIT",
       "lastActivity": "2026-06-08",
       "verifiedOn": "2026-10-22",
-      "notes": "Codex only, from the plugin browser (/plugins). Manifest version 0.1.2. Separate from the mixpanel plugin that wraps the hosted connector: this one writes Python with the mixpanel_headless SDK, pandas and plotting libraries. Skills: setup, mixpanel-auth, mixpanelyst and dashboard-expert. Sign in with mp login, or set MP_OAUTH_TOKEN, MP_PROJECT_ID and MP_REGION. Needs a Mixpanel account.",
+      "notes": "Codex only, from the plugin browser (/plugins). Manifest version 0.1.2. Separate from the mixpanel plugin that wraps the hosted connector: this one writes Python with the mixpanel_headless SDK, pandas and plotting libraries. Skills: mixpanel-headless-setup, mixpanel-auth, mixpanelyst and dashboard-expert. Sign in with mp login, or set MP_OAUTH_TOKEN, MP_PROJECT_ID and MP_REGION. Needs a Mixpanel account.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3347,7 +3355,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-10-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Skills include instrumenting-with-mlflow-tracing (Python and TypeScript, OpenAI, Anthropic, LangChain and more), analyze-mlflow-trace, debug-agent, agent-evaluation, build-a-scorer and querying-mlflow-metrics. An optional UserPromptSubmit hook suggests a skill from your prompt. Also listed as mlflow@claude-plugins-official.",
+      "notes": "Skills include instrumenting-with-mlflow-tracing (Python and TypeScript, OpenAI, Anthropic, LangChain and more), analyze-mlflow-trace, debug-agent, agent-evaluation, build-a-scorer and querying-mlflow-metrics. An optional UserPromptSubmit hook suggests a skill from your prompt. Also listed as mlflow@claude-plugins-official. Written for MLflow 3.8 or later.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3379,7 +3387,7 @@
       "license": "MIT",
       "lastActivity": "2026-10-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Hosted at https://mcp.monday.com/mcp with OAuth; monday marks the MCP integration as beta. The README has no Claude Code or Codex one-liner. In Claude Code, the monday-crm plugin bundles this server plus five CRM skills (daily briefing, forecast, meeting-to-deal, workspace builder, data cleanup). In Codex, install monday.com from /plugins. The plugin README says it works with monday CRM's free tier.",
+      "notes": "Hosted at https://mcp.monday.com/mcp with OAuth. The README has no Claude Code or Codex one-liner. In Claude Code, the monday-crm plugin (v0.5.0) bundles this server plus nine CRM skills: daily briefing, forecast, meeting-to-deal, workspace builder, data cleanup, sequences, activity logging, activity insights and automations. In Codex, install monday.com from /plugins. The plugin README says it works with monday CRM's free tier. Dynamic API Tools are beta and off by default.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3404,13 +3412,13 @@
       ],
       "summary": "Official n8n MCP server to find, build, edit, test and run workflows on your instance.",
       "sourceUrl": "https://docs.n8n.io/build/ways-of-building-workflows/connect-to-n8n-mcp-server",
-      "evidenceUrl": "https://docs.n8n.io/connect/connect-to-n8n-mcp-server/mcp-client-examples.md",
+      "evidenceUrl": "https://docs.n8n.io/connect/connect-to-n8n-mcp-server/mcp-client-examples",
       "install": "claude mcp add --transport http n8n https://<your-n8n-domain>/mcp-server/http",
       "publisher": "n8n",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Enable instance-level MCP, then OAuth or an API token. n8n Cloud or self-hosted. No desktop app. Creating and editing workflows is documented from n8n 2.13. From 2.33.0, Settings has a Connect a client dialog. Separate from the MCP Server Trigger and MCP Client Tool nodes. Your n8n plan applies. Use http:// if the instance is plain HTTP.",
+      "verifiedOn": "2026-10-22",
+      "notes": "Turn it on under Settings > Instance-level MCP (instance owner or admin), then sign in with OAuth or an API token. n8n Cloud or self-hosted. No desktop app. Creating and editing workflows needs n8n 2.13 or later; the Connect a client dialog arrived in 2.33.0. A client sees only workflows enabled for MCP. Separate from the MCP Server Trigger and MCP Client Tool nodes. Use http:// if the instance is plain HTTP.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3435,9 +3443,9 @@
       "install": "claude mcp add n8n-mcp \\\n  -e MCP_MODE=stdio \\\n  -e LOG_LEVEL=error \\\n  -e DISABLE_CONSOLE_OUTPUT=true \\\n  -- npx n8n-mcp",
       "publisher": "Romuald Członkowski / czlonkowski",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Works on macOS via npx. Docs and validation need no n8n key. Live create and edit need N8N_API_URL and N8N_API_KEY. Copy a workflow before an AI edit. Telemetry is on by default and can include sanitized workflow structure plus intent text. Disable with npx n8n-mcp telemetry disable. This server is separate from n8n's built-in instance MCP.",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Runs locally with npx. Docs and validation need no n8n key. Live create and edit need N8N_API_URL and N8N_API_KEY. The README says to copy a workflow before an AI edit. Telemetry is on by default and can include sanitized workflow structure plus intent text. Disable with npx n8n-mcp telemetry disable. Codex setup is a config.toml entry. This server is separate from n8n's built-in instance MCP.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3452,8 +3460,7 @@
       "name": "n8n MCP Tools Expert",
       "kind": "skill",
       "agents": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "categories": [
         "workflow-automation"
@@ -3461,12 +3468,12 @@
       "summary": "Guide for community n8n-mcp tools: which tool to call, node type formats and validation.",
       "sourceUrl": "https://github.com/czlonkowski/n8n-skills",
       "evidenceUrl": "https://github.com/czlonkowski/n8n-skills/blob/main/skills/n8n-mcp-tools-expert/SKILL.md",
-      "install": "npx skills add czlonkowski/n8n-skills",
+      "install": "/plugin install czlonkowski/n8n-skills",
       "publisher": "Romuald Członkowski / czlonkowski",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "The install command adds the whole n8n-skills pack. Needs the community n8n-mcp server for any real call. No desktop app. Search tools use nodes-base.* names. Workflow tools use n8n-nodes-base.*. Live management needs the server API key. Agent tools and some test runs need N8N_MCP_ACCESS_TOKEN.",
+      "lastActivity": "2026-10-15",
+      "verifiedOn": "2026-10-22",
+      "notes": "The install adds the whole n8n-mcp-skills plugin, including hooks that nudge the agent around n8n-mcp calls. Needs the community n8n-mcp server for any real call. Search and validate tools take nodes-base.* names; workflow tools take n8n-nodes-base.*. Live management needs the server's n8n API key, and agent tools need N8N_MCP_ACCESS_TOKEN. Other agents can copy the skill folder; Codex setup is not documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3490,17 +3497,19 @@
       "summary": "Official n8n skills and hooks for building workflows through the instance MCP server.",
       "sourceUrl": "https://github.com/n8n-io/skills",
       "evidenceUrl": "https://github.com/n8n-io/skills",
-      "install": "/plugin marketplace add n8n-io/skills\n/plugin install n8n-skills@n8n-io",
+      "install": "/plugin marketplace add n8n-io/skills\n/plugin install n8n-skills@n8n-io\n/reload-plugins",
       "publisher": "n8n",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-17",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs instance-level MCP on n8n Cloud or self-hosted. README minimum is n8n 2.2.0. Claude Code asks for the base URL and registers MCP. Then run /mcp and authenticate. Codex needs 0.142.0 or newer, a separate codex mcp add, and approval of the hook-trust prompt. Disable a second n8n MCP entry if you already have one.",
       "verdict": {
         "tier": null,
         "note": null
       },
-      "match": [],
+      "match": [
+        "plugin:n8n-skills"
+      ],
       "media": []
     },
     {
@@ -3520,9 +3529,9 @@
       "install": "npx add-mcp next-devtools-mcp@latest",
       "publisher": "Vercel",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs Node.js 20.19 or newer and a Next.js 16+ dev server. The endpoint is /_next/mcp unless experimental.mcpServer is false. nextjs_index finds servers. nextjs_call runs get_errors, get_routes, get_logs, and similar tools. get_page_metadata needs the page open in a browser. nextjs_docs and browser_eval only point at local Next.js docs and the agent-browser CLI. Upgrade workflows are skills, not tools in this server. MIT, package version 0.4.1. Docs page updated 2026-10-02.",
+      "lastActivity": "2026-09-15",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Node.js 20.19 or newer and a running Next.js 16+ dev server. The endpoint is /_next/mcp unless experimental.mcpServer is false. nextjs_index finds servers; nextjs_call runs get_errors, get_routes, get_logs, and similar tools. get_page_metadata needs the page open in a browser. nextjs_docs and browser_eval only point at local Next.js docs and the agent-browser CLI. Sends anonymous usage telemetry; set NEXT_TELEMETRY_DISABLED=1 to opt out. MIT is declared in package.json; the repo has no LICENSE file. Package version 0.4.1.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3549,9 +3558,9 @@
       "install": "claude mcp add --transport http notion https://mcp.notion.com/mcp",
       "publisher": "Notion",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Hosted server at https://mcp.notion.com/mcp. You complete OAuth, then the agent can read and update content you can access in the workspace you select. Claude Code: add the server, then run /mcp and finish login. Codex docs show a ~/.codex/config.toml block for that URL, then `codex mcp login notion`. No SPDX license is published for the hosted service.",
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Hosted server at https://mcp.notion.com/mcp. You complete OAuth, then the agent can read and update content you can access in the workspace you select. Claude Code: add the server, then run /mcp and finish login; Notion also offers a Claude Code plugin with skills and slash commands. Codex: add a [mcp_servers.notion] block with that URL to ~/.codex/config.toml, then run `codex mcp login notion`. No SPDX license is published for the hosted service.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3578,8 +3587,8 @@
       "install": "/plugin install superpowers@claude-plugins-official",
       "publisher": "Jesse Vincent / obra",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-10",
+      "verifiedOn": "2026-10-22",
       "notes": "Claude Code install is the full Superpowers plugin. This skill is one file inside it. Codex: open `/plugins`, search Superpowers, and choose Install Plugin. The skill blocks proposed fixes until the error is read, reproduced, and recent changes are checked. After three failed fixes it stops and asks you about the architecture.",
       "verdict": {
         "tier": null,
@@ -3608,7 +3617,7 @@
       "publisher": "Jesse Vincent / obra",
       "license": "MIT",
       "lastActivity": "2026-09-19",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "The install adds the full Superpowers plugin. In the Codex CLI, type /plugins, search superpowers, and select Install Plugin. The Codex app installs it from the Coding section of Plugins. Ask a person before skipping it for throwaway prototypes, generated code, or configuration files. Implementation written before the failing test is deleted.",
       "verdict": {
         "tier": null,
@@ -3636,8 +3645,8 @@
       "publisher": "Onshape Labs / PTC",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Needs an Onshape account, a subscription to the FeatureScript MCP Server app, and a browser approve step. The 2026-09-08 article documents Claude Code only: claude mcp add --transport http onshape https://fs-mcp.labs.onshape.app/mcp, then /mcp to authenticate. No local CAD app is required. Subscription price and a code license are not stated on that page.",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an Onshape account, a subscription to the FeatureScript MCP Server app in the Onshape App Store, and a browser authorize step. The 2026-09-08 article documents Claude Code only: claude mcp add --transport http onshape https://fs-mcp.labs.onshape.app/mcp, then /mcp to authenticate. On Windows it also adds C:\\Users\\USERNAME\\.local\\bin to PATH. No local CAD app is required. If your organization has a company API allocation, you can ask Claude to use it instead of your own. Subscription price and a code license are not stated on that page.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3661,9 +3670,9 @@
       "install": null,
       "publisher": "OpenAI",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Codex only, version 0.1.2, MIT. Not an Expo add-on and not a Claude Code plugin. Skills cover App Intents, SwiftUI patterns, Liquid Glass, performance audits, ETTrace profiles, memgraph leaks, and simulator debugging. .mcp.json starts XcodeBuildMCP for simulator, UI automation, debugging, and logging. Needs Xcode on a Mac. The repo has no one-line install command.",
+      "lastActivity": "2026-06-08",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, version 0.1.2, MIT. Not an Expo add-on and not a Claude Code plugin. Skills cover App Intents, SwiftUI patterns, Liquid Glass, performance audits, ETTrace profiles, memgraph leaks, and simulator debugging. .mcp.json starts XcodeBuildMCP for simulator, UI automation, debugging, and logging. Needs Xcode on a Mac. Listed in the openai-curated marketplace; the repo prints no install command, so install it from /plugins in Codex.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3687,9 +3696,9 @@
       "install": null,
       "publisher": "OpenAI",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Codex only. Manifest version 0.1.2, MIT. Skills: frontend-app-builder, frontend-testing-debugging, react-best-practices, shadcn-best-practices, stripe-best-practices, supabase-best-practices. The plugin README does not print an install command. The publisher describes frontend builds with generated visual assets, browser testing, shadcn/ui, Stripe, and Supabase or Postgres guidance.",
+      "lastActivity": "2026-06-08",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only. Manifest version 0.1.2, MIT. Skills: frontend-app-builder, frontend-testing-debugging, react-best-practices, shadcn-best-practices, stripe-best-practices, supabase-best-practices. Listed in the openai-curated marketplace; the repo prints no install command, so install it from /plugins in Codex. The publisher describes frontend builds with generated visual assets, browser testing, shadcn/ui, Stripe, and Supabase or Postgres guidance.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3713,7 +3722,7 @@
       "install": "npm install --global @openai/codex-security\ncs login",
       "publisher": "OpenAI",
       "license": "Apache-2.0",
-      "lastActivity": "2026-10-21",
+      "lastActivity": "2026-10-22",
       "verifiedOn": "2026-10-22",
       "notes": "In Codex, enter /plugins, search Codex Security and install it, then ask for a scan. Skills include $security-scan, $security-diff-scan, $deep-security-scan, $triage-finding, $fix-finding and $verify-fix. The CLI (cs scan .) needs Node 22.13+, 24 or 26 and Python 3.10+. Scans save report.md, findings and coverage and leave source unchanged. Some requests and protected findings need Trusted Access for Cyber approval. A scan with no findings does not prove the repo is secure.",
       "verdict": {
@@ -3818,7 +3827,6 @@
       "name": "OpenAI Frontend Testing and Debugging",
       "kind": "skill",
       "agents": [
-        "claude-code",
         "codex"
       ],
       "categories": [
@@ -3832,9 +3840,9 @@
       "install": null,
       "publisher": "OpenAI",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Ships inside the Build Web Apps plugin. No separate install command is documented. Parent manifest is MIT. Uses the Browser plugin and its browser skill when that plugin is in the session. If Browser is absent, it uses the repo's Playwright setup or a temporary script and records why. The reply is a QA report with URL, checks, and screenshots. Do not install new browser packages unless you allow it.",
+      "lastActivity": "2026-05-06",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only: ships inside the Build Web Apps plugin, with no separate install command. Parent manifest is MIT. Uses the Browser plugin and its browser skill when that plugin is in the session. If Browser is absent, it uses the repo's Playwright setup or a temporary script and records why. The reply is a QA report with URL, checks, and screenshots. It does not install new browser packages unless you allow dependency changes.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3858,9 +3866,9 @@
       "install": null,
       "publisher": "Notion; distributed in OpenAI's curated repository",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Codex only, version 0.1.7, MIT. Not a Claude Code plugin. Skills: notion-spec-to-implementation, notion-research-documentation, notion-meeting-intelligence, and notion-knowledge-capture. Needs a connected Notion workspace. The plugin points at https://mcp.notion.com/mcp. The repo prints no one-line install; add Notion from the Codex plugin marketplace.",
+      "lastActivity": "2026-08-26",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, version 0.1.7, MIT per its plugin.json. Not a Claude Code plugin. Skills: notion-spec-to-implementation, notion-research-documentation, notion-meeting-intelligence, and notion-knowledge-capture. Needs a connected Notion workspace; it authenticates on install. The plugin points at https://mcp.notion.com/mcp. The repo prints no one-line install; in the Codex CLI, open /plugins and install Notion from the openai-curated marketplace.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3903,8 +3911,7 @@
       "name": "OpenSCAD Design",
       "kind": "skill",
       "agents": [
-        "claude-code",
-        "codex"
+        "claude-code"
       ],
       "categories": [
         "cad-design"
@@ -3916,7 +3923,7 @@
       "publisher": "RobertCoop",
       "license": "MIT",
       "lastActivity": "2026-09-10",
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Documented install is the Claude Code plugin, which also adds the OpenSCAD MCP server. Needs OpenSCAD 2021.01 or newer. The skill tells the agent to measure and validate before trusting a render, then export STL or 3MF. That page does not document a Codex install.",
       "verdict": {
         "tier": null,
@@ -3944,7 +3951,7 @@
       "publisher": "RobertCoop",
       "license": "MIT",
       "lastActivity": "2026-09-10",
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs OpenSCAD 2021.01 or newer and uv, or Python 3.10 or newer. If OpenSCAD is not on PATH, set OPENSCAD_PATH. allowed_paths is unset by default, so the server does not check file paths and logs a warning. Set allowed_paths before pointing it at a project. The install section names Claude Code, not Codex.",
       "verdict": {
         "tier": null,
@@ -4033,9 +4040,9 @@
       "install": "codex mcp add playwright npx \"@playwright/mcp@latest\"",
       "publisher": "Microsoft",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "README prints separate Claude Code and Codex commands. Also documents CLI+skills as an alternative for coding agents. This MCP is distinct from Anthropic webapp-testing.",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Node.js 18 or newer. Works from accessibility snapshots, not screenshots; coordinate clicks need --caps=vision. For coding agents the README suggests the playwright-cli with skills as a more token-efficient option. Separate from Anthropic's webapp-testing skill.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4180,8 +4187,8 @@
       "install": "npx skills add remotion-dev/skills",
       "publisher": "Remotion",
       "license": null,
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
       "notes": "npx skills add remotion-dev/skills installs the whole Remotion skill pack. Documented for Claude Code and Codex. New videos preview with npx remotion studio. npx remotion render runs only when you ask to render or export. You need a Remotion project. The skills repo root listing had no LICENSE file.",
       "verdict": {
         "tier": null,
@@ -4210,7 +4217,7 @@
       "publisher": "Remotion",
       "license": "MIT",
       "lastActivity": "2026-10-19",
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Claude Code only. Restart after install, then use /remotion:remotion-create. The repo README says the package is internal and has no docs. Install steps are on remotion.dev. It overlaps the remotion-dev/skills pack. Plugin manifest license is MIT.",
       "verdict": {
         "tier": null,
@@ -4241,7 +4248,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2025-12-18",
       "verifiedOn": "2026-10-22",
-      "notes": "Needs a Replicate API token; the remote server asks for it in a web sign-in step. Replicate bills each run by hardware time or by input and output. Codex runs the local package: codex mcp add replicate --env REPLICATE_API_TOKEN=r8_xxxxxx -- npx -y replicate-mcp@latest. It covers every operation in Replicate's HTTP API, so it can run public image and video models. The npm latest tag (0.9.0) dates from June 2025; the newest alpha is from December 2025. License is the npm package's.",
+      "notes": "Needs a Replicate API token; the remote server asks for it in a web sign-in step. Runs are billed to your Replicate account, from prepaid credit or monthly in arrears. Codex runs the local package: codex mcp add replicate --env REPLICATE_API_TOKEN=r8_xxxxxx -- npx -y replicate-mcp@latest. It covers every operation in Replicate's HTTP API, so it can run public image and video models. The npm latest tag (0.9.0) dates from June 2025; the newest alpha is from December 2025. License is the npm package's.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4351,14 +4358,14 @@
         "security-testing"
       ],
       "summary": "Plugin that scans each file the agent writes with Semgrep Code, Supply Chain and Secrets, and sends findings back to fix.",
-      "sourceUrl": "https://github.com/semgrep/guardian",
+      "sourceUrl": "https://github.com/semgrep/guardian/tree/develop/plugin",
       "evidenceUrl": "https://docs.semgrep.dev/semgrep-guardian/quickstart",
       "install": "claude plugin install semgrep@claude-plugins-official",
       "publisher": "Semgrep",
       "license": null,
       "lastActivity": "2026-10-20",
       "verifiedOn": "2026-10-22",
-      "notes": "Version 2.9.0. Needs a Semgrep account; you sign in through the browser once. Codex install: add the semgrep/guardian marketplace, then codex plugin add semgrep@semgrep-marketplace. Hooks fire on every file write in every project and send those files to scanner.semgrep.ai. The plugin path uses a fixed ruleset, not your org's Policies. Sends telemetry unless you turn it off. The repo has no license file.",
+      "notes": "Version 2.9.0. Needs a Semgrep account; you sign in through the browser once. Codex install: add the semgrep/guardian marketplace, then codex plugin add semgrep@semgrep-marketplace. Hooks fire on every file write in every project and send those files to scanner.semgrep.ai. The plugin path uses a fixed ruleset, not your org's Policies. Sends telemetry unless you turn it off. The repo has no license file. Windows needs WSL.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4414,9 +4421,9 @@
       "install": "claude mcp add --transport http sentry https://mcp.sentry.dev/mcp/{organizationSlug}/{projectSlug}",
       "publisher": "Sentry",
       "license": "FSL-1.1-ALv2",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Remote server at https://mcp.sentry.dev/mcp. First connect opens OAuth. Put an organization slug, or org and project, in the URL so tools default to that project. Aimed at a person in the loop, not every Sentry API. Self-hosted stdio needs a Sentry user auth token. AI search tools on that path also need an LLM provider. License is FSL-1.1-ALv2, which is not unrestricted open source.",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Remote server at https://mcp.sentry.dev/mcp. First connect opens OAuth. Put an organization slug, or org and project, in the URL so tools default to that project. Codex setup in the repo: codex mcp add sentry --url https://mcp.sentry.dev/mcp. Claude Code can also use the sentry-mcp plugin (claude plugin marketplace add getsentry/sentry-mcp), which adds a sentry-mcp subagent. Aimed at a person in the loop, not every Sentry API. Self-hosted stdio needs a Sentry user auth token; its AI search tools also need an LLM provider. FSL-1.1-ALv2 is not unrestricted open source.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4443,8 +4450,8 @@
       "install": "npx shadcn@latest mcp init --client claude",
       "publisher": "shadcn/ui",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
       "notes": "Run it in a project. Claude Code: npx shadcn@latest mcp init --client claude, then restart. Codex: the same init with --client codex does not edit ~/.codex/config.toml. Add [mcp_servers.shadcn] with command npx and args shadcn@latest, mcp, then restart. The default registry needs no extra config. Private registries go in components.json and can use env vars such as REGISTRY_TOKEN.",
       "verdict": {
         "tier": null,
@@ -4472,9 +4479,9 @@
       "install": "npx skills add shadcn/ui",
       "publisher": "shadcn/ui",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Install with npx skills add shadcn/ui. On load it runs shadcn info --json for framework, aliases, base, icons, and installed components. It will not guess a registry when you ask to add a block. Preset changes ask whether to overwrite, merge, or skip. allowed-tools in the frontmatter is a Claude Code extension. Other agents may ignore it. The project must be able to run the shadcn CLI.",
+      "lastActivity": "2026-10-14",
+      "verifiedOn": "2026-10-22",
+      "notes": "Install with npx skills add shadcn/ui. On load it runs shadcn info --json for framework, aliases, base, icons, and installed components. It will not guess a registry when you ask to add a block. Preset changes ask whether to overwrite, partially apply, merge, or skip. allowed-tools in the frontmatter is a Claude Code extension. Other agents may ignore it. The project must be able to run the shadcn CLI.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4532,7 +4539,7 @@
       "license": null,
       "lastActivity": "2026-10-19",
       "verifiedOn": "2026-10-22",
-      "notes": "Needs a SonarQube Cloud, Server or Community Build account, the SonarQube CLI (sonar), and Docker, Podman or Nerdctl for the MCP server image. After install run /sonarqube:sonar-integrate, or sonar auth login then sonar integrate claude. In Codex, install sonarqube@sonar from the SonarSource marketplace, then run sonar integrate codex. Vortex analysis after each edit depends on your SonarQube Cloud org. License: Sonar Source-Available License v1.0.",
+      "notes": "Needs a SonarQube Cloud, Server or Community Build account, the SonarQube CLI (sonar), Node.js for the SessionStart hook, and Docker, Podman or Nerdctl for the MCP server image. After install run /sonarqube:sonar-integrate, or sonar auth login then sonar integrate claude. In Codex, install sonarqube@sonar from the SonarSource marketplace, then run sonar integrate codex. Vortex analysis after each edit depends on your SonarQube Cloud org. License: Sonar Source-Available License v1.0.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4560,7 +4567,7 @@
       "publisher": "Spline",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "The documented command saves the skill at ~/.claude/skills/spline-embed/SKILL.md for Claude Code. That page does not document Codex. Paste an export URL from the Spline editor. A guessed id, a share link, a community page, or a .spline file will not load. Keep the Made with Spline credit and do not hide the viewer badge. The page says not to state plan limits.",
       "verdict": {
         "tier": null,
@@ -4583,11 +4590,11 @@
       "summary": "Official Spline MCP for building 3D scenes and Hana designs from Claude Code or Codex.",
       "sourceUrl": "https://docs.spline.design/generate/spline-mcp-server",
       "evidenceUrl": "https://docs.spline.design/generate/spline-mcp-server",
-      "install": null,
+      "install": "claude mcp add --transport http --scope user spline https://mcp.spline.design/mcp",
       "publisher": "Spline",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Hosted server: https://mcp.spline.design/mcp. Sign in with a Spline account. No desktop app required for that path. Claude Code uses claude mcp add --transport http, then /mcp to authenticate. Codex uses codex mcp add --url, then codex mcp login spline. Desktop mode needs the Spline app on macOS or Windows. The app auto-registers clients, and the command path differs by install. Hosted calls count toward a daily plan allowance. A software license is not stated on the docs page.",
       "verdict": {
         "tier": null,
@@ -4617,12 +4624,13 @@
       "license": "MIT",
       "lastActivity": "2026-10-09",
       "verifiedOn": "2026-10-22",
-      "notes": "Needs a StackHawk account and HAWK_API_KEY; the README offers a 14-day free trial. wingman installs hawkscan, stackhawk-api, stackhawk-data-seed and stackhawk-optimize. hawkscan-ci installs separately and writes CI workflow files. The README gives the same /plugin commands for Codex. HawkScan attacks a live app, so run it only against apps you own or are authorized to test.",
+      "notes": "Needs a StackHawk account and HAWK_API_KEY; the README offers a 14-day free trial. wingman installs hawkscan, stackhawk-api, stackhawk-data-seed and stackhawk-optimize; the hawkscan plugin's hooks can start a scan after code changes. hawkscan-ci installs separately and writes CI workflow files. For Codex the README gives codex plugin marketplace add stackhawk/agent-skills-marketplace, then codex plugin add hawkscan@stackhawk. HawkScan attacks a live app, so run it only against apps you own or are authorized to test.",
       "verdict": {
         "tier": null,
         "note": null
       },
       "match": [
+        "plugin:wingman",
         "plugin:hawkscan",
         "plugin:stackhawk-api",
         "skill:hawkscan"
@@ -4648,7 +4656,7 @@
       "publisher": "Stripe",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Hosted at https://mcp.stripe.com. OAuth can grant sandbox or live access. Writes include customers, invoices, subscriptions, and refunds. Turn on tool approval and prefer a sandbox. After November 30, 2026, full-access secret keys and restricted keys without the Agent tag stop working. Use OAuth or an agent API key. No SPDX license is published for the hosted service. An admin can disable MCP for the team.",
       "verdict": {
         "tier": null,
@@ -4676,8 +4684,8 @@
       "install": "codex mcp add supabase --url \"https://mcp.supabase.com/mcp\"",
       "publisher": "Supabase",
       "license": "Apache-2.0",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Hosted at https://mcp.supabase.com/mcp. Sign in with Supabase OAuth. A personal access token is not required. Add ?project_ref= to stay on one project, ?read_only=true to block writes, or ?features= to limit tool groups. execute_sql and apply_migration can change data. Storage tools are off by default. Local Supabase CLI uses http://localhost:54321/mcp. Connecting an agent exposes that project's data.",
       "verdict": {
         "tier": null,
@@ -4707,7 +4715,7 @@
       "publisher": "Supabase",
       "license": "MIT",
       "lastActivity": "2026-07-30",
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Load it before creating or changing tables, policies, indexes, or SQL. Eight rule groups, from query performance and connections through RLS, then smaller topics. Each rule file has an incorrect example and a correct one. Works for any Postgres, with Supabase notes where they apply. Claude Code can also install postgres-best-practices@supabase-agent-skills. SKILL.md says version 1.1.1, January 2026. The skill changelog lists 1.6.0 on 2026-07-30.",
       "verdict": {
         "tier": null,
@@ -4793,8 +4801,8 @@
       "install": "npx skills add cloudai-x/threejs-skills",
       "publisher": "CloudAI-X",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
       "notes": "Targets three.js r186. The README documents Claude Code: npx skills add cloudai-x/threejs-skills, or a copy into ~/.claude/skills or .claude/skills. The installer offers the whole pack, not this skill alone. You need a browser or app runtime to see the scene. No paid API or desktop modeler is listed.",
       "verdict": {
         "tier": null,
@@ -4822,8 +4830,8 @@
       "install": "npx skills add cloudai-x/threejs-skills",
       "publisher": "CloudAI-X",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
       "notes": "Targets three.js r186. The README documents Claude Code: npx skills add cloudai-x/threejs-skills, or a copy into ~/.claude/skills or .claude/skills. The installer offers the whole pack, not this skill alone. You need a browser or app runtime to see the loaded model. No paid API or desktop modeler is listed. A meshopt file fails to load unless setMeshoptDecoder is set.",
       "verdict": {
         "tier": null,
@@ -4846,7 +4854,7 @@
         "ai-engineering"
       ],
       "summary": "One Together AI skill with guides and scripts for inference, fine-tuning, evaluations, batch jobs, media generation and GPUs.",
-      "sourceUrl": "https://github.com/togethercomputer/skills",
+      "sourceUrl": "https://github.com/togethercomputer/skills/tree/main/skills/together-ai",
       "evidenceUrl": "https://github.com/togethercomputer/skills",
       "install": "npx skills add togethercomputer/skills",
       "publisher": "Together AI",
@@ -4916,9 +4924,9 @@
       "install": "npm install -g ui-ux-pro-max-cli\nuipro init --ai claude\nuipro init --ai codex",
       "publisher": "Next Level Builder",
       "license": "MIT",
-      "lastActivity": "2026-08-13",
-      "verifiedOn": "2026-10-21",
-      "notes": "Needs Python 3.x. The search script uses the standard library only and makes no network calls. The npm package is ui-ux-pro-max-cli. Older uipro-cli releases are stale. Claude Code alternative: /plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill then /plugin install ui-ux-pro-max@ui-ux-pro-max-skill. Run uipro init in the project. Agents must not install Python for you. If project files do not show a stack, the agent should ask. An unnamed web stack may fall back to HTML + Tailwind. An empty search is a miss, and results are recommendations.",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Python 3.x; the search script uses the standard library only and makes no network calls. The npm package is ui-ux-pro-max-cli; older uipro-cli releases are stale. Claude Code alternative: /plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill then /plugin install ui-ux-pro-max@ui-ux-pro-max-skill. Run uipro init in the project. The skill installs nothing for you. If project files do not show a stack, the agent asks instead of assuming one. An empty search is retried once, then labeled as built-in defaults. Results are recommendations.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4945,7 +4953,7 @@
       "publisher": "Epic Games",
       "license": "MIT",
       "lastActivity": "2026-09-17",
-      "verifiedOn": "2026-10-21",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs Unreal Editor running with ModelContextProtocol and AllToolsets enabled, then ModelContextProtocol.StartServer. Default port is 8000. The session hook needs bash on PATH (macOS, Linux, or Windows via Git Bash or WSL). Claude Code only. Tools can change live project files, including through Python.",
       "verdict": {
         "tier": null,
@@ -4975,7 +4983,7 @@
       "publisher": "Vercel",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Remote server at https://mcp.vercel.com. OAuth. Available on all plans under Vercel's AI Product Terms. Only clients Vercel has approved can connect. Tools depend on the grant and your team role. Docs page updated 2026-09-15. No SPDX license is published for the hosted service.",
       "verdict": {
         "tier": null,
@@ -5005,9 +5013,9 @@
       "install": "npx skills add vercel-labs/agent-skills",
       "publisher": "Vercel",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "npx skills add vercel-labs/agent-skills installs the skills in that repo, not this file alone. The skill lists rules in eight groups, led by waterfall removal and bundle size. Read the matching rules file before applying one. It does not run a profiler or edit code by itself.",
+      "lastActivity": "2026-04-14",
+      "verifiedOn": "2026-10-22",
+      "notes": "npx skills add vercel-labs/agent-skills installs the skills in that repo, not this file alone. The skill lists rules in eight groups, led by waterfall removal and bundle size. Read the matching rules file before applying one. It does not run a profiler or edit code by itself. MIT is declared in SKILL.md; the repo has no LICENSE file.",
       "verdict": {
         "tier": null,
         "note": null
@@ -5035,9 +5043,9 @@
       "install": "npx skills add vercel-labs/agent-skills",
       "publisher": "Vercel",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Rules for React Native and Expo, highest priority first: FlashList and list item cost, then Reanimated (transform and opacity only), native stack and tabs, expo-image, and monorepo native deps. The installer adds every skill in vercel-labs/agent-skills. Frontmatter name is vercel-react-native-skills; the folder is react-native-skills.",
+      "lastActivity": "2026-01-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "Rules for React Native and Expo, highest priority first: FlashList and list item cost, then Reanimated (transform and opacity only), native stack and tabs, expo-image, and monorepo native deps. The installer adds every skill in vercel-labs/agent-skills. Frontmatter name is vercel-react-native-skills; the folder is react-native-skills. MIT is declared in SKILL.md; the repo has no LICENSE file.",
       "verdict": {
         "tier": null,
         "note": null
@@ -5064,10 +5072,10 @@
       "evidenceUrl": "https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md",
       "install": "npx skills add vercel-labs/agent-skills",
       "publisher": "Vercel",
-      "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Same installer as the other skills in vercel-labs/agent-skills. Before each review it fetches the guidelines from vercel-labs/web-interface-guidelines, so it needs network. If you do not name files, it asks which files to review. Output is the file:line format from those rules.",
+      "license": null,
+      "lastActivity": "2026-01-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Same installer as the other skills in vercel-labs/agent-skills. Before each review it fetches the guidelines from vercel-labs/web-interface-guidelines, so it needs network. If you do not name files, it asks which files to review. Output is the file:line format from those rules. No license is declared: the repo has no LICENSE file and this SKILL.md names none.",
       "verdict": {
         "tier": null,
         "note": null
@@ -5094,8 +5102,8 @@
       "install": "npx skills add vercel-labs/agent-skills",
       "publisher": "Vercel",
       "license": "MIT",
-      "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "lastActivity": "2026-08-28",
+      "verifiedOn": "2026-10-22",
       "notes": "The installer adds every skill in vercel-labs/agent-skills. Each review fetches current rules from vercel-labs/writing-guidelines, so it needs network access. Output is file:line findings. Ask it to review docs, writing style, or voice.",
       "verdict": {
         "tier": null,
@@ -5152,7 +5160,7 @@
       "publisher": "Windmill",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
+      "verifiedOn": "2026-10-22",
       "notes": "Needs a Windmill Cloud or self-hosted workspace. OAuth gateway is <base_url>/api/mcp/gateway. The Claude Code command in the docs uses a token URL. Token URLs can land in history and logs. A superadmin can refuse ?token= and force OAuth or a Bearer header. Folder scope limits which scripts and flows appear. No Codex setup is documented.",
       "verdict": {
         "tier": null,
@@ -5181,14 +5189,16 @@
       "publisher": "Zapier",
       "license": null,
       "lastActivity": null,
-      "verifiedOn": "2026-10-20",
-      "notes": "Sign in during setup. No local app. These clients should not create a server at mcp.zapier.com first. A Team or Enterprise Claude org may need Owner approval before you can add MCP servers. Each successful call uses two Zapier tasks. Failed calls do not. On WSL, the OAuth callback may never return. Use a native Windows or macOS terminal.",
+      "verifiedOn": "2026-10-22",
+      "notes": "Sign in during setup. No local app. These clients should not create a server at mcp.zapier.com first. A Team or Enterprise Claude org may need Owner approval before you can add MCP servers. Each successful call uses two Zapier tasks. Failed calls do not. On WSL, the OAuth callback may never return. Use a native Windows or macOS terminal. Zapier also publishes a Claude Code plugin: zapier@claude-plugins-official.",
       "verdict": {
         "tier": null,
         "note": null
       },
       "match": [
-        "mcp:zapier"
+        "mcp:zapier",
+        "mcp:zapier-mcp",
+        "plugin:zapier"
       ],
       "media": []
     }
