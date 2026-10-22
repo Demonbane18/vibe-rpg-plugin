@@ -634,6 +634,35 @@
       "media": []
     },
     {
+      "slug": "anthropic-financial-analysis-plugin",
+      "name": "Anthropic Financial Analysis",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "data-analysis",
+        "business-operations"
+      ],
+      "summary": "Core plugin of Claude for Financial Services: DCF, comps, LBO and 3-statement models in Excel, plus skills that clean and audit spreadsheets.",
+      "sourceUrl": "https://github.com/anthropics/financial-services/tree/main/plugins/vertical-plugins/financial-analysis",
+      "evidenceUrl": "https://github.com/anthropics/financial-services/blob/main/README.md",
+      "install": "claude plugin marketplace add anthropics/financial-services\nclaude plugin install financial-analysis@claude-for-financial-services",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-05-29",
+      "verifiedOn": "2026-10-22",
+      "notes": "Commands include /comps, /dcf, /lbo, /3-statement-model and /debug-model. For standalone .xlsx files the skills use Python and openpyxl and write formulas, not computed values; inside the Excel add-in they use Office JS. clean-data-xls and audit-xls work on any spreadsheet. .mcp.json lists connectors such as FactSet, Morningstar and PitchBook that may need a subscription; on 2026-10-22 that file was not valid JSON. Its hooks.json and .mcp.json flag it in trials (needs --allow-hazards). Drafts work for professional review.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:financial-analysis"
+      ],
+      "media": []
+    },
+    {
       "slug": "anthropic-frontend-design-plugin",
       "name": "Anthropic Frontend Design Plugin",
       "kind": "plugin",
@@ -1147,7 +1176,8 @@
         "codex"
       ],
       "categories": [
-        "documents-productivity"
+        "documents-productivity",
+        "business-operations"
       ],
       "summary": "Atlassian's hosted MCP server for Jira and Confluence: search, create and update issues and pages, with OAuth or an API token.",
       "sourceUrl": "https://github.com/atlassian/atlassian-mcp-server",
@@ -1456,6 +1486,36 @@
       "match": [
         "mcp:cartesia",
         "mcp:cartesia-mcp"
+      ],
+      "media": []
+    },
+    {
+      "slug": "cartesia-skills",
+      "name": "Cartesia Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Cartesia's agent skills for writing app code with its Sonic text to speech, Ink speech to text and Line voice agents.",
+      "sourceUrl": "https://github.com/cartesia-ai/skills",
+      "evidenceUrl": "https://github.com/cartesia-ai/skills/blob/main/README.md",
+      "install": "/plugin marketplace add cartesia-ai/skills\n/plugin install cartesia-skills@cartesia",
+      "publisher": "Cartesia",
+      "license": "MIT",
+      "lastActivity": "2026-08-22",
+      "verifiedOn": "2026-10-22",
+      "notes": "Running the code needs a Cartesia API key from play.cartesia.ai/keys, and Line voice agents also need an LLM provider key. Two skills: cartesia-api for REST, WebSocket and the Python and JS SDKs, and cartesia-line for the Line SDK, CLI deploys and telephony. The skill says to pin one Cartesia-Version and give browsers short-lived access tokens instead of API keys. The repo also ships a .mcp.json for Cartesia's hosted MCP. Other agents: npx skills add cartesia-ai/skills. The cartesia-mcp spell is the MCP server itself.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:cartesia-skills",
+        "skill:cartesia-api",
+        "skill:cartesia-line"
       ],
       "media": []
     },
@@ -1966,6 +2026,35 @@
       "media": []
     },
     {
+      "slug": "deepgram-skills",
+      "name": "Deepgram Skills",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Deepgram's skills for building speech to text, text to speech and voice agents, with API reference, recipes, starter apps and CLI help.",
+      "sourceUrl": "https://github.com/deepgram/skills",
+      "evidenceUrl": "https://github.com/deepgram/skills/blob/main/README.md",
+      "install": "npx skills add deepgram/skills",
+      "publisher": "Deepgram",
+      "license": null,
+      "lastActivity": "2026-10-02",
+      "verifiedOn": "2026-10-22",
+      "notes": "Running the code needs a Deepgram API key in DEEPGRAM_API_KEY. Fourteen skills include speech-to-text (Nova and Flux STT), text-to-speech (Aura and Flux TTS), voice-agent, audio and text intelligence, a generated API reference, recipes, starters, the deepctl CLI, MCP setup and self-hosting. Claude Code plugin: deepgram@deepgram-agent-skills. Codex: npx skills add deepgram/skills -a codex. The repo has no license file. The pack sits at the repo root, so trials cannot equip it as one folder. The deepgram-mcp spell is the MCP server.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:deepgram"
+      ],
+      "media": []
+    },
+    {
       "slug": "deque-axe-accessibility",
       "name": "Deque Axe Accessibility",
       "kind": "plugin",
@@ -1973,7 +2062,8 @@
         "claude-code"
       ],
       "categories": [
-        "qa-testing"
+        "qa-testing",
+        "frontend-design"
       ],
       "summary": "Claude Code plugin for the Axe MCP Server: scan a page for accessibility violations, batch the fixes, and rescan to zero.",
       "sourceUrl": "https://github.com/dequelabs/axe-accessibility",
@@ -2078,6 +2168,34 @@
       "match": [
         "mcp:duckdb",
         "mcp:motherduck"
+      ],
+      "media": []
+    },
+    {
+      "slug": "duckdb-skills-plugin",
+      "name": "DuckDB Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "DuckDB's Claude Code plugin: read CSV, JSON, Parquet, Excel or SQLite files, query them in SQL or plain English, and convert between formats.",
+      "sourceUrl": "https://github.com/duckdb/duckdb-skills",
+      "evidenceUrl": "https://github.com/duckdb/duckdb-skills/blob/main/README.md",
+      "install": "/plugin marketplace add duckdb/duckdb-skills\n/plugin install duckdb-skills@duckdb-skills",
+      "publisher": "DuckDB",
+      "license": "MIT",
+      "lastActivity": "2026-04-14",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs the DuckDB CLI on PATH. If it is missing, the skills offer install-duckdb, which needs the network, so a sealed trial arena works only with duckdb already installed. When an extension is missing (spatial, sqlite_scanner), read-file retries with INSTALL. Session state lives in .duckdb-skills/state.sql in the project or under ~/.duckdb-skills. duckdb-docs, s3-explore and remote reads use the network. read-memories searches past Claude Code session logs. Tested on macOS and Linux only. plugin.json version 0.2.4.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:duckdb-skills"
       ],
       "media": []
     },
@@ -2516,6 +2634,37 @@
       "media": []
     },
     {
+      "slug": "gladia-skills",
+      "name": "Gladia Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Gladia's official skills for speech to text code: batch and live transcription, diarization, subtitles, PII redaction and its SDKs.",
+      "sourceUrl": "https://github.com/gladiaio/skills/tree/main/plugins/gladia",
+      "evidenceUrl": "https://github.com/gladiaio/skills/blob/main/README.md",
+      "install": "/plugin marketplace add gladiaio/skills\n/plugin install gladia",
+      "publisher": "Gladia",
+      "license": "MIT",
+      "lastActivity": "2026-10-02",
+      "verifiedOn": "2026-10-22",
+      "notes": "Running the code needs a Gladia API key in GLADIA_API_KEY. Six skills cover pre-recorded and live transcription, audio intelligence features, SDK setup, troubleshooting and a reference synced daily from docs.gladia.io. They default to the @gladiaio/sdk and gladiaio-sdk packages and use raw REST or WebSocket only when the SDK falls short. Other agents: npx skills add gladiaio/skills.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:gladia",
+        "skill:gladia-pre-recorded-transcription",
+        "skill:gladia-live-transcription",
+        "skill:gladia-sdk-integration"
+      ],
+      "media": []
+    },
+    {
       "slug": "godot-ai",
       "name": "Godot AI",
       "kind": "mcp_server",
@@ -2600,6 +2749,42 @@
       "media": []
     },
     {
+      "slug": "google-genmedia-mcp",
+      "name": "Google GenMedia MCP Servers",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "video-generation",
+        "audio-production",
+        "image-generation"
+      ],
+      "summary": "Local MCP servers from Google Cloud for Veo video, Lyria music, Chirp 3 HD and Gemini speech, Gemini images and ffmpeg compositing on Vertex AI.",
+      "sourceUrl": "https://github.com/GoogleCloudPlatform/genmedia-creative-studio/tree/main/experiments/mcp-genmedia",
+      "evidenceUrl": "https://github.com/GoogleCloudPlatform/genmedia-creative-studio/blob/main/docs-site/src/content/docs/experiments/mcp-genmedia/agents/claude-code.md",
+      "install": "curl -sL https://raw.githubusercontent.com/GoogleCloudPlatform/genmedia-creative-studio/main/experiments/mcp-genmedia/mcp-genmedia-go/install-online.sh | bash\nclaude mcp add --env GOOGLE_CLOUD_PROJECT=YOUR_GOOGLE_CLOUD_PROJECT_ID --env GENMEDIA_BUCKET=gs://YOUR_GENMEDIA_BUCKET veo -- mcp-veo-go",
+      "publisher": "Google Cloud",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-18",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Google Cloud project with Vertex AI and Application Default Credentials (gcloud auth application-default login). Calls bill to that project. The repo says it is not an officially supported Google product. Each server is added on its own: veo, omni, lyria, chirp3, gemini, nanobanana and avtool, which needs ffmpeg. Veo saves to Cloud Storage and needs a longer tool timeout. A genmedia Claude Code plugin in the same repo wires only the image server so far. MCP servers cannot be equipped in trials.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:veo",
+        "mcp:omni",
+        "mcp:lyria",
+        "mcp:chirp3",
+        "mcp:avtool",
+        "mcp:nanobanana"
+      ],
+      "media": []
+    },
+    {
       "slug": "grafana-k6-mcp",
       "name": "Grafana k6 MCP Server",
       "kind": "mcp_server",
@@ -2666,7 +2851,8 @@
         "codex"
       ],
       "categories": [
-        "full-stack-web"
+        "full-stack-web",
+        "documents-productivity"
       ],
       "summary": "Builds a queryable knowledge graph from a folder of code, docs, papers, images, or videos.",
       "sourceUrl": "https://github.com/Graphify-Labs/graphify/blob/v8/graphify/skill.md",
@@ -2683,6 +2869,40 @@
       },
       "match": [
         "skill:graphify"
+      ],
+      "media": []
+    },
+    {
+      "slug": "hegel-skill",
+      "name": "Hegel property-based testing",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "qa-testing",
+        "testing-debugging"
+      ],
+      "summary": "Teaches the agent to write and review property-based tests with Hegel in Rust, Go, C++, TypeScript, Java and OCaml projects.",
+      "sourceUrl": "https://github.com/hegeldev/hegel-skill",
+      "evidenceUrl": "https://github.com/hegeldev/hegel-skill/blob/main/README.md",
+      "install": "/plugin marketplace add hegeldev/hegel-skill\n/plugin install hegel-skill@hegeldev",
+      "publisher": "Hegel development team",
+      "license": "MIT",
+      "lastActivity": "2026-10-12",
+      "verifiedOn": "2026-10-22",
+      "notes": "Two skills: hegel writes the tests and hegel-review checks them for narrowed generators, weak oracles and tolerance hacks. The project needs the Hegel library for its language, and the skill learns its API from existing tests and the installed copy, so an offline arena works only when that library is already there. Before finishing, a separate subagent looks for missed properties. Codex: $skill-installer install https://github.com/hegeldev/hegel-skill/tree/main/skills/hegel adds the hegel skill only.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:hegel-skill",
+        "skill:hegel",
+        "skill:hegel-review",
+        "skill:hegel-skill:hegel",
+        "skill:hegel-skill:hegel-review"
       ],
       "media": []
     },
@@ -2988,6 +3208,64 @@
       "media": []
     },
     {
+      "slug": "kdense-exploratory-data-analysis",
+      "name": "K-Dense Exploratory Data Analysis",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "K-Dense skill for bounded local EDA of CSV, TSV and JSON files: profiles, missingness and leakage audits, outlier checks and a report scaffold.",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/exploratory-data-analysis",
+      "evidenceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/README.md",
+      "install": "gh skill install K-Dense-AI/scientific-agent-skills exploratory-data-analysis",
+      "publisher": "K-Dense",
+      "license": "MIT",
+      "lastActivity": "2026-10-01",
+      "verifiedOn": "2026-10-22",
+      "notes": "Part of Scientific Agent Skills (177 skills). npx skills add K-Dense-AI/scientific-agent-skills installs all of them, and the README advises installing only what you need. The core CSV, TSV and JSON tools need Python 3.11+, use only the standard library and make no network calls, which suits sealed trial arenas. Inputs must sit inside an approved --root folder, and reports tokenize identifiers by default. Parquet, Excel and most domain formats are reference only. Optional NumPy, HDF5 and image checks need extra packages.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:exploratory-data-analysis"
+      ],
+      "media": []
+    },
+    {
+      "slug": "kdense-statistical-analysis",
+      "name": "K-Dense Statistical Analysis",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "K-Dense skill for hypothesis tests on research data: picks the test, checks assumptions, reports effect sizes with intervals in APA style.",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/statistical-analysis",
+      "evidenceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/main/README.md",
+      "install": "gh skill install K-Dense-AI/scientific-agent-skills statistical-analysis",
+      "publisher": "K-Dense",
+      "license": "MIT",
+      "lastActivity": "2026-10-01",
+      "verifiedOn": "2026-10-22",
+      "notes": "Part of Scientific Agent Skills; gh skill installs this one skill. Targets Pingouin 0.7.0, SciPy 1.18.1 and statsmodels 0.15.0 in a separate uv environment, plus PyMC and ArviZ for the Bayesian examples. The network is needed only to install them, so a sealed trial arena needs those packages already present. Covers t-tests, ANOVA, chi-square, correlation, regression, rank tests and power analysis. For model APIs it points to the statsmodels and pymc skills.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:statistical-analysis"
+      ],
+      "media": []
+    },
+    {
       "slug": "kubernetes-mcp-server",
       "name": "Kubernetes MCP Server",
       "kind": "mcp_server",
@@ -3077,6 +3355,35 @@
       "media": []
     },
     {
+      "slug": "luma-plugin",
+      "name": "Luma Plugin for Claude",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "video-generation",
+        "image-generation"
+      ],
+      "summary": "Luma AI's Claude plugin. It connects Luma's hosted MCP to generate video clips and images, then edit, extend, restyle or reframe them.",
+      "sourceUrl": "https://github.com/lumalabs/luma-plugins/tree/main/luma",
+      "evidenceUrl": "https://github.com/lumalabs/luma-plugins/blob/main/README.md",
+      "install": "/plugin marketplace add lumalabs/luma-plugins\n/plugin install luma@luma\n/mcp",
+      "publisher": "Luma AI",
+      "license": null,
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Luma account. After installing, run /mcp, sign in with OAuth and pick the Luma team whose credits pay for generations. The plugin holds no code, only the remote MCP at https://agents.lumalabs.ai/mcp, and results stay in that team's Luma workspace. It also runs Luma mini apps such as Background Swap and Camera Angles and reports credit usage. The license is proprietary and allows installing and using it with Claude. Trials turn off MCP servers, so it does nothing there. Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:luma"
+      ],
+      "media": []
+    },
+    {
       "slug": "make-mcp",
       "name": "Make MCP Server",
       "kind": "mcp_server",
@@ -3131,6 +3438,34 @@
       },
       "match": [
         "plugin:make-skills"
+      ],
+      "media": []
+    },
+    {
+      "slug": "marimo-notebook",
+      "name": "marimo Notebook",
+      "kind": "skill",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "marimo's skill for writing reactive Python notebooks as plain .py files, with SQL cells, UI widgets and a marimo check pass before handoff.",
+      "sourceUrl": "https://github.com/marimo-team/skills/tree/main/skills/marimo-notebook",
+      "evidenceUrl": "https://github.com/marimo-team/skills/blob/main/README.md",
+      "install": "npx skills add marimo-team/skills --agent claude-code",
+      "publisher": "marimo",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-06-15",
+      "verifiedOn": "2026-10-22",
+      "notes": "The install line adds all ten marimo skills, including jupyter-to-marimo and streamlit-to-marimo. Notebooks declare dependencies inline (PEP 723) and run with uv run, marimo edit or marimo run. The skill asks for uvx marimo check before a notebook goes back to you. SQL cells use DuckDB in memory and return polars dataframes. Needs uv and marimo; trials run offline, so both must already be installed. Interactive editing opens a browser.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:marimo-notebook"
       ],
       "media": []
     },
@@ -3309,6 +3644,37 @@
       "media": []
     },
     {
+      "slug": "minimax-cli",
+      "name": "MiniMax CLI Skill",
+      "kind": "skill",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "video-generation",
+        "audio-production",
+        "image-generation"
+      ],
+      "summary": "Skill for MiniMax's official mmx CLI: Hailuo and MiniMax-H3 video, text to speech, transcription and images from the terminal.",
+      "sourceUrl": "https://github.com/MiniMax-AI/cli/tree/main/skill",
+      "evidenceUrl": "https://github.com/MiniMax-AI/cli/blob/main/README.md",
+      "install": "npx skills add MiniMax-AI/cli -y -g",
+      "publisher": "MiniMax",
+      "license": null,
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Node.js 18, npm install -g mmx-cli and mmx auth login with MiniMax OAuth or an API key. The README says it requires a MiniMax Token Plan; the mmx-h3-video sub-skill covers MiniMax-H3 with pay-as-you-go keys. The skill tells agents to pass --non-interactive, --quiet and --output json. The README badge says MIT, but the repo has no license file. MiniMax retired its music CLI in August 2026, so older MiniMax music skills no longer work. Trials run offline, so it cannot generate there.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:mmx-cli",
+        "skill:mmx-h3-video"
+      ],
+      "media": []
+    },
+    {
       "slug": "mixpanel-headless-plugin",
       "name": "Mixpanel Headless",
       "kind": "plugin",
@@ -3377,7 +3743,8 @@
       ],
       "categories": [
         "documents-productivity",
-        "business-operations"
+        "business-operations",
+        "marketing-sales"
       ],
       "summary": "monday.com's hosted MCP server: search boards, create and update items and columns, assign owners and post updates.",
       "sourceUrl": "https://github.com/mondaycom/mcp",
@@ -3963,6 +4330,40 @@
       "media": []
     },
     {
+      "slug": "pactflow-contract-testing",
+      "name": "PactFlow Swagger Contract Testing",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "SmartBear plugin for Pact consumer tests, provider verification and Drift OpenAPI checks, with agents that write and review pact tests.",
+      "sourceUrl": "https://github.com/pactflow/pactflow-agent-skills/tree/main/plugins/swagger-contract-testing",
+      "evidenceUrl": "https://github.com/pactflow/pactflow-agent-skills/blob/main/README.md",
+      "install": "claude plugin marketplace add anthropics/claude-plugins-community\nclaude plugin install swagger-contract-testing@claude-community",
+      "publisher": "SmartBear (PactFlow)",
+      "license": "MIT",
+      "lastActivity": "2026-10-22",
+      "verifiedOn": "2026-10-22",
+      "notes": "Writing and reviewing local Pact tests works without credentials. Publishing, can-i-deploy and the AI generate and review tools go through the bundled SmartBear MCP server and need a PactFlow account or Pact Broker plus Node.js 20. Drift tests need the Drift CLI; pact-coverage and the spec generators need ripwire. The plugin ships hooks and an MCP config, so trials need --allow-hazards, and an offline arena needs the Pact library already installed. Codex: npx skills add pactflow/pactflow-agent-skills adds the skills without the agents.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:swagger-contract-testing",
+        "skill:pactflow",
+        "skill:drift-testing",
+        "skill:openapi-parser",
+        "skill:swagger-contract-testing:pactflow",
+        "skill:swagger-contract-testing:drift-testing"
+      ],
+      "media": []
+    },
+    {
       "slug": "perplexity-mcp",
       "name": "Perplexity MCP",
       "kind": "mcp_server",
@@ -4150,7 +4551,8 @@
         "codex"
       ],
       "categories": [
-        "qa-testing"
+        "qa-testing",
+        "full-stack-web"
       ],
       "summary": "Lets the agent manage Postman workspaces, collections, specs, mocks and monitors, and keep code in sync with them.",
       "sourceUrl": "https://github.com/postmanlabs/postman-mcp-server",
@@ -4343,6 +4745,63 @@
       "match": [
         "plugin:save-to-spotify",
         "skill:save-to-spotify"
+      ],
+      "media": []
+    },
+    {
+      "slug": "scenario-audio",
+      "name": "Scenario Audio Skill",
+      "kind": "skill",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Scenario's skill for music, songs, sound effects, voiceover and video soundtracks through the Scenario MCP server.",
+      "sourceUrl": "https://github.com/scenario-labs/skills/tree/main/skills/scenario-audio",
+      "evidenceUrl": "https://github.com/scenario-labs/skills/blob/main/README.md",
+      "install": "npx skills add scenario-labs/skills --skill scenario scenario-audio\nclaude mcp add --transport http scenario https://mcp.scenario.com/mcp",
+      "publisher": "Scenario",
+      "license": "MIT",
+      "lastActivity": "2026-10-17",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Scenario account and the Scenario MCP server, signed in with OAuth or an API key. Install the scenario skill too for the connection steps. Generations spend Scenario credits. It covers music and full songs, looping sound effects, text to speech and voice cloning, scoring a silent video, and cut, split and extract utilities. Family skills such as scenario-elevenlabs, scenario-ace-step and scenario-minimax-music hold per-model rules. Trials turn off MCP servers and the network, so it cannot generate there.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:scenario-audio"
+      ],
+      "media": []
+    },
+    {
+      "slug": "scenario-video",
+      "name": "Scenario Video Skill",
+      "kind": "skill",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "video-generation",
+        "video-editing"
+      ],
+      "summary": "Scenario's skill for text to video, image to video, lipsync, upscaling and clip edits through the Scenario MCP server.",
+      "sourceUrl": "https://github.com/scenario-labs/skills/tree/main/skills/scenario-video",
+      "evidenceUrl": "https://github.com/scenario-labs/skills/blob/main/README.md",
+      "install": "npx skills add scenario-labs/skills --skill scenario scenario-video\nclaude mcp add --transport http scenario https://mcp.scenario.com/mcp",
+      "publisher": "Scenario",
+      "license": "MIT",
+      "lastActivity": "2026-10-17",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Scenario account and the Scenario MCP server, signed in with OAuth or an API key. Install the scenario skill too: it covers the connection and the core loop. Generations spend Scenario credits, and model_run with dry_run prices a job first. It points to family skills for Kling, Veo, Seedance, Runway, Luma, MiniMax and others. Trials turn off MCP servers and the network, so it cannot generate there. Codex setup for the MCP server is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:scenario-video"
       ],
       "media": []
     },
@@ -4873,6 +5332,181 @@
       "media": []
     },
     {
+      "slug": "trailofbits-audit-context-building",
+      "name": "Trail of Bits Audit Context Building",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Skill and workflow that map a codebase function by function before an audit, recording what each assumes, promises and depends on.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/audit-context-building",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/audit-context-building/README.md",
+      "install": "/plugin install trailofbits/skills/plugins/audit-context-building",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 2.0.2, by Omar Inuwa. Run /audit-context-building:audit-context <path>, or let the skill start it when an audit begins. Notes go to audit-context/functions/ and a summary to audit-context/DOSSIER.md. It reports no vulnerabilities and suggests no fixes, so pair it with a bug-hunting spell. The per-function fan-out uses Claude Code's Workflow tool. Codex: codex plugin marketplace add trailofbits/skills, then codex plugin add audit-context-building@trailofbits. Equippable in Claude Code trials.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:audit-context-building"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-fp-check",
+      "name": "Trail of Bits fp-check",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Skill that checks suspected security bugs one at a time and returns a true or false positive verdict with evidence after six gate reviews.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/fp-check",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/fp-check/README.md",
+      "install": "/plugin marketplace add trailofbits/skills\n/plugin install fp-check",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 1.0.5, by Maciej Domanski. Triggers when you ask whether a finding is real; it does not hunt for new bugs. Ships three agents (data-flow-analyzer, exploitability-verifier, poc-builder) and Stop and SubagentStop prompt hooks that block stopping until every bug has a verdict. The hooks match every stop, so trials flag the plugin and run it only with --allow-hazards. Codex: codex plugin marketplace add trailofbits/skills, then codex plugin add fp-check@trailofbits.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:fp-check"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-insecure-defaults",
+      "name": "Trail of Bits Insecure Defaults",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Claude Code plugin that audits a repo, folder or file for fallback secrets, default credentials, fail-open switches and other insecure defaults.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/insecure-defaults",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/insecure-defaults/README.md",
+      "install": "/plugin marketplace add trailofbits/skills\n/plugin install insecure-defaults",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 2.0.3. Run /insecure-defaults:audit with an optional path. The command starts a Claude Code workflow: one sweep agent per category greps for candidates, then verifier agents (Opus in the README) try to refute each one before it is reported. Ships a command and a workflow but no skill, so no Codex setup is documented. Equippable in Claude Code trials, where it needs the Workflow tool. For committed secrets the README suggests gitleaks or trufflehog. Audit only code you own or may review.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:insecure-defaults"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-mutation-testing",
+      "name": "Trail of Bits Mutation Testing",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "qa-testing",
+        "testing-debugging"
+      ],
+      "summary": "Skill that sets up mewt or muton mutation campaigns, sorts surviving mutants into test gaps or equivalents, and checks bugs they point to.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/mutation-testing",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/mutation-testing/README.md",
+      "install": "/plugin marketplace add trailofbits/skills\n/plugin menu",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 1.9.2. Campaign setup needs mewt or muton and a runnable test suite. Analyzing saved results needs neither and accepts output from other mutation tools. The analysis writes mutation-testing-report.md with the tests to add but does not add them, and a bug counts as confirmed only after a reproduced proof of concept. Codex: codex plugin marketplace add trailofbits/skills, then codex plugin add mutation-testing@trailofbits. Equippable in Claude Code trials; campaigns there need mewt or muton already installed.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:mutation-testing"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-property-based-testing",
+      "name": "Trail of Bits Property-Based Testing",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing",
+        "qa-testing"
+      ],
+      "summary": "Skill that writes, reviews and triages property-based tests with Hypothesis, fast-check, proptest, and Echidna or Medusa for Solidity.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/property-based-testing",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/property-based-testing/README.md",
+      "install": "/plugin marketplace add trailofbits/skills\n/plugin menu",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 1.2.2, by Henrik Brodin. Suits code with a clear rule to test: encode and decode pairs, parsers, normalizers, validators, data structures and contract state invariants. Not for coverage-guided fuzzing. It leaves adding a test library to you, so trials pass only where Hypothesis, fast-check or a similar library is already installed. Manual install: /plugin install trailofbits/skills/plugins/property-based-testing. Codex: codex plugin marketplace add trailofbits/skills, then codex plugin add property-based-testing@trailofbits.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:property-based-testing"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-sharp-edges",
+      "name": "Trail of Bits Sharp Edges",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Skill and agent that find error-prone APIs, dangerous configuration options and footgun designs that make security mistakes easy.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/sharp-edges",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/sharp-edges/README.md",
+      "install": "/plugin install trailofbits/skills/plugins/sharp-edges",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 1.1.3. Reviews code and designs from three viewpoints: a malicious developer, a lazy one who copies the first example, and a confused one who swaps parameters. The skill only reads files (Read, Grep, Glob); the sharp-edges-analyzer agent runs the same analysis in its own context. Findings are design risks without an exploit. Codex: codex plugin marketplace add trailofbits/skills, then codex plugin add sharp-edges@trailofbits. Equippable in Claude Code trials and needs no network.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:sharp-edges"
+      ],
+      "media": []
+    },
+    {
       "slug": "trailofbits-skills",
       "name": "Trail of Bits Skills",
       "kind": "plugin",
@@ -4904,6 +5538,66 @@
         "plugin:variant-analysis",
         "plugin:supply-chain-risk-auditor",
         "plugin:building-secure-contracts"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-variant-analysis",
+      "name": "Trail of Bits Variant Analysis",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Skill and workflow that take one known bug, extract its root cause and hunt the other places it occurs, with CodeQL and Semgrep templates.",
+      "sourceUrl": "https://github.com/trailofbits/skills/tree/main/plugins/variant-analysis",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/plugins/variant-analysis/README.md",
+      "install": "/plugin install trailofbits/skills/plugins/variant-analysis",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 2.0.4, by Axel Mierczuk. Starts from a bug you already found; the skill says it is not for initial discovery. /variant-analysis:variants runs a Claude Code workflow with one subagent per expansion axis, and below about 40 source files it does a single narrow sweep. Templates cover Python, JavaScript, Java, Go and C++. Codex: codex plugin marketplace add trailofbits/skills, then codex plugin add variant-analysis@trailofbits. Equippable in Claude Code trials; the Semgrep and CodeQL steps need those tools installed.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:variant-analysis"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trunk-flaky-tests",
+      "name": "Trunk Flaky Tests",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "qa-testing",
+        "testing-debugging"
+      ],
+      "summary": "Claude Code plugin with a flaky test patterns skill, plus Trunk commands that explain and fix flaky tests from your CI history.",
+      "sourceUrl": "https://github.com/trunk-io/claude-code-plugin",
+      "evidenceUrl": "https://github.com/trunk-io/claude-code-plugin/blob/main/README.md",
+      "install": "claude plugin marketplace add anthropics/claude-plugins-community\nclaude plugin install trunk@claude-community",
+      "publisher": "Trunk",
+      "license": "MIT",
+      "lastActivity": "2026-09-30",
+      "verifiedOn": "2026-10-22",
+      "notes": "The /trunk:fix-flaky, /trunk:why-flaky and /trunk:setup-uploads commands call the Trunk MCP server, which needs a Trunk account (OAuth sign in) and test results uploaded from CI. Without that, only the flaky-test-patterns skill helps: it maps symptoms such as sleeps, clock use, shared state, real network calls and fixed ports to fixes. In a sealed trial arena the MCP part cannot connect, and its .mcp.json means trials need --allow-hazards. A trunk-ci-setup skill covers CI upload config.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:trunk",
+        "skill:flaky-test-patterns",
+        "skill:trunk:flaky-test-patterns"
       ],
       "media": []
     },
@@ -5168,6 +5862,35 @@
       },
       "match": [
         "mcp:windmill"
+      ],
+      "media": []
+    },
+    {
+      "slug": "wshobson-unit-testing",
+      "name": "Unit Testing (wshobson agents)",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "qa-testing",
+        "testing-debugging"
+      ],
+      "summary": "Claude Code plugin with a test-generate command plus test automator and debugger subagents for Python and JavaScript unit tests.",
+      "sourceUrl": "https://github.com/wshobson/agents/tree/main/plugins/unit-testing",
+      "evidenceUrl": "https://github.com/wshobson/agents/blob/main/.claude-plugin/marketplace.json",
+      "install": "/plugin marketplace add wshobson/agents\n/plugin install unit-testing@claude-code-workflows",
+      "publisher": "Seth Hobson",
+      "license": "MIT",
+      "lastActivity": "2026-10-04",
+      "verifiedOn": "2026-10-22",
+      "notes": "/unit-testing:test-generate writes pytest, Jest or React component tests with mocks and edge cases, then checks coverage gaps. The unit-testing-debugger agent captures the error, reproduces it, isolates the failure and makes a minimal fix. The test-automator agent's prompt is broad and names cloud and browser tools, so point it at local runners. No hooks or MCP, so trials equip it as is. It has no skills, so the native Codex install adds nothing from it.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:unit-testing"
       ],
       "media": []
     },
@@ -6047,6 +6770,7 @@
     "anthropic-docx": "craft",
     "anthropic-feature-dev-plugin": "craft",
     "anthropic-finance-plugin": "craft",
+    "anthropic-financial-analysis-plugin": "craft",
     "anthropic-frontend-design": "craft",
     "anthropic-frontend-design-plugin": "craft",
     "anthropic-legal-plugin": "test",
@@ -6076,6 +6800,7 @@
     "build123d-mcp": "craft",
     "canva-plugin": "craft",
     "cartesia-mcp": "craft",
+    "cartesia-skills": "craft",
     "caveman": "craft",
     "chrome-devtools-mcp": "test",
     "claude-financial-services": "craft",
@@ -6093,10 +6818,12 @@
     "davinci-resolve-workflows": "craft",
     "dbt-mcp": "scout",
     "deepgram-mcp": "scout",
+    "deepgram-skills": "craft",
     "deque-axe-accessibility": "test",
     "descript-mcp": "craft",
     "docker-mcp-gateway": "craft",
     "duckdb-motherduck-mcp": "scout",
+    "duckdb-skills-plugin": "scout",
     "elevenlabs-skills": "craft",
     "endor-labs-agent-kit": "test",
     "exa-mcp": "scout",
@@ -6112,12 +6839,15 @@
     "freecad-contextform-mcp": "craft",
     "fusion360-mcp-bridge": "craft",
     "github-mcp": "scout",
+    "gladia-skills": "craft",
     "godot-ai": "craft",
     "godot-mcp": "craft",
     "google-analytics-mcp": "test",
+    "google-genmedia-mcp": "craft",
     "grafana-k6-mcp": "test",
     "grafana-mcp": "ship",
     "graphify": "scout",
+    "hegel-skill": "test",
     "heygen-mcp": "craft",
     "higgsfield-skills": "craft",
     "hubspot-sales-plugin": "craft",
@@ -6128,17 +6858,22 @@
     "hyperframes": "craft",
     "intercom-plugin": "scout",
     "intuit-quickbooks-plugin": "scout",
+    "kdense-exploratory-data-analysis": "scout",
+    "kdense-statistical-analysis": "craft",
     "kubernetes-mcp-server": "ship",
     "langfuse-skills": "test",
     "linear-mcp": "scout",
+    "luma-plugin": "craft",
     "make-mcp": "craft",
     "make-skills-plugin": "craft",
+    "marimo-notebook": "craft",
     "mattpocock-codebase-design": "craft",
     "mattpocock-diagnosing-bugs": "test",
     "mattpocock-tdd": "test",
     "mcp-for-unity": "craft",
     "meshy-3d-generation": "craft",
     "meshy-mcp": "craft",
+    "minimax-cli": "craft",
     "mixpanel-headless-plugin": "scout",
     "mlflow-skills": "test",
     "monday-mcp": "ship",
@@ -6162,6 +6897,7 @@
     "openai-test-android-apps": "test",
     "openscad-design": "craft",
     "openscad-mcp": "craft",
+    "pactflow-contract-testing": "test",
     "perplexity-mcp": "scout",
     "playwright-cli": "test",
     "playwright-mcp": "test",
@@ -6175,6 +6911,8 @@
     "runway-dev": "craft",
     "salesforce-hosted-mcp": "craft",
     "save-to-spotify": "ship",
+    "scenario-audio": "craft",
+    "scenario-video": "craft",
     "semgrep-guardian": "craft",
     "semrush-mcp": "scout",
     "sentry-mcp": "test",
@@ -6193,7 +6931,15 @@
     "threejs-geometry": "craft",
     "threejs-loaders": "craft",
     "together-ai-skills": "craft",
+    "trailofbits-audit-context-building": "scout",
+    "trailofbits-fp-check": "test",
+    "trailofbits-insecure-defaults": "test",
+    "trailofbits-mutation-testing": "test",
+    "trailofbits-property-based-testing": "test",
+    "trailofbits-sharp-edges": "test",
     "trailofbits-skills": "test",
+    "trailofbits-variant-analysis": "test",
+    "trunk-flaky-tests": "test",
     "ui-ux-pro-max": "craft",
     "unreal-engine-claude-plugin": "craft",
     "vercel-mcp": "ship",
@@ -6203,6 +6949,7 @@
     "vercel-writing-guidelines": "test",
     "wandb-mcp": "test",
     "windmill-mcp": "craft",
+    "wshobson-unit-testing": "test",
     "zapier-mcp": "craft"
   },
   "classes": [

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/plugin/cli.ts; spell-report 0.7.1. Rebuild with bun run build:plugin.
+// Generated from src/plugin/cli.ts; spell-report 0.7.2. Rebuild with bun run build:plugin.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -23659,7 +23659,7 @@ async function medalsReport(roots, runs, quests, library, base) {
 
 // src/plugin/cli.ts
 var DEFAULT_ENDPOINT = "https://vibe-rpg-simulator.vercel.app/api/submit";
-var VERSION = "0.7.1";
+var VERSION = "0.7.2";
 var PARSERS = {
   codex: parseCodexFile,
   "claude-code": parseClaudeFile,
