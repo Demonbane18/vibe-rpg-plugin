@@ -41,7 +41,7 @@ Terms follow the site's glossary:
 - **Clear rate** is the pass rate. **Steadiness** is reliability: the Wilson 95% lower bound of clear rate. A few runs support a low number even when every run passed.
 - **Buff** is effectiveness: clear-rate percentage points over the matching Unarmed control. A negative buff is a debuff. No matching control means no buff claim.
 - **Mastery** is partial credit: average share of checks passed, failed runs included. **Casts** is median prompts needed by cleared runs. **Cast time** is median agent runtime, grading excluded.
-- **Mana** is median cost at API list prices, each run priced with its own model (100 mana is one US cent), not subscription billing; a run whose hero reports no cost is not priced yet. **Tokens** are median tokens, cached input included; compare them within one hero. **Incantation** is median output tokens, hidden reasoning included. **Runes** are median lines added and removed in the workspace diff. **Actions** means tool calls. **Attunement** means the agent opened an equipped skill, found in that run's own log.
+- **Mana** is median cost at API list prices, each run priced with its own model (100 mana is one US cent), not subscription billing. Codex runs are priced from the bundled price book; a run whose model is not in it, or a Codex run from before plugin 0.7.0, is not priced yet. **Incantation** is median output tokens, hidden reasoning included. **Runes** are median lines added and removed in the workspace diff. **Actions** means tool calls. **Attunement** means the agent opened an equipped skill, found in that run's own log.
 
 ## Report results
 

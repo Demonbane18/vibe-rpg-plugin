@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/plugin/cli.ts; spell-report 0.6.0. Rebuild with bun run build:plugin.
+// Generated from src/plugin/cli.ts; spell-report 0.7.0. Rebuild with bun run build:plugin.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -21088,6 +21088,15 @@ import { parseArgs } from "node:util";
 
 // src/shared/mana.ts
 var MANA_PER_USD = 1e4;
+function priceCard(model, at, prices) {
+  const name = model.toLowerCase();
+  const day = at.toISOString().slice(0, 10);
+  return prices.find((card) => (card.id.toLowerCase() === name || card.aliases.some((alias) => alias.toLowerCase() === name)) && (card.effectiveFrom === null || card.effectiveFrom <= day) && (card.effectiveTo === null || day <= card.effectiveTo)) ?? null;
+}
+function cardMana(card, usage) {
+  const usd = usage.input * card.input + usage.cacheRead * card.cacheRead + usage.cacheWrite * (card.cacheWrite ?? card.input) + usage.output * card.output;
+  return usd * MANA_PER_USD / 1e6;
+}
 function formatMana(mana) {
   return mana < 10 ? mana.toLocaleString("en-US", { maximumSignificantDigits: 2 }) : mana.toLocaleString("en-US", { maximumFractionDigits: 0 });
 }
@@ -21564,6 +21573,13 @@ var asFocus = (value, fallback) => typeof value === "string" && FOCUS_LEVELS.inc
 var baseEnv = (home, tmp) => ({ PATH: process.env.PATH ?? "/usr/bin:/bin", HOME: home, TMPDIR: tmp, LANG: "en_US.UTF-8", USER: process.env.USER ?? "quester" });
 var TRANSCRIPT_LIMIT = 64000000;
 var CODEX_TOOL_ITEMS = new Set(["command_execution", "file_change", "mcp_tool_call", "web_search"]);
+function codexCostUsd(totals, model, at, prices) {
+  const card = priceCard(model, at, prices);
+  if (!card)
+    return null;
+  const fresh = Math.max(0, totals.input - totals.cached - totals.cacheWrites);
+  return Math.round(cardMana(card, { input: fresh, cacheRead: totals.cached, cacheWrite: totals.cacheWrites, output: totals.output })) / MANA_PER_USD;
+}
 function codexConfig(caster, focus, realHome, temp, readable) {
   return [
     ...caster ? [`model = ${JSON.stringify(caster)}`] : [],
@@ -21598,7 +21614,8 @@ var codex = {
   containment: "sealed",
   focusLevels: ["default", "minimal", "low", "medium", "high", "xhigh"],
   kinds: ["skill"],
-  async start({ arena, spells, caster, focus, timeLimitMs }) {
+  async start({ arena, spells, caster, focus, timeLimitMs, prices }) {
+    const startedAt = new Date;
     refuseUnequippable(codex, spells);
     const realHome = homedir3();
     const codexHome = join4(arena.home, ".codex");
@@ -21616,8 +21633,7 @@ var codex = {
     const base = baseEnv(arena.home, arena.tmp);
     const env = { ...base, PATH: [...clones, base.PATH].join(":"), CODEX_HOME: codexHome };
     let thread = null;
-    let tokens = null;
-    let outputTokens = null;
+    let totals = null;
     let toolCalls = 0;
     return {
       async send(prompt) {
@@ -21636,8 +21652,7 @@ var codex = {
           else if (event.type === "turn.completed") {
             completed = true;
             const usage = event.usage ?? {};
-            tokens = (tokens ?? 0) + (Number(usage.input_tokens) || 0) + (Number(usage.output_tokens) || 0);
-            outputTokens = (outputTokens ?? 0) + (Number(usage.output_tokens) || 0);
+            totals = { input: Number(usage.input_tokens) || 0, cached: Number(usage.cached_input_tokens) || 0, cacheWrites: Number(usage.cache_write_input_tokens) || 0, output: Number(usage.output_tokens) || 0 };
           } else if (event.type === "turn.failed")
             failure2 += ` ${event.error?.message ?? ""}`;
           else if (event.type === "error")
@@ -21658,14 +21673,15 @@ var codex = {
             effort = event.payload?.effort ?? effort;
           }
         }
+        const priced = model ?? caster;
         return {
           heroVersion: files.map((file2) => file2.session?.harnessVersion ?? null).find(Boolean) ?? null,
-          caster: model ?? caster,
+          caster: priced,
           focus: asFocus(effort, focus),
-          tokens,
-          outputTokens,
+          tokens: totals && totals.input + totals.output,
+          outputTokens: totals?.output ?? null,
           toolCalls,
-          costUsd: null,
+          costUsd: totals && priced ? codexCostUsd(totals, priced, startedAt, prices) : null,
           opened: skillNames(files)
         };
       }
@@ -22618,7 +22634,7 @@ async function runTrial(plan) {
   let roots = [arena.workspace, arena.root];
   try {
     const grader = nodeRunner(await ward(arena, "grade", { read: await commandReadPaths("node"), write: [], network: false, root: arena.scratch }));
-    session = await hero.start({ arena, spells, caster: plan.caster, focus: plan.focus, timeLimitMs: plan.quest.timeLimitSec * 1000 });
+    session = await hero.start({ arena, spells, caster: plan.caster, focus: plan.focus, timeLimitMs: plan.quest.timeLimitSec * 1000, prices: plan.prices });
     for (let n = 1;n <= plan.quest.maxPrompts; n++) {
       const invoked = plan.cast === "invoked" ? invocation(spells) : "";
       const prompt = n === 1 ? `${PREAMBLE}
@@ -22774,8 +22790,7 @@ function runLine(run, quest) {
   const loadout = run.loadout.kind === "unarmed" ? "Unarmed" : run.loadout.kind === "workflow" ? `Workflow ${run.loadout.slug}` : `${run.loadout.kind === "combo" ? "Combo" : "Spell"} ${run.loadout.spells.join(" + ")}`;
   const metrics = [
     formatDuration(run.durationMs),
-    run.tokens === null ? null : `${formatTokens(run.tokens)} tokens`,
-    run.costUsd === null ? null : `${formatMana(Math.round(run.costUsd * MANA_PER_USD))} mana`,
+    run.costUsd === null ? "mana not priced yet" : `${formatMana(Math.round(run.costUsd * MANA_PER_USD))} mana`,
     run.outputTokens == null ? null : `${formatTokens(run.outputTokens)} incantation (output tokens)`,
     run.linesAdded == null || run.linesRemoved == null ? null : `runes ${formatLines(run.linesAdded, run.linesRemoved)} lines`,
     run.loadout.kind === "unarmed" ? null : run.attuned.length > 0 ? `attuned: ${run.attuned.join(", ")}` : "not attuned"
@@ -22839,7 +22854,7 @@ ${hazards.map((line) => `  ${line}`).join(`
   const results = [];
   let mishapsInRow = 0;
   for (const [index, job] of jobs.entries()) {
-    const { run: result, output: output2 } = await runTrial({ quest: job.quest, loadout: job.loadout, hero: request.hero, caster: request.caster, focus: request.focus, cast: request.cast, keep: request.keep });
+    const { run: result, output: output2 } = await runTrial({ quest: job.quest, loadout: job.loadout, hero: request.hero, caster: request.caster, focus: request.focus, cast: request.cast, keep: request.keep, prices: ctx.catalog.prices });
     await appendRun(result, ctx.runsFile);
     if (ctx.outputsDir)
       await saveOutput(output2, ctx.outputsDir);
@@ -22872,7 +22887,7 @@ function describeCells(cells, catalog, quests) {
       const name = cell.loadout.kind === "unarmed" ? "Unarmed" : cell.loadout.kind === "workflow" ? catalog.workflows.find((item) => item.slug === cell.loadout.slug)?.name ?? cell.loadout.slug : cell.loadout.spells.map((slug) => catalog.skills.find((item) => item.slug === slug)?.name ?? slug).join(" + ");
       const rate = clearRate(cell);
       const buff = buffOver(cell, cells);
-      lines.push(`  ${name}${cell.cast ? ` (${cell.cast} cast)` : ""} · ${HARNESS_NAMES[cell.hero]} ${cell.heroVersion ?? "?"} · weapon ${cell.caster} · charge ${cell.focus}${cell.source.kind === "community" ? ` · community: ${cell.source.name ?? "anonymous"}` : ""}`, `    Clear rate (pass rate) ${cell.cleared}/${cell.runs}${rate === null ? "" : ` = ${Math.round(rate * 100)}%`} · Steadiness (reliability) ${Math.round(wilsonLower(cell.cleared, cell.runs) * 100)}%` + ` · Buff (vs Unarmed) ${cell.loadout.kind === "unarmed" ? "control" : buff ? `${buff.points >= 0 ? "+" : ""}${buff.points} pts` : "no control yet"}`, `    Instant casts ${cell.oneShot}/${cell.cleared} · Casts (prompts) ${cell.medianPromptsToClear ?? "-"} · Mastery ${Math.round(cell.meanScore * 100)}%` + ` · Cast time ${cell.medianDurationMs === null ? "-" : formatDuration(cell.medianDurationMs)} · Tokens ${cell.medianTokens === null ? "-" : formatTokens(cell.medianTokens)}` + ` · Mana (cost) ${cell.medianCostUsd === null ? "-" : formatMana(Math.round(cell.medianCostUsd * MANA_PER_USD))}` + ` · Incantation (output tokens) ${cell.medianOutputTokens == null ? "-" : formatTokens(cell.medianOutputTokens)}` + ` · Runes (lines written) ${cell.medianLinesAdded == null || cell.medianLinesRemoved == null ? "-" : formatLines(cell.medianLinesAdded, cell.medianLinesRemoved)}` + ` · Attuned ${cell.loadout.kind === "unarmed" ? "-" : `${cell.attuned}/${cell.runs}`}` + (cell.mishaps ? ` · ${cell.mishaps} mishap(s) left out` : ""));
+      lines.push(`  ${name}${cell.cast ? ` (${cell.cast} cast)` : ""} · ${HARNESS_NAMES[cell.hero]} ${cell.heroVersion ?? "?"} · weapon ${cell.caster} · charge ${cell.focus}${cell.source.kind === "community" ? ` · community: ${cell.source.name ?? "anonymous"}` : ""}`, `    Clear rate (pass rate) ${cell.cleared}/${cell.runs}${rate === null ? "" : ` = ${Math.round(rate * 100)}%`} · Steadiness (reliability) ${Math.round(wilsonLower(cell.cleared, cell.runs) * 100)}%` + ` · Buff (vs Unarmed) ${cell.loadout.kind === "unarmed" ? "control" : buff ? `${buff.points >= 0 ? "+" : ""}${buff.points} pts` : "no control yet"}`, `    Instant casts ${cell.oneShot}/${cell.cleared} · Casts (prompts) ${cell.medianPromptsToClear ?? "-"} · Mastery ${Math.round(cell.meanScore * 100)}%` + ` · Cast time ${cell.medianDurationMs === null ? "-" : formatDuration(cell.medianDurationMs)}` + ` · Mana (cost at list prices) ${cell.medianCostUsd === null ? "not priced yet" : formatMana(Math.round(cell.medianCostUsd * MANA_PER_USD))}` + ` · Incantation (output tokens) ${cell.medianOutputTokens == null ? "-" : formatTokens(cell.medianOutputTokens)}` + ` · Runes (lines written) ${cell.medianLinesAdded == null || cell.medianLinesRemoved == null ? "-" : formatLines(cell.medianLinesAdded, cell.medianLinesRemoved)}` + ` · Attuned ${cell.loadout.kind === "unarmed" ? "-" : `${cell.attuned}/${cell.runs}`}` + (cell.mishaps ? ` · ${cell.mishaps} mishap(s) left out` : ""));
     }
   }
   return lines;
@@ -23644,7 +23659,7 @@ async function medalsReport(roots, runs, quests, library, base) {
 
 // src/plugin/cli.ts
 var DEFAULT_ENDPOINT = "https://vibe-rpg-simulator.vercel.app/api/submit";
-var VERSION = "0.6.0";
+var VERSION = "0.7.0";
 var PARSERS = {
   codex: parseCodexFile,
   "claude-code": parseClaudeFile,
@@ -23680,6 +23695,16 @@ Without --yes: local preview only, exit 2, no network. With --yes: check, then s
   medals: `medals [--base <url>]
 Checks your local session logs and quest results for medals, then prints a card and an import link for the Practice Grounds. Nothing is sent; the link holds only medal names, days and library spell names. Base: --base, then the bundled site. Requires Node 20.12 or newer.`
 };
+var PluginCatalogSchema = exports_external.object({
+  skills: exports_external.array(SkillSchema),
+  workflows: exports_external.array(WorkflowSchema),
+  phases: exports_external.record(SlugSchema, exports_external.enum(PHASES)).optional(),
+  classes: exports_external.array(exports_external.object({ slug: SlugSchema, className: exports_external.string() })).optional(),
+  prices: exports_external.array(ModelPriceSchema)
+});
+async function readPluginCatalog(skillDir) {
+  return PluginCatalogSchema.parse(JSON.parse(await readFile8(join11(skillDir, "catalog.json"), "utf8")));
+}
 async function readLocal(path, limit) {
   if (resolve4(path).split(sep4).some((part) => SENSITIVE_NAME.test(part) || part.startsWith(".env") || part === ".ssh")) {
     throw new Error("Refusing to read a sensitive path.");
@@ -23955,12 +23980,7 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
     const questsDir = options.questsDir ?? join11(skillDir, "quests");
     const dataDir = options.dataDir ?? process.env.VIBERPG_DATA_DIR ?? join11(homedir4(), ".viberpg");
     const runsFile = join11(dataDir, "trials", "runs.jsonl");
-    const catalog = async () => options.catalog ?? exports_external.object({
-      skills: exports_external.array(SkillSchema),
-      workflows: exports_external.array(WorkflowSchema),
-      phases: exports_external.record(SlugSchema, exports_external.enum(PHASES)).optional(),
-      classes: exports_external.array(exports_external.object({ slug: SlugSchema, className: exports_external.string() })).optional()
-    }).parse(JSON.parse(await readFile8(join11(skillDir, "catalog.json"), "utf8")));
+    const catalog = async () => options.catalog ?? readPluginCatalog(skillDir);
     switch (command) {
       case "medals": {
         const { values, positionals } = parseArgs2({ args, allowPositionals: true, options: { base: { type: "string" } } });
@@ -24248,5 +24268,6 @@ if (process.argv[1] && resolve4(process.argv[1]) === fileURLToPath(import.meta.u
 }
 export {
   trialScrying,
-  runCli
+  runCli,
+  readPluginCatalog
 };
