@@ -1,7 +1,7 @@
 ---
 name: spell-report
-description: Write, check, sign and send a structured test report on a skill, plugin or MCP server for Claude Code or Codex to the VibeRPGSimulator curator. Use when someone wants to review a spell, share test results, report limits or submit screenshots with optional GitHub provenance.
-compatibility: Node 20 or newer on macOS, Linux or Windows. Optional signing requires the OpenSSH ssh-keygen command. Sending requires an internet connection.
+description: Write, check, sign and send a structured test report on a skill, plugin or MCP server for Claude Code or Codex to the VibeRPGSimulator curator. Use when someone wants to review a spell, share test results, report limits or submit screenshots with optional GitHub provenance, or asks to check their VibeRPG medals.
+compatibility: Node 20 or newer on macOS, Linux or Windows; the medals command needs Node 20.12 or newer. Optional signing requires the OpenSSH ssh-keygen command. Sending requires an internet connection.
 ---
 
 # Spell report
@@ -40,6 +40,16 @@ Resolve the path from this skill's installed directory. Every command below goes
 6. Run `check "<report-directory>/spell-report.md"` and fix blocking problems. Show the complete report, measured counts, every attachment, reply email, destination and any provenance warnings. A local preview is available with `submit "<report-directory>/spell-report.md"` without `--yes`; it sends nothing.
 7. Offer optional signing. A valid SSH signature ties these exact report bytes to a signing key; when that key is listed on the claimed GitHub account, the curator can verify that attribution. It does not prove the findings are true. Run `sign "<report-directory>/spell-report.md"` or add `--key "<chosen key path>"`. Never open a private key or ask for a passphrase. If signing fails or needs a passphrase, give the exact manual command printed by the helper for them to run in their own terminal. Never change the report after signing; changes require an unsigned copy and a new signature. Run `check` again.
 8. Ask explicitly whether to send these files to this destination. Only an explicit yes authorizes `submit "<report-directory>/spell-report.md" --yes`. Include any agreed endpoint override. Report the returned reference id and signature/GitHub status. On failure, show the error and offer upload at `<site>/submit/`; the helper prints that URL. Do not silently retry a possibly delivered email.
+
+## Check my medals
+
+When the user asks to check their medals (or "what medals do I have"), run:
+
+```text
+node "<this-skill-directory>/scripts/spell-report.mjs" medals
+```
+
+Show the card it prints, then offer the import link; opening it adds the medals to their save on the site's Practice Grounds. Explain that the scan reads their session logs and quest results on this machine only, nothing is sent, and the link holds only medal names, days and library spell names. It needs Node 20.12 or newer.
 
 ## Privacy
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/plugin/cli.ts; spell-report 0.4.0. Rebuild with bun run build:plugin.
+// Generated from src/plugin/cli.ts; spell-report 0.6.0. Rebuild with bun run build:plugin.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -19447,11 +19447,20 @@ function date4(params) {
 // src/shared/loadout-rules.ts
 var PHASES = ["scout", "craft", "test", "ship"];
 var ACTIONS = ["cast", "summon", "link", "scan", "strike", "craft", "guard", "loot"];
-var FOES = ["bug-slime", "flaky-wisp", "fog-wraith", "tangle-hydra", "blank-mimic", "clay-golem", "reel-phantom", "clockwork-imp", "paper-golem", "gate-warden", "vault-serpent", "error-imp"];
+var FOE_ROLES = ["foe", "boss"];
+var FOE_FX = ["claw", "slam", "spit", "haze", "split", "flicker", "regrow", "crash", "grind", "paper", "barrier", "venom", "breath", "call", "rewind", "stare"];
+var FOE_STATUSES = ["haze", "poison"];
+var PASSIVES = ["split", "flicker", "regrow", "barrier"];
 var EFFORTS = ["none", "low", "medium", "high", "xhigh", "max"];
 var WEAPONS = ["greatsword", "longsword", "dagger", "warhammer", "staff"];
 var LOADOUT_LIMITS = { perPhase: 3, spells: 12, title: 60, task: 90, notes: 300, author: 32 };
 var SINGLE_LINE = /^[^\r\n\u0085\u2028\u2029]*$/;
+function toBase64Url(bytes) {
+  let binary = "";
+  for (const byte of bytes)
+    binary += String.fromCharCode(byte);
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
+}
 
 // src/shared/looks.ts
 var ICON_BASES = [
@@ -19563,7 +19572,26 @@ var CategorySchema = exports_external.object({
   name: exports_external.string().min(2).max(60),
   className: exports_external.string().min(2).max(30),
   description: exports_external.string().min(10).max(240),
-  emblem: exports_external.string().regex(/^[a-z0-9-]+\.png$/)
+  emblem: exports_external.string().regex(/^[a-z0-9-]+\.png$/),
+  foe: SlugSchema,
+  craftFoe: SlugSchema.optional()
+});
+var FoeSchema = exports_external.object({
+  slug: SlugSchema,
+  name: exports_external.string().min(2).max(40),
+  means: exports_external.string().min(5).max(120),
+  role: exports_external.enum(FOE_ROLES),
+  hp: exports_external.number().int().min(1).max(999),
+  speed: exports_external.number().int().min(1).max(30),
+  attack: exports_external.string().min(2).max(24),
+  fx: exports_external.enum(FOE_FX),
+  damage: exports_external.array(exports_external.number().int().min(1).max(50)).min(1).max(4),
+  all: exports_external.boolean().default(false),
+  inflicts: exports_external.enum(FOE_STATUSES).nullable().default(null),
+  passive: exports_external.enum(PASSIVES).nullable().default(null),
+  minion: SlugSchema.nullable().default(null),
+  rpg: exports_external.string().min(10).max(140),
+  plain: exports_external.string().min(10).max(220)
 });
 var BeatSchema = exports_external.object({
   action: exports_external.enum(ACTIONS),
@@ -19575,7 +19603,7 @@ var BeatSchema = exports_external.object({
 var GuideSchema = exports_external.object({
   slug: SlugSchema,
   phase: exports_external.enum(PHASES),
-  foe: exports_external.enum(FOES),
+  foe: SlugSchema,
   tagline: exports_external.string().min(10).max(100),
   beats: exports_external.array(BeatSchema).min(3).max(5),
   install: exports_external.partialRecord(exports_external.enum(AGENTS), exports_external.string().min(3).max(400))
@@ -19595,6 +19623,23 @@ var ArmorySchema = exports_external.object({
     verifiedOn: Day
   }))
 });
+var UsdPerMillion = exports_external.number().nonnegative().max(1000);
+var ModelPriceSchema = exports_external.object({
+  id: exports_external.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{1,63}$/),
+  vendor: exports_external.string().min(2).max(40),
+  name: exports_external.string().min(2).max(40),
+  aliases: exports_external.array(exports_external.string().regex(/^[A-Za-z0-9][A-Za-z0-9._/-]{1,79}$/)),
+  input: UsdPerMillion,
+  cacheRead: UsdPerMillion,
+  cacheWrite: UsdPerMillion.nullable(),
+  cacheWrite1h: UsdPerMillion.optional(),
+  output: UsdPerMillion,
+  effectiveFrom: Day.nullable(),
+  effectiveTo: Day.nullable(),
+  sourceUrl: Https,
+  verifiedOn: Day,
+  note: exports_external.string().min(3).max(240).optional()
+}).refine((card) => !card.effectiveFrom || !card.effectiveTo || card.effectiveFrom <= card.effectiveTo, { message: "effectiveFrom must not be after effectiveTo", path: ["effectiveTo"] });
 var LoadoutSpellSchema = exports_external.object({ spell: SlugSchema, phase: exports_external.enum(PHASES) });
 var LoadoutBuildSchema = exports_external.object({
   title: exports_external.string().trim().min(3).max(LOADOUT_LIMITS.title).regex(SINGLE_LINE, "Keep this to a single line"),
@@ -19618,7 +19663,10 @@ var SiteSchema = exports_external.object({
   heroTitle: exports_external.string().min(5).max(80),
   tagline: exports_external.string().min(10).max(160),
   baseUrl: exports_external.url({ protocol: /^https?$/ }),
-  githubRepo: exports_external.string().regex(/^[A-Za-z0-9-]{1,39}\/[A-Za-z0-9._-]{1,100}$/, "Use owner/name").nullable()
+  githubRepo: exports_external.string().regex(/^[A-Za-z0-9-]{1,39}\/[A-Za-z0-9._-]{1,100}$/, "Use owner/name").nullable(),
+  titleParty: exports_external.array(SlugSchema).min(1).max(5),
+  questFoes: exports_external.object({ scout: exports_external.array(SlugSchema).max(3), test: exports_external.array(SlugSchema).max(3), ship: exports_external.array(SlugSchema).max(2) }),
+  demoFoe: SlugSchema
 });
 var LooksSchema = exports_external.record(SlugSchema, exports_external.string().regex(/^[a-z]+-[a-z]+$/, "Use base-palette, like tome-ember"));
 var REGISTRIES = ["npm", "pypi"];
@@ -19773,6 +19821,9 @@ var TrialCellSchema = exports_external.object({
   medianTokens: Count3.nullable(),
   medianToolCalls: Count3.nullable(),
   medianCostUsd: exports_external.number().nonnegative().nullable(),
+  medianOutputTokens: Count3.nullable().optional(),
+  medianLinesAdded: Count3.nullable().optional(),
+  medianLinesRemoved: Count3.nullable().optional(),
   firstRun: Day2,
   lastRun: Day2,
   scrying: exports_external.object({ file: ScryingFileSchema, outcome: exports_external.enum(["cleared", "fizzled"]) }).optional()
@@ -19810,6 +19861,9 @@ function formatDuration(ms) {
 }
 function formatTokens(value) {
   return value >= 1000 ? `${Number((value / 1000).toFixed(1))}k` : String(value);
+}
+function formatLines(added, removed) {
+  return `+${added} / -${removed}`;
 }
 
 // src/shared/report.ts
@@ -21032,12 +21086,21 @@ async function discoverFiles() {
 import { spawnSync } from "node:child_process";
 import { parseArgs } from "node:util";
 
+// src/shared/mana.ts
+var MANA_PER_USD = 1e4;
+function formatMana(mana) {
+  return mana < 10 ? mana.toLocaleString("en-US", { maximumSignificantDigits: 2 }) : mana.toLocaleString("en-US", { maximumFractionDigits: 0 });
+}
+
 // src/trials/arena.ts
 import { createHash as createHash2 } from "node:crypto";
-import { constants as constants2, existsSync } from "node:fs";
+import { constants as constants2, existsSync, realpathSync } from "node:fs";
 import { chmod, copyFile, cp, lstat as lstat2, mkdir, mkdtemp, readdir as readdir2, realpath, rename, rm, stat, writeFile } from "node:fs/promises";
 import { homedir as homedir2, tmpdir } from "node:os";
 import { dirname as dirname2, join as join2 } from "node:path";
+function tempRoot() {
+  return realpathSync(tmpdir());
+}
 var WARD_AVAILABLE = process.platform === "darwin" && existsSync("/usr/bin/sandbox-exec");
 async function privateDir(path) {
   await mkdir(path, { recursive: true, mode: 448 });
@@ -21061,16 +21124,18 @@ async function closeArena(arena) {
   await rm(arena.root, { recursive: true, force: true });
 }
 var quote = (path) => `"${path.replaceAll("\\", "\\\\").replaceAll('"', "\\\"")}"`;
-function wardProfile(arenaRoot, rules, home = homedir2()) {
+function wardProfile(arenaRoot, rules, home = homedir2(), temp = tempRoot()) {
   const reads = rules.read.map((path) => `(subpath ${quote(path)})`).join(" ");
-  const writes = [`(subpath ${quote(arenaRoot)})`, '(subpath "/dev")', ...rules.write.map((path) => `(subpath ${quote(path)})`)].join(" ");
+  const writes = [`(subpath ${quote(rules.root ?? arenaRoot)})`, '(subpath "/dev")', ...rules.write.map((path) => `(subpath ${quote(path)})`)].join(" ");
   const locked = (rules.locked ?? []).map((path) => `(subpath ${quote(path)})`).join(" ");
   return [
     "(version 1)",
     "(allow default)",
     `(deny file-read* (subpath ${quote(home)}))`,
+    `(deny file-read* (subpath ${quote(temp)}))`,
     "(allow file-read-metadata)",
     `(allow file-read* (literal ${quote(home)})${reads ? ` ${reads}` : ""})`,
+    `(allow file-read* (subpath ${quote(arenaRoot)}))`,
     "(deny file-write*)",
     `(allow file-write* ${writes})`,
     ...locked ? [`(deny file-write* ${locked})`] : [],
@@ -21082,7 +21147,7 @@ function wardProfile(arenaRoot, rules, home = homedir2()) {
 async function ward(arena, name, rules) {
   if (!WARD_AVAILABLE)
     throw new Error(`The ${name} step needs a sandbox, and macOS Seatbelt is not available on this system.`);
-  return ["/usr/bin/sandbox-exec", "-p", wardProfile(rules.root ?? arena.root, rules)];
+  return ["/usr/bin/sandbox-exec", "-p", wardProfile(await realpath(arena.root), rules)];
 }
 async function commandReadPaths(command) {
   const home = homedir2();
@@ -21132,7 +21197,7 @@ async function cloneOutOfHome(commands, cacheRoot = join2(tmpdir(), "viberpg-are
 // src/trials/heroes.ts
 import { spawn } from "node:child_process";
 import { existsSync as existsSync2 } from "node:fs";
-import { cp as cp2, mkdir as mkdir3, readdir as readdir4, readFile as readFile3, stat as stat3, symlink, writeFile as writeFile3 } from "node:fs/promises";
+import { cp as cp2, mkdir as mkdir3, readdir as readdir4, readFile as readFile3, realpath as realpath2, stat as stat3, symlink, writeFile as writeFile3 } from "node:fs/promises";
 import { homedir as homedir3 } from "node:os";
 import { dirname as dirname3, join as join4 } from "node:path";
 import { createInterface } from "node:readline";
@@ -21499,7 +21564,7 @@ var asFocus = (value, fallback) => typeof value === "string" && FOCUS_LEVELS.inc
 var baseEnv = (home, tmp) => ({ PATH: process.env.PATH ?? "/usr/bin:/bin", HOME: home, TMPDIR: tmp, LANG: "en_US.UTF-8", USER: process.env.USER ?? "quester" });
 var TRANSCRIPT_LIMIT = 64000000;
 var CODEX_TOOL_ITEMS = new Set(["command_execution", "file_change", "mcp_tool_call", "web_search"]);
-function codexConfig(caster, focus, realHome) {
+function codexConfig(caster, focus, realHome, temp, readable) {
   return [
     ...caster ? [`model = ${JSON.stringify(caster)}`] : [],
     ...focus !== "default" ? [`model_reasoning_effort = ${JSON.stringify(focus)}`] : [],
@@ -21513,6 +21578,8 @@ function codexConfig(caster, focus, realHome) {
     "",
     "[permissions.arena.filesystem]",
     `${JSON.stringify(realHome)} = "deny"`,
+    `${JSON.stringify(temp)} = "deny"`,
+    ...readable.map((path) => `${JSON.stringify(path)} = "read"`),
     "",
     "[permissions.arena.network]",
     "enabled = false",
@@ -21544,11 +21611,13 @@ var codex = {
     const auth = join4(realHome, ".codex", "auth.json");
     if (existsSync2(auth))
       await symlink(auth, join4(codexHome, "auth.json"));
-    await writeFile3(join4(codexHome, "config.toml"), codexConfig(caster, focus, realHome));
+    const clones = await cloneOutOfHome(["codex", "node"]);
+    await writeFile3(join4(codexHome, "config.toml"), codexConfig(caster, focus, realHome, tempRoot(), [arena.home, ...await Promise.all(clones.map((dir) => realpath2(dir)))]));
     const base = baseEnv(arena.home, arena.tmp);
-    const env = { ...base, PATH: [...await cloneOutOfHome(["codex", "node"]), base.PATH].join(":"), CODEX_HOME: codexHome };
+    const env = { ...base, PATH: [...clones, base.PATH].join(":"), CODEX_HOME: codexHome };
     let thread = null;
     let tokens = null;
+    let outputTokens = null;
     let toolCalls = 0;
     return {
       async send(prompt) {
@@ -21568,6 +21637,7 @@ var codex = {
             completed = true;
             const usage = event.usage ?? {};
             tokens = (tokens ?? 0) + (Number(usage.input_tokens) || 0) + (Number(usage.output_tokens) || 0);
+            outputTokens = (outputTokens ?? 0) + (Number(usage.output_tokens) || 0);
           } else if (event.type === "turn.failed")
             failure2 += ` ${event.error?.message ?? ""}`;
           else if (event.type === "error")
@@ -21593,6 +21663,7 @@ var codex = {
           caster: model ?? caster,
           focus: asFocus(effort, focus),
           tokens,
+          outputTokens,
           toolCalls,
           costUsd: null,
           opened: skillNames(files)
@@ -21660,6 +21731,7 @@ var omp = {
     const version2 = await ompVersion();
     let first = true;
     let tokens = null;
+    let outputTokens = null;
     let cost = null;
     let toolCalls = 0;
     let model = null;
@@ -21699,6 +21771,8 @@ var omp = {
           const usage = message.usage ?? {};
           if (typeof usage.totalTokens === "number")
             tokens = (tokens ?? 0) + usage.totalTokens;
+          if (typeof usage.output === "number")
+            outputTokens = (outputTokens ?? 0) + usage.output;
           if (typeof usage.cost?.total === "number")
             cost = (cost ?? 0) + usage.cost.total;
           toolCalls += (message.content ?? []).filter((part) => part.type === "toolCall").length;
@@ -21719,6 +21793,7 @@ var omp = {
           caster: model ?? caster,
           focus,
           tokens,
+          outputTokens,
           toolCalls,
           costUsd: cost === null ? null : Math.round(cost * 1e4) / 1e4,
           opened: skillNames(await summaries(sessions, "omp", parseOmpFile))
@@ -21727,6 +21802,20 @@ var omp = {
     };
   }
 };
+function claudeSettings(realHome, temp, arena) {
+  return {
+    sandbox: {
+      enabled: true,
+      failIfUnavailable: true,
+      allowUnsandboxedCommands: false,
+      autoAllowBashIfSandboxed: true,
+      filesystem: { denyRead: [realHome, temp], allowRead: [arena.workspace, arena.home, arena.tmp] }
+    },
+    permissions: { deny: ["WebFetch", "WebSearch", `Read(/${realHome}/**)`] },
+    disableAllHooks: true,
+    disableSkillShellExecution: true
+  };
+}
 var claudeCode = {
   id: "claude-code",
   containment: "sealed",
@@ -21759,18 +21848,6 @@ var claudeCode = {
       const clean = id.replace(/^\//, "").split(/\s/)[0];
       return owners.get(clean) ?? (clean.includes(":") ? owners.get(clean.slice(0, clean.indexOf(":") + 1)) : undefined);
     };
-    const settings = {
-      sandbox: {
-        enabled: true,
-        failIfUnavailable: true,
-        allowUnsandboxedCommands: false,
-        autoAllowBashIfSandboxed: true,
-        filesystem: { denyRead: [realHome], allowRead: [arena.workspace] }
-      },
-      permissions: { deny: ["WebFetch", "WebSearch", `Read(/${realHome}/**)`] },
-      disableAllHooks: true,
-      disableSkillShellExecution: true
-    };
     const argv = [
       "claude",
       "-p",
@@ -21790,7 +21867,7 @@ var claudeCode = {
       "--permission-prompts",
       "none",
       "--settings",
-      JSON.stringify(settings),
+      JSON.stringify(claudeSettings(realHome, tempRoot(), arena)),
       ...pluginDirs,
       ...caster ? ["--model", caster] : [],
       ...focus !== "default" ? ["--effort", focus] : []
@@ -21829,7 +21906,7 @@ var claudeCode = {
       for (const resolve3 of waiting.splice(0))
         resolve3(null);
     });
-    let usage = { tokens: null, cost: null };
+    let usage = { tokens: null, outputTokens: null, cost: null };
     return {
       async send(prompt) {
         const started = performance.now();
@@ -21856,7 +21933,11 @@ var claudeCode = {
           return { durationMs, timedOut: false, mishap: mishapFrom(stderr), reply: "" };
         const turnUsage = outcome.usage ?? {};
         const turnTokens = ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"].reduce((sum, key) => sum + (Number(turnUsage[key]) || 0), 0);
-        usage = { tokens: (usage.tokens ?? 0) + turnTokens, cost: typeof outcome.total_cost_usd === "number" ? outcome.total_cost_usd : usage.cost };
+        usage = {
+          tokens: (usage.tokens ?? 0) + turnTokens,
+          outputTokens: (usage.outputTokens ?? 0) + (Number(turnUsage.output_tokens) || 0),
+          cost: typeof outcome.total_cost_usd === "number" ? outcome.total_cost_usd : usage.cost
+        };
         const failed = outcome.is_error === true || outcome.subtype === "error_during_execution";
         return { durationMs, timedOut: false, mishap: failed ? mishapFrom(`${outcome.result ?? ""} ${outcome.terminal_reason ?? ""} ${stderr}`) : null, reply: typeof outcome.result === "string" ? outcome.result : "" };
       },
@@ -21908,6 +21989,7 @@ var claudeCode = {
           caster: model ?? caster,
           focus,
           tokens: usage.tokens,
+          outputTokens: usage.outputTokens,
           toolCalls,
           costUsd: usage.cost === null ? null : Math.round(usage.cost * 1e4) / 1e4,
           opened: [...read].sort()
@@ -21919,8 +22001,174 @@ var claudeCode = {
 var HEROES = { codex, omp, "claude-code": claudeCode };
 
 // src/trials/results.ts
-import { appendFile, mkdir as mkdir4, readdir as readdir5, readFile as readFile4, stat as stat4, unlink, writeFile as writeFile4 } from "node:fs/promises";
-import { dirname as dirname4, join as join5 } from "node:path";
+import { appendFile, mkdir as mkdir4, readdir as readdir6, readFile as readFile4, stat as stat4, unlink, writeFile as writeFile4 } from "node:fs/promises";
+import { dirname as dirname4, join as join6 } from "node:path";
+
+// src/trials/diff.ts
+import { constants as constants3 } from "node:fs";
+import { open as open2, readdir as readdir5, realpath as realpath3 } from "node:fs/promises";
+import { join as join5, sep as sep3 } from "node:path";
+var SKIP = new Set([".claude", ".codex", ".agents", ".omp", "node_modules", ".git"]);
+var MAX_BYTES = 200000;
+var MAX_CELLS = 4000000;
+async function listFiles(root, dir = "") {
+  const found = [];
+  for (const entry of await readdir5(join5(root, dir), { withFileTypes: true }).catch(() => [])) {
+    const rel = dir ? `${dir}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      if (!SKIP.has(entry.name))
+        found.push(...await listFiles(root, rel));
+    } else if (entry.isFile())
+      found.push(rel);
+  }
+  return found;
+}
+function lineOps(a, b) {
+  let start = 0;
+  while (start < a.length && start < b.length && a[start] === b[start])
+    start++;
+  let endA = a.length, endB = b.length;
+  while (endA > start && endB > start && a[endA - 1] === b[endB - 1]) {
+    endA--;
+    endB--;
+  }
+  const x = a.slice(start, endA), y = b.slice(start, endB);
+  const middle = [];
+  if (x.length * y.length > MAX_CELLS) {
+    middle.push(...x.map((line) => ["-", line]), ...y.map((line) => ["+", line]));
+  } else {
+    const width = y.length + 1;
+    const lcs = new Uint32Array((x.length + 1) * width);
+    for (let i2 = x.length - 1;i2 >= 0; i2--) {
+      for (let j2 = y.length - 1;j2 >= 0; j2--) {
+        lcs[i2 * width + j2] = x[i2] === y[j2] ? lcs[(i2 + 1) * width + j2 + 1] + 1 : Math.max(lcs[(i2 + 1) * width + j2], lcs[i2 * width + j2 + 1]);
+      }
+    }
+    let i = 0, j = 0;
+    while (i < x.length && j < y.length) {
+      if (x[i] === y[j]) {
+        middle.push([" ", x[i]]);
+        i++;
+        j++;
+      } else if (lcs[(i + 1) * width + j] >= lcs[i * width + j + 1])
+        middle.push(["-", x[i++]]);
+      else
+        middle.push(["+", y[j++]]);
+    }
+    while (i < x.length)
+      middle.push(["-", x[i++]]);
+    while (j < y.length)
+      middle.push(["+", y[j++]]);
+  }
+  return [...a.slice(0, start).map((line) => [" ", line]), ...middle, ...a.slice(endA).map((line) => [" ", line])];
+}
+function hunks(ops, context) {
+  const aLine = [], bLine = [];
+  let a = 1, b = 1;
+  for (const [kind] of ops) {
+    aLine.push(a);
+    bLine.push(b);
+    if (kind !== "+")
+      a++;
+    if (kind !== "-")
+      b++;
+  }
+  const changes = ops.flatMap(([kind], index) => kind === " " ? [] : [index]);
+  const lines = [];
+  for (let first = 0;first < changes.length; ) {
+    let last = first;
+    while (last + 1 < changes.length && changes[last + 1] - changes[last] <= 2 * context + 1)
+      last++;
+    const from = Math.max(0, changes[first] - context), to = Math.min(ops.length, changes[last] + context + 1);
+    const slice = ops.slice(from, to);
+    const aCount = slice.filter(([kind]) => kind !== "+").length, bCount = slice.filter(([kind]) => kind !== "-").length;
+    lines.push(`@@ -${aCount > 0 ? aLine[from] : aLine[from] - 1},${aCount} +${bCount > 0 ? bLine[from] : bLine[from] - 1},${bCount} @@`, ...slice.map(([kind, text]) => kind + text));
+    first = last + 1;
+  }
+  return lines;
+}
+var textLines = (bytes) => {
+  if (!bytes)
+    return [];
+  const lines = bytes.toString("utf8").split(`
+`);
+  if (lines.at(-1) === "")
+    lines.pop();
+  return lines;
+};
+async function readContained(root, realRoot, rel) {
+  const path = join5(root, rel);
+  const handle = await open2(path, constants3.O_RDONLY | constants3.O_NOFOLLOW).catch((error62) => error62.code === "ENOENT" ? "absent" : "refused");
+  if (typeof handle === "string")
+    return handle;
+  try {
+    const info = await handle.stat();
+    if (!info.isFile() || info.nlink !== 1 || !(await realpath3(path)).startsWith(realRoot + sep3))
+      return "refused";
+    if (info.size > MAX_BYTES)
+      return "large";
+    const buffer = Buffer.alloc(info.size + 1);
+    let total = 0;
+    while (total < buffer.length) {
+      const { bytesRead } = await handle.read(buffer, total, buffer.length - total, total);
+      if (bytesRead === 0)
+        break;
+      total += bytesRead;
+    }
+    return total > MAX_BYTES ? "large" : buffer.subarray(0, total);
+  } finally {
+    await handle.close();
+  }
+}
+async function treeDiff(before, after, context = 2) {
+  const [realBefore, realAfter] = await Promise.all([realpath3(before), realpath3(after)]);
+  const paths = [...new Set([...await listFiles(before), ...await listFiles(after)])].sort();
+  const out = [];
+  for (const rel of paths) {
+    const [a, b] = await Promise.all([readContained(before, realBefore, rel), readContained(after, realAfter, rel)]);
+    if (a === "refused" || b === "refused") {
+      out.push(`Skipped ${rel}: not a regular file inside the workspace`);
+      continue;
+    }
+    if (Buffer.isBuffer(a) && Buffer.isBuffer(b) && a.equals(b))
+      continue;
+    const from = a === "absent" ? "/dev/null" : `a/${rel}`, to = b === "absent" ? "/dev/null" : `b/${rel}`;
+    if (a === "large" || b === "large" || [a, b].some((bytes) => Buffer.isBuffer(bytes) && bytes.subarray(0, 8000).includes(0))) {
+      out.push(`Binary files ${from} and ${to} differ`);
+      continue;
+    }
+    out.push(`--- ${from}`, `+++ ${to}`, ...hunks(lineOps(textLines(Buffer.isBuffer(a) ? a : null), textLines(Buffer.isBuffer(b) ? b : null)), context));
+  }
+  return out.join(`
+`);
+}
+function diffLines(diff) {
+  let added = 0, removed = 0, oldLeft = 0, newLeft = 0;
+  for (const line of diff.split(`
+`)) {
+    if (oldLeft > 0 || newLeft > 0) {
+      if (line.startsWith("+")) {
+        added++;
+        newLeft--;
+      } else if (line.startsWith("-")) {
+        removed++;
+        oldLeft--;
+      } else {
+        oldLeft--;
+        newLeft--;
+      }
+      continue;
+    }
+    const hunk = /^@@ -\d+,(\d+) \+\d+,(\d+) @@$/.exec(line);
+    if (hunk) {
+      oldLeft = Number(hunk[1]);
+      newLeft = Number(hunk[2]);
+    }
+  }
+  return { added, removed };
+}
+
+// src/trials/results.ts
 async function appendRun(run, file2) {
   await mkdir4(dirname4(file2), { recursive: true });
   await appendFile(file2, `${JSON.stringify(run)}
@@ -21928,7 +22176,7 @@ async function appendRun(run, file2) {
 }
 async function saveOutput(output2, dir) {
   await mkdir4(dir, { recursive: true });
-  await writeFile4(join5(dir, `${output2.runId}.json`), JSON.stringify(output2));
+  await writeFile4(join6(dir, `${output2.runId}.json`), JSON.stringify(output2));
 }
 async function readRuns(file2) {
   let text;
@@ -21950,6 +22198,22 @@ async function readRuns(file2) {
       return [];
     }
   });
+}
+async function withLines(runs, dir) {
+  return Promise.all(runs.map(async (run) => {
+    if (run.linesAdded != null && run.linesRemoved != null)
+      return run;
+    let output2;
+    try {
+      output2 = JSON.parse(await readFile4(join6(dir, `${run.id}.json`), "utf8"));
+    } catch {
+      return run;
+    }
+    if (typeof output2.diff !== "string")
+      return run;
+    const lines = diffLines(output2.diff);
+    return { ...run, linesAdded: lines.added, linesRemoved: lines.removed };
+  }));
 }
 function median(values) {
   if (values.length === 0)
@@ -22010,6 +22274,9 @@ function cellsFromRuns(runs, quests, content) {
       medianTokens: rounded(median(valid.flatMap((run) => run.tokens === null ? [] : [run.tokens]))),
       medianToolCalls: rounded(median(valid.flatMap((run) => run.toolCalls === null ? [] : [run.toolCalls]))),
       medianCostUsd: cost === null ? null : Math.round(cost * 1e4) / 1e4,
+      medianOutputTokens: rounded(median(valid.flatMap((run) => run.outputTokens == null ? [] : [run.outputTokens]))),
+      medianLinesAdded: rounded(median(valid.flatMap((run) => run.linesAdded == null ? [] : [run.linesAdded]))),
+      medianLinesRemoved: rounded(median(valid.flatMap((run) => run.linesRemoved == null ? [] : [run.linesRemoved]))),
       firstRun: days[0],
       lastRun: days[days.length - 1]
     });
@@ -22023,13 +22290,13 @@ function setupKey(item) {
 
 // src/trials/run.ts
 import { randomUUID } from "node:crypto";
-import { realpath as realpath3 } from "node:fs/promises";
+import { realpath as realpath4 } from "node:fs/promises";
 import { join as join8 } from "node:path";
 
 // src/trials/checks.ts
 import { spawn as spawn2 } from "node:child_process";
-import { cp as cp3, lstat as lstat3, mkdir as mkdir5, mkdtemp as mkdtemp2, readdir as readdir6, readFile as readFile5, rm as rm3 } from "node:fs/promises";
-import { basename as basename2, join as join6 } from "node:path";
+import { cp as cp3, lstat as lstat3, mkdir as mkdir5, mkdtemp as mkdtemp2, readdir as readdir7, readFile as readFile5, rm as rm3 } from "node:fs/promises";
+import { basename as basename2, join as join7 } from "node:path";
 var OUTPUT_LIMIT = 1e6;
 function nodeRunner(prefix = []) {
   return (args, { cwd, timeoutMs }) => {
@@ -22089,13 +22356,13 @@ async function copyWorkspace(source, dest) {
   await cp3(source, dest, { recursive: true, filter: async (path) => !OMIT.has(basename2(path)) && !(await lstat3(path)).isSymbolicLink() });
 }
 async function testFiles(root, dir) {
-  const folder = join6(root, dir);
-  const entries = await readdir6(folder, { withFileTypes: true }).catch(() => []);
+  const folder = join7(root, dir);
+  const entries = await readdir7(folder, { withFileTypes: true }).catch(() => []);
   const files = [];
   for (const entry of entries) {
     if (OMIT.has(entry.name))
       continue;
-    const path = join6(dir, entry.name);
+    const path = join7(dir, entry.name);
     if (entry.isDirectory())
       files.push(...await testFiles(root, path));
     else if (entry.isFile() && /\.test\.(?:mjs|cjs|js)$/.test(entry.name))
@@ -22196,18 +22463,18 @@ function words(text) {
 }
 async function checkOne(check2, quest, root, runner, timeoutMs) {
   const result = (ok, score, detail) => ({ id: check2.id, label: check2.label, ok, score, detail });
-  const text = (file2) => readFile5(join6(root, file2), "utf8");
-  const original = (file2) => readFile5(join6(quest.dir, "fixture", file2), "utf8");
+  const text = (file2) => readFile5(join7(root, file2), "utf8");
+  const original = (file2) => readFile5(join7(quest.dir, "fixture", file2), "utf8");
   if (check2.type === "node-test" || check2.type === "own-tests" || check2.type === "catches-original") {
     if (check2.type === "node-test") {
       for (const file2 of check2.files) {
-        await mkdir5(join6(root, file2, ".."), { recursive: true });
-        await cp3(join6(quest.dir, "hidden", file2), join6(root, file2));
+        await mkdir5(join7(root, file2, ".."), { recursive: true });
+        await cp3(join7(quest.dir, "hidden", file2), join7(root, file2));
       }
     } else if (check2.type === "catches-original") {
       for (const file2 of check2.restore) {
-        await mkdir5(join6(root, file2, ".."), { recursive: true });
-        await cp3(join6(quest.dir, "fixture", file2), join6(root, file2));
+        await mkdir5(join7(root, file2, ".."), { recursive: true });
+        await cp3(join7(quest.dir, "fixture", file2), join7(root, file2));
       }
     }
     const files = check2.type === "node-test" ? check2.files : await testFiles(root, check2.dir);
@@ -22228,8 +22495,8 @@ async function checkOne(check2, quest, root, runner, timeoutMs) {
   if (check2.type === "unchanged") {
     const changed = [];
     for (const path of check2.paths) {
-      const actual2 = await readFile5(join6(root, path)).catch(() => null);
-      if (!actual2 || !actual2.equals(await readFile5(join6(quest.dir, "fixture", path))))
+      const actual2 = await readFile5(join7(root, path)).catch(() => null);
+      if (!actual2 || !actual2.equals(await readFile5(join7(quest.dir, "fixture", path))))
         changed.push(path);
     }
     return result(changed.length === 0, (check2.paths.length - changed.length) / check2.paths.length, changed.length ? `Changed or missing files: ${changed.join(", ")}` : `${check2.paths.length} files unchanged.`);
@@ -22299,7 +22566,7 @@ async function gradeQuest(quest, workspace, opts) {
   await mkdir5(opts.scratch, { recursive: true });
   const checks3 = [];
   for (const check2 of quest.checks) {
-    const root = await mkdtemp2(join6(opts.scratch, "grade-"));
+    const root = await mkdtemp2(join7(opts.scratch, "grade-"));
     try {
       await copyWorkspace(workspace, root);
       checks3.push(await checkOne(check2, quest, root, opts.runNode ?? runNode, opts.testTimeoutMs ?? 30000));
@@ -22311,145 +22578,6 @@ async function gradeQuest(quest, workspace, opts) {
     }
   }
   return { passed: checks3.every((check2) => check2.ok), score: checks3.length ? checks3.reduce((sum, check2) => sum + check2.score, 0) / checks3.length : 0, checks: checks3 };
-}
-
-// src/trials/diff.ts
-import { constants as constants3 } from "node:fs";
-import { open as open2, readdir as readdir7, realpath as realpath2 } from "node:fs/promises";
-import { join as join7, sep as sep3 } from "node:path";
-var SKIP = new Set([".claude", ".codex", ".agents", ".omp", "node_modules", ".git"]);
-var MAX_BYTES = 200000;
-var MAX_CELLS = 4000000;
-async function listFiles(root, dir = "") {
-  const found = [];
-  for (const entry of await readdir7(join7(root, dir), { withFileTypes: true }).catch(() => [])) {
-    const rel = dir ? `${dir}/${entry.name}` : entry.name;
-    if (entry.isDirectory()) {
-      if (!SKIP.has(entry.name))
-        found.push(...await listFiles(root, rel));
-    } else if (entry.isFile())
-      found.push(rel);
-  }
-  return found;
-}
-function lineOps(a, b) {
-  let start = 0;
-  while (start < a.length && start < b.length && a[start] === b[start])
-    start++;
-  let endA = a.length, endB = b.length;
-  while (endA > start && endB > start && a[endA - 1] === b[endB - 1]) {
-    endA--;
-    endB--;
-  }
-  const x = a.slice(start, endA), y = b.slice(start, endB);
-  const middle = [];
-  if (x.length * y.length > MAX_CELLS) {
-    middle.push(...x.map((line) => ["-", line]), ...y.map((line) => ["+", line]));
-  } else {
-    const width = y.length + 1;
-    const lcs = new Uint32Array((x.length + 1) * width);
-    for (let i2 = x.length - 1;i2 >= 0; i2--) {
-      for (let j2 = y.length - 1;j2 >= 0; j2--) {
-        lcs[i2 * width + j2] = x[i2] === y[j2] ? lcs[(i2 + 1) * width + j2 + 1] + 1 : Math.max(lcs[(i2 + 1) * width + j2], lcs[i2 * width + j2 + 1]);
-      }
-    }
-    let i = 0, j = 0;
-    while (i < x.length && j < y.length) {
-      if (x[i] === y[j]) {
-        middle.push([" ", x[i]]);
-        i++;
-        j++;
-      } else if (lcs[(i + 1) * width + j] >= lcs[i * width + j + 1])
-        middle.push(["-", x[i++]]);
-      else
-        middle.push(["+", y[j++]]);
-    }
-    while (i < x.length)
-      middle.push(["-", x[i++]]);
-    while (j < y.length)
-      middle.push(["+", y[j++]]);
-  }
-  return [...a.slice(0, start).map((line) => [" ", line]), ...middle, ...a.slice(endA).map((line) => [" ", line])];
-}
-function hunks(ops, context) {
-  const aLine = [], bLine = [];
-  let a = 1, b = 1;
-  for (const [kind] of ops) {
-    aLine.push(a);
-    bLine.push(b);
-    if (kind !== "+")
-      a++;
-    if (kind !== "-")
-      b++;
-  }
-  const changes = ops.flatMap(([kind], index) => kind === " " ? [] : [index]);
-  const lines = [];
-  for (let first = 0;first < changes.length; ) {
-    let last = first;
-    while (last + 1 < changes.length && changes[last + 1] - changes[last] <= 2 * context + 1)
-      last++;
-    const from = Math.max(0, changes[first] - context), to = Math.min(ops.length, changes[last] + context + 1);
-    const slice = ops.slice(from, to);
-    const aCount = slice.filter(([kind]) => kind !== "+").length, bCount = slice.filter(([kind]) => kind !== "-").length;
-    lines.push(`@@ -${aCount > 0 ? aLine[from] : aLine[from] - 1},${aCount} +${bCount > 0 ? bLine[from] : bLine[from] - 1},${bCount} @@`, ...slice.map(([kind, text]) => kind + text));
-    first = last + 1;
-  }
-  return lines;
-}
-var textLines = (bytes) => {
-  if (!bytes)
-    return [];
-  const lines = bytes.toString("utf8").split(`
-`);
-  if (lines.at(-1) === "")
-    lines.pop();
-  return lines;
-};
-async function readContained(root, realRoot, rel) {
-  const path = join7(root, rel);
-  const handle = await open2(path, constants3.O_RDONLY | constants3.O_NOFOLLOW).catch((error62) => error62.code === "ENOENT" ? "absent" : "refused");
-  if (typeof handle === "string")
-    return handle;
-  try {
-    const info = await handle.stat();
-    if (!info.isFile() || info.nlink !== 1 || !(await realpath2(path)).startsWith(realRoot + sep3))
-      return "refused";
-    if (info.size > MAX_BYTES)
-      return "large";
-    const buffer = Buffer.alloc(info.size + 1);
-    let total = 0;
-    while (total < buffer.length) {
-      const { bytesRead } = await handle.read(buffer, total, buffer.length - total, total);
-      if (bytesRead === 0)
-        break;
-      total += bytesRead;
-    }
-    return total > MAX_BYTES ? "large" : buffer.subarray(0, total);
-  } finally {
-    await handle.close();
-  }
-}
-async function treeDiff(before, after, context = 2) {
-  const [realBefore, realAfter] = await Promise.all([realpath2(before), realpath2(after)]);
-  const paths = [...new Set([...await listFiles(before), ...await listFiles(after)])].sort();
-  const out = [];
-  for (const rel of paths) {
-    const [a, b] = await Promise.all([readContained(before, realBefore, rel), readContained(after, realAfter, rel)]);
-    if (a === "refused" || b === "refused") {
-      out.push(`Skipped ${rel}: not a regular file inside the workspace`);
-      continue;
-    }
-    if (Buffer.isBuffer(a) && Buffer.isBuffer(b) && a.equals(b))
-      continue;
-    const from = a === "absent" ? "/dev/null" : `a/${rel}`, to = b === "absent" ? "/dev/null" : `b/${rel}`;
-    if (a === "large" || b === "large" || [a, b].some((bytes) => Buffer.isBuffer(bytes) && bytes.subarray(0, 8000).includes(0))) {
-      out.push(`Binary files ${from} and ${to} differ`);
-      continue;
-    }
-    out.push(`--- ${from}`, `+++ ${to}`, ...hunks(lineOps(textLines(Buffer.isBuffer(a) ? a : null), textLines(Buffer.isBuffer(b) ? b : null)), context));
-  }
-  return out.join(`
-`);
 }
 
 // src/trials/run.ts
@@ -22527,13 +22655,14 @@ ${invoked}` : ""}` : followUp(grade, n, plan.quest.maxPrompts);
     reason = `harness error: ${error62 instanceof Error ? error62.message.slice(0, 200) : String(error62).slice(0, 200)}`;
   } finally {
     diff = await treeDiff(join8(plan.quest.dir, "fixture"), arena.workspace).catch(() => "");
-    const resolved = [...roots, ...await Promise.all(roots.map((path) => realpath3(path).catch(() => path)))];
+    const resolved = [...roots, ...await Promise.all(roots.map((path) => realpath4(path).catch(() => path)))];
     roots = [...new Set([...resolved, ...resolved.map((path) => path.replace(/^\/private(?=\/)/, ""))])];
     if (!plan.keep)
       await closeArena(arena);
   }
   const opened = new Set(report?.opened ?? []);
   const id = randomUUID();
+  const lines = diffLines(diff);
   const run = {
     v: 1,
     id,
@@ -22558,7 +22687,10 @@ ${invoked}` : ""}` : followUp(grade, n, plan.quest.maxPrompts);
     durationMs,
     tokens: report?.tokens ?? null,
     toolCalls: report?.toolCalls ?? null,
-    costUsd: report?.costUsd ?? null
+    costUsd: report?.costUsd ?? null,
+    outputTokens: report?.outputTokens ?? null,
+    linesAdded: lines.added,
+    linesRemoved: lines.removed
   };
   const checks3 = (grade?.checks ?? []).map((check2) => ({ id: check2.id, label: check2.label, ok: check2.ok, detail: check2.detail }));
   return { run, output: { v: 1, runId: id, replies, followUps, diff, checks: checks3, roots } };
@@ -22642,8 +22774,10 @@ function runLine(run, quest) {
   const loadout = run.loadout.kind === "unarmed" ? "Unarmed" : run.loadout.kind === "workflow" ? `Workflow ${run.loadout.slug}` : `${run.loadout.kind === "combo" ? "Combo" : "Spell"} ${run.loadout.spells.join(" + ")}`;
   const metrics = [
     formatDuration(run.durationMs),
-    run.tokens === null ? null : `${formatTokens(run.tokens)} mana`,
-    run.costUsd === null ? null : `$${run.costUsd.toFixed(2)}`,
+    run.tokens === null ? null : `${formatTokens(run.tokens)} tokens`,
+    run.costUsd === null ? null : `${formatMana(Math.round(run.costUsd * MANA_PER_USD))} mana`,
+    run.outputTokens == null ? null : `${formatTokens(run.outputTokens)} incantation (output tokens)`,
+    run.linesAdded == null || run.linesRemoved == null ? null : `runes ${formatLines(run.linesAdded, run.linesRemoved)} lines`,
     run.loadout.kind === "unarmed" ? null : run.attuned.length > 0 ? `attuned: ${run.attuned.join(", ")}` : "not attuned"
   ].filter(Boolean).join(" · ");
   return `${quest.id} (${RANK_NAMES[quest.rank]}) · ${loadout}${run.cast ? ` (${run.cast})` : ""} · ${HARNESS_NAMES[run.hero]} ${run.heroVersion ?? "?"} ${run.caster} ${run.focus} → ${STATUS[run.outcome]}, ${how} · score ${Math.round(run.score * 100)}% · ${metrics}`;
@@ -22738,7 +22872,7 @@ function describeCells(cells, catalog, quests) {
       const name = cell.loadout.kind === "unarmed" ? "Unarmed" : cell.loadout.kind === "workflow" ? catalog.workflows.find((item) => item.slug === cell.loadout.slug)?.name ?? cell.loadout.slug : cell.loadout.spells.map((slug) => catalog.skills.find((item) => item.slug === slug)?.name ?? slug).join(" + ");
       const rate = clearRate(cell);
       const buff = buffOver(cell, cells);
-      lines.push(`  ${name}${cell.cast ? ` (${cell.cast} cast)` : ""} · ${HARNESS_NAMES[cell.hero]} ${cell.heroVersion ?? "?"} · weapon ${cell.caster} · charge ${cell.focus}${cell.source.kind === "community" ? ` · community: ${cell.source.name ?? "anonymous"}` : ""}`, `    Clear rate (pass rate) ${cell.cleared}/${cell.runs}${rate === null ? "" : ` = ${Math.round(rate * 100)}%`} · Steadiness (reliability) ${Math.round(wilsonLower(cell.cleared, cell.runs) * 100)}%` + ` · Buff (vs Unarmed) ${cell.loadout.kind === "unarmed" ? "control" : buff ? `${buff.points >= 0 ? "+" : ""}${buff.points} pts` : "no control yet"}`, `    Instant casts ${cell.oneShot}/${cell.cleared} · Casts (prompts) ${cell.medianPromptsToClear ?? "-"} · Mastery ${Math.round(cell.meanScore * 100)}%` + ` · Cast time ${cell.medianDurationMs === null ? "-" : formatDuration(cell.medianDurationMs)} · Mana ${cell.medianTokens === null ? "-" : formatTokens(cell.medianTokens)}` + ` · Gold ${cell.medianCostUsd === null ? "-" : `$${cell.medianCostUsd.toFixed(2)}`} · Attuned ${cell.loadout.kind === "unarmed" ? "-" : `${cell.attuned}/${cell.runs}`}` + (cell.mishaps ? ` · ${cell.mishaps} mishap(s) left out` : ""));
+      lines.push(`  ${name}${cell.cast ? ` (${cell.cast} cast)` : ""} · ${HARNESS_NAMES[cell.hero]} ${cell.heroVersion ?? "?"} · weapon ${cell.caster} · charge ${cell.focus}${cell.source.kind === "community" ? ` · community: ${cell.source.name ?? "anonymous"}` : ""}`, `    Clear rate (pass rate) ${cell.cleared}/${cell.runs}${rate === null ? "" : ` = ${Math.round(rate * 100)}%`} · Steadiness (reliability) ${Math.round(wilsonLower(cell.cleared, cell.runs) * 100)}%` + ` · Buff (vs Unarmed) ${cell.loadout.kind === "unarmed" ? "control" : buff ? `${buff.points >= 0 ? "+" : ""}${buff.points} pts` : "no control yet"}`, `    Instant casts ${cell.oneShot}/${cell.cleared} · Casts (prompts) ${cell.medianPromptsToClear ?? "-"} · Mastery ${Math.round(cell.meanScore * 100)}%` + ` · Cast time ${cell.medianDurationMs === null ? "-" : formatDuration(cell.medianDurationMs)} · Tokens ${cell.medianTokens === null ? "-" : formatTokens(cell.medianTokens)}` + ` · Mana (cost) ${cell.medianCostUsd === null ? "-" : formatMana(Math.round(cell.medianCostUsd * MANA_PER_USD))}` + ` · Incantation (output tokens) ${cell.medianOutputTokens == null ? "-" : formatTokens(cell.medianOutputTokens)}` + ` · Runes (lines written) ${cell.medianLinesAdded == null || cell.medianLinesRemoved == null ? "-" : formatLines(cell.medianLinesAdded, cell.medianLinesRemoved)}` + ` · Attuned ${cell.loadout.kind === "unarmed" ? "-" : `${cell.attuned}/${cell.runs}`}` + (cell.mishaps ? ` · ${cell.mishaps} mishap(s) left out` : ""));
     }
   }
   return lines;
@@ -22866,6 +23000,7 @@ ${problems.join(`
 }
 
 // src/trials/scrying.ts
+import { execFileSync } from "node:child_process";
 import { mkdir as mkdir6, readdir as readdir9, readFile as readFile7, writeFile as writeFile5 } from "node:fs/promises";
 import { hostname as hostname3, userInfo } from "node:os";
 import { join as join10 } from "node:path";
@@ -22901,12 +23036,19 @@ var PLURAL = {
   "URL secret": "URL secrets"
 };
 var COMMON_NAMES = new Set(["root", "user", "admin", "runner", "ubuntu", "node", "localhost", "home", "test"]);
+var cachedIdentity;
 function localIdentity() {
+  if (cachedIdentity)
+    return cachedIdentity;
   let user = null;
   try {
     user = userInfo().username;
   } catch {}
-  return { user, host: hostname3() || null };
+  let fullName = null;
+  try {
+    fullName = execFileSync("id", ["-F"], { encoding: "utf8", timeout: 2000, stdio: ["ignore", "pipe", "ignore"] }).trim() || null;
+  } catch {}
+  return cachedIdentity = { user, host: hostname3() || null, fullName };
 }
 var escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 var sensitive = (length) => SENSITIVE_MARK.repeat(Math.min(40, Math.max(3, length)));
@@ -22979,12 +23121,21 @@ function redact(input2, roots, identity = localIdentity()) {
     count("email address");
     return sensitive(match.length);
   });
-  const names = [["user name", identity.user], ["host name", identity.host], ["host name", identity.host?.split(".")[0] ?? null]];
+  const names = [["user name", identity.user], ["user name", identity.fullName], ["host name", identity.host], ["host name", identity.host?.split(".")[0] ?? null]];
   for (const [kind, name] of names) {
     if (!name || name.length < 3 || COMMON_NAMES.has(name.toLowerCase()))
       continue;
-    text = text.replace(new RegExp(`(?<![A-Za-z0-9_])${escape(name)}(?![A-Za-z0-9_])`, "gi"), (match) => {
+    const pattern = name.trim().split(/\s+/).map(escape).join("\\s+");
+    text = text.replace(new RegExp(`(?<![A-Za-z0-9_])${pattern}\\d*(?![A-Za-z0-9_])`, "gi"), (match) => {
       count(kind);
+      return sensitive(match.length);
+    });
+  }
+  for (const part of identity.fullName?.trim().split(/\s+/) ?? []) {
+    if (part.length < 4 || COMMON_NAMES.has(part.toLowerCase()))
+      continue;
+    text = text.replace(new RegExp(`(?<![A-Za-z0-9_])${escape(part)}(?![A-Za-z0-9_])`, "g"), (match) => {
+      count("user name");
       return sensitive(match.length);
     });
   }
@@ -23134,6 +23285,7 @@ function scry(run, output2, quest, identity = localIdentity()) {
   rows.push({ segments: [], bg: null, height: 4, rule: true });
   gap(4);
   const outcome = run.outcome === "cleared" ? `Cleared, ${run.clearedAtPrompt === 1 ? "instant cast" : `channeled (${run.clearedAtPrompt} prompts)`}` : run.outcome === "fizzled" ? `Fizzled${run.reason ? ` (${run.reason})` : ""}` : "Mishap";
+  const tokens = run.tokens === null ? "" : ` (${formatTokens(run.tokens)} tokens)`;
   const fields = [
     ["Loadout", loadoutLabel(run)],
     ["Hero", `${HARNESS_NAMES[run.hero]} ${run.heroVersion ?? "(version not reported)"}`],
@@ -23144,7 +23296,7 @@ function scry(run, output2, quest, identity = localIdentity()) {
     ["Prompts", `${run.prompts}${quest ? ` of ${quest.maxPrompts}` : ""}`],
     ["Score", `${Math.round(run.score * 100)}%`],
     ["Cast time", formatDuration(run.durationMs)],
-    ["Mana", run.tokens === null ? "not reported" : `${formatTokens(run.tokens)} tokens`]
+    ["Mana", `${run.costUsd === null ? "not priced yet" : formatMana(Math.round(run.costUsd * MANA_PER_USD))}${tokens}`]
   ];
   for (let i = 0;i < fields.length; i += 2) {
     const segments = [];
@@ -23162,16 +23314,16 @@ function scry(run, output2, quest, identity = localIdentity()) {
   if (replyLines.length > CAPS.reply)
     row([{ text: ` ... ${replyLines.length - CAPS.reply} more lines`, color: MUTED }], WELL);
   title("Changes");
-  const diffLines = output2.diff.trim() ? clean(output2.diff.replace(/\n$/, "")).split(`
+  const diffLines2 = output2.diff.trim() ? clean(output2.diff.replace(/\n$/, "")).split(`
 `) : [];
-  if (diffLines.length === 0)
+  if (diffLines2.length === 0)
     row([{ text: " (No file changes.)", color: MUTED }], WELL);
-  for (const line of diffLines.slice(0, CAPS.diff)) {
+  for (const line of diffLines2.slice(0, CAPS.diff)) {
     const color = /^(\+\+\+|---) /.test(line) ? GOLD : line.startsWith("+") ? XP : line.startsWith("-") ? HP : line.startsWith("@@") ? LINK : line.startsWith("Binary files") ? MUTED : MUTED;
     row([{ text: ` ${clip(line, COLS - 2)}`, color }], WELL);
   }
-  if (diffLines.length > CAPS.diff)
-    row([{ text: ` ... ${diffLines.length - CAPS.diff} more lines`, color: MUTED }], WELL);
+  if (diffLines2.length > CAPS.diff)
+    row([{ text: ` ... ${diffLines2.length - CAPS.diff} more lines`, color: MUTED }], WELL);
   title(`Checks: ${output2.checks.filter((check2) => check2.ok).length} of ${output2.checks.length} passed`);
   for (const check2 of output2.checks.slice(0, CAPS.checks)) {
     row([{ text: check2.ok ? " ✓ " : " × ", color: check2.ok ? XP : HP }, { text: clip(toGlyphs(check2.label), COLS - 4), color: TEXT }], WELL);
@@ -23299,9 +23451,200 @@ async function scryPending(outputsDir, scryingDir, runs, render, log) {
   return { rendered, skipped: pending.length - rendered };
 }
 
+// src/shared/game.ts
+function emptySave() {
+  return { v: 1, trainer: null, seen: [], learned: [], caught: [], proven: [], foes: [], medals: {}, gyms: {}, hidden: [] };
+}
+async function checksum(bytes) {
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  return Array.from(digest.subarray(0, 4), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+async function encodeSave(save) {
+  const json2 = new TextEncoder().encode(JSON.stringify(save));
+  const stream = new Blob([json2]).stream().pipeThrough(new CompressionStream("deflate-raw"));
+  const packed = new Uint8Array(await new Response(stream).arrayBuffer());
+  return `1.${toBase64Url(packed)}.${await checksum(json2)}`;
+}
+function medalCatalog(input2) {
+  const medal = (id, name, tier, source, rule, feedback) => ({ id, name, tier, source, rule, feedback });
+  return [
+    medal("first-victory", "First Victory", "bronze", "practice", "Win your first practice battle.", "You matched a spell to a problem. Try a gym next."),
+    medal("type-scholar", "Type Scholar", "silver", "practice", "Beat every foe in the bestiary at least once in practice.", "You know which spell fights each foe. Try it on a real task."),
+    medal("full-party", "Full Party", "silver", "practice", "Win a battle casting Scout, Craft, Test and Ship spells in that order.", "Gather context, build, check, then ship."),
+    medal("wise-restraint", "Wise Restraint", "silver", "practice", "Clear a quest round Unarmed, where trials show spells only add cost.", "Sometimes the best spell is none. Check the trials before you equip."),
+    ...input2.classes.map((c) => medal(`gym-${c.slug}`, `${c.className} Gym`, "bronze", "practice", `Win the ${c.className} gym's battle.`, `You know the ${c.className} foes. Earn gold by clearing a real ${c.className} quest.`)),
+    medal("first-scroll", "First Scroll", "bronze", "logs", "Use a library skill in a real session.", "Your agent read a skill. Open its page to see what it is good at."),
+    medal("orb-bearer", "Orb Bearer", "bronze", "logs", "Use a library MCP server in a real session.", "Your agent called a tool server. Check which foes it fights."),
+    medal("relic-keeper", "Relic Keeper", "bronze", "logs", "Use a library plugin in a real session.", "A plugin did some of the work. See if a combo uses it."),
+    medal("summoner", "Summoner", "bronze", "logs", "Run a session where your agent sends a subagent.", "Your agent split the work. Give helpers small, clear jobs."),
+    medal("scout-first", "Scout First", "silver", "logs", "In one session, use a Scout-row spell before the first Craft-row spell.", "You looked before you built. Keep doing that."),
+    medal("bug-slayer", "Bug Slayer", "silver", "logs", "In one session, a test fails and later passes with the same runner. It shows a fix happened, not that a spell caused it.", "You ran the tests again after a fix. That is the habit."),
+    medal("explorer", "Explorer", "bronze", "logs", "Use a skill, MCP server or plugin that isn't in the library yet. Its name stays on your machine.", "You found something new. Send a spell report if it helped."),
+    ...input2.combos.map((w) => medal(`combo-${w.slug}`, `Combo: ${w.name}`, "silver", "logs", "Use this combo's spells in order in one session.", "You ran the whole combo. Try it in a local quest to see if it pays off.")),
+    ...input2.classes.filter((c) => input2.questSchools.includes(c.slug)).map((c) => medal(`proven-${c.slug}`, `${c.className} Proven`, "gold", "trials", `Clear ${/^[AEIOU]/.test(c.className) ? "an" : "a"} ${c.className} quest on your machine with a spell equipped and opened.`, "Your spell helped on a real quest. Run it Unarmed too, to see the difference.")),
+    medal("true-buff", "True Buff", "gold", "trials", "Clear a quest with spells that your Unarmed run of the same setup failed.", "The spells made the difference here. Share a spell report."),
+    medal("thrift", "Thrift", "gold", "trials", "Clear a quest with spells at or below the Unarmed run's mana, or its tokens when a run is not priced.", "The spells paid for themselves. Keep this loadout.")
+  ];
+}
+function today(date5 = new Date) {
+  return `${date5.getFullYear()}-${String(date5.getMonth() + 1).padStart(2, "0")}-${String(date5.getDate()).padStart(2, "0")}`;
+}
+
+// src/plugin/medals.ts
+var KIND_MEDALS = { skill: "first-scroll", mcp_server: "orb-bearer", plugin: "relic-keeper" };
+var TIER_MARKS = { gold: "[G]", silver: "[S]", bronze: "[B]" };
+function earn(medals, id, ts) {
+  const day = today(ts !== null && !Number.isNaN(Date.parse(ts)) ? new Date(ts) : undefined);
+  if (!medals[id] || day < medals[id])
+    medals[id] = day;
+}
+function earlier(a, b) {
+  if (a === null)
+    return b;
+  return b !== null && Date.parse(b) < Date.parse(a) ? b : a;
+}
+function comboWorkflows(library) {
+  const matched = new Set(library.skills.filter((skill) => skill.match.length > 0).map((skill) => skill.slug));
+  return library.workflows.filter((workflow) => workflow.steps.every((step) => matched.has(step.skill)));
+}
+function logMedals(roots, library) {
+  const medals = {};
+  const caught = new Set;
+  const byId = new Map;
+  for (const skill of library.skills)
+    for (const id of skill.match)
+      byId.set(id, [...byId.get(id) ?? [], skill]);
+  const kinds = new Map(library.skills.map((skill) => [skill.slug, skill.kind]));
+  const combos = comboWorkflows(library);
+  for (const root of roots) {
+    const used = new Map;
+    for (const [id, ts] of root.spells) {
+      const skills = byId.get(id);
+      if (!skills) {
+        if (/^(skill|mcp|plugin):/.test(id))
+          earn(medals, "explorer", ts ?? root.startedAt);
+        continue;
+      }
+      for (const { slug } of skills)
+        used.set(slug, used.has(slug) ? earlier(used.get(slug), ts) : ts);
+    }
+    for (const [slug, ts] of used) {
+      caught.add(slug);
+      const medal = KIND_MEDALS[kinds.get(slug)];
+      if (medal)
+        earn(medals, medal, ts ?? root.startedAt);
+    }
+    for (const member of root.members)
+      if (member.id !== root.id)
+        earn(medals, "summoner", member.startedAt ?? root.startedAt);
+    const firstIn = (phase) => [...used].filter(([slug, ts]) => ts !== null && library.phases?.[slug] === phase).map(([, ts]) => ts).reduce(earlier, null);
+    const scout = firstIn("scout");
+    const craft = firstIn("craft");
+    if (scout !== null && craft !== null && Date.parse(scout) < Date.parse(craft))
+      earn(medals, "scout-first", craft);
+    for (const member of root.members) {
+      const failures = new Map;
+      for (const test of member.tests)
+        if (test.failed)
+          failures.set(test.family, Math.min(failures.get(test.family) ?? Infinity, test.seq));
+      for (const test of member.tests) {
+        if (!test.failed && test.seq > (failures.get(test.family) ?? Infinity))
+          earn(medals, "bug-slayer", test.ts ?? member.startedAt ?? root.startedAt);
+      }
+    }
+    for (const workflow of combos) {
+      const times = workflow.steps.map((step) => used.get(step.skill) ?? null);
+      if (times.every((ts, index) => ts !== null && (index === 0 || Date.parse(times[index - 1]) <= Date.parse(ts)))) {
+        earn(medals, `combo-${workflow.slug}`, times.at(-1));
+      }
+    }
+  }
+  return { medals, caught: [...caught].sort() };
+}
+function setupKey2(item) {
+  return JSON.stringify([
+    item.quest,
+    item.questVersion,
+    item.loadout,
+    item.cast,
+    item.hero,
+    item.heroVersion,
+    item.caster,
+    item.focus,
+    item.containment,
+    item.environment.os,
+    item.environment.arch
+  ]);
+}
+function questMedals(runs, quests, library) {
+  const medals = {};
+  const proven = new Set;
+  const gyms = {};
+  const spells = new Set(library.skills.map((skill) => skill.slug));
+  const current = new Map(quests.map((quest) => [quest.id, quest]));
+  for (const run of runs) {
+    const quest = current.get(run.quest);
+    const attuned = run.attuned.filter((slug) => spells.has(slug));
+    if (run.outcome !== "cleared" || !quest || quest.version !== run.questVersion || attuned.length === 0)
+      continue;
+    earn(medals, `proven-${quest.school}`, run.startedAt);
+    gyms[quest.school] = "gold";
+    for (const slug of attuned)
+      proven.add(slug);
+  }
+  const cells = cellsFromRuns(runs, quests, library);
+  for (const cell of cells) {
+    if (cell.loadout.kind === "unarmed" || cell.cleared === 0)
+      continue;
+    const control = cells.find((other) => other.loadout.kind === "unarmed" && sameSetup(cell, other));
+    if (!control)
+      continue;
+    const thrift = cell.medianCostUsd !== null && control.medianCostUsd !== null ? cell.medianCostUsd <= control.medianCostUsd : cell.medianTokens !== null && control.medianTokens !== null && cell.medianTokens <= control.medianTokens;
+    const key = setupKey2(cell);
+    for (const run of runs) {
+      if (run.outcome !== "cleared" || setupKey2(run) !== key)
+        continue;
+      if (control.cleared < control.runs)
+        earn(medals, "true-buff", run.startedAt);
+      if (thrift)
+        earn(medals, "thrift", run.startedAt);
+    }
+  }
+  return { medals, proven: [...proven].sort(), gyms };
+}
+async function medalsReport(roots, runs, quests, library, base) {
+  const logs = logMedals(roots, library);
+  const trials = questMedals(runs, quests, library);
+  const medals = { ...logs.medals, ...trials.medals };
+  const defs = medalCatalog({
+    classes: library.classes ?? [],
+    questSchools: [...new Set(quests.map((quest) => quest.school))],
+    combos: comboWorkflows(library).map(({ slug, name }) => ({ slug, name }))
+  }).filter((def) => def.source !== "practice");
+  const earned = defs.filter((def) => medals[def.id]);
+  const width = Math.max(...defs.map((def) => def.name.length));
+  const bar = `+${"-".repeat(width + 22)}+`;
+  const lines = [bar, `|  ${"MEDALS FROM YOUR SESSIONS AND QUESTS".padEnd(width + 20)}|`, bar];
+  for (const def of earned)
+    lines.push(`${TIER_MARKS[def.tier]} ${def.name.padEnd(width)}  ${def.tier.padEnd(6)}  ${medals[def.id]}`);
+  if (earned.length < defs.length)
+    lines.push("", "Not yet:");
+  for (const def of defs)
+    if (!medals[def.id])
+      lines.push(`[ ] ${def.name.padEnd(width)}  ${def.tier.padEnd(6)}  ${def.rule}`);
+  lines.push("", `Earned ${earned.length} of ${defs.length} medals. Library spells used in your sessions: ${logs.caught.length}. Spells proven in your quests: ${trials.proven.length}.`);
+  if (!base) {
+    lines.push("No site address is bundled, so there is no import link. Rerun with --base <site address>.", "Nothing was sent.");
+    return lines;
+  }
+  const code = await encodeSave({ ...emptySave(), medals, caught: logs.caught, proven: trials.proven, gyms: trials.gyms });
+  lines.push("", "Open this link to add these medals to your save on the Practice Grounds:", `${new URL("play/", base).href}#s=${code}`, "Only medal names, days and library spell names are in this link. Nothing was sent.");
+  return lines;
+}
+
 // src/plugin/cli.ts
 var DEFAULT_ENDPOINT = "https://vibe-rpg-simulator.vercel.app/api/submit";
-var VERSION = "0.4.0";
+var VERSION = "0.6.0";
 var PARSERS = {
   codex: parseCodexFile,
   "claude-code": parseClaudeFile,
@@ -23333,7 +23676,9 @@ Checks the report header, byte limits, attachment hashes and optional <report.md
   sign: `sign <report.md> [--key <path>]
 Signs exact report bytes with ssh-keygen. Default key: first existing ~/.ssh/id_ed25519, id_ecdsa or id_rsa. The CLI never reads private key bytes. Passphrase prompts must run in your own terminal.`,
   submit: `submit <report.md> [--yes] [--endpoint <url>] [--email <address>]
-Without --yes: local preview only, exit 2, no network. With --yes: check, then send only the report, signature and chosen attachments. Endpoint: --endpoint, SPELL_REPORT_ENDPOINT, then the bundled site URL.`
+Without --yes: local preview only, exit 2, no network. With --yes: check, then send only the report, signature and chosen attachments. Endpoint: --endpoint, SPELL_REPORT_ENDPOINT, then the bundled site URL.`,
+  medals: `medals [--base <url>]
+Checks your local session logs and quest results for medals, then prints a card and an import link for the Practice Grounds. Nothing is sent; the link holds only medal names, days and library spell names. Base: --base, then the bundled site. Requires Node 20.12 or newer.`
 };
 async function readLocal(path, limit) {
   if (resolve4(path).split(sep4).some((part) => SENSITIVE_NAME.test(part) || part.startsWith(".env") || part === ".ssh")) {
@@ -23589,7 +23934,7 @@ async function runCli(argv, options = {}) {
   if (!command || command === "--help" || command === "-h") {
     out(`spell-report ${VERSION} (Node 20+; trials need Node 22+)
 Usage: spell-report <command> [options]
-Commands: spells, quests, doctor, trial, trials, scry, new, attach, check, sign, submit
+Commands: spells, quests, doctor, trial, trials, scry, medals, new, attach, check, sign, submit
 Use <command> --help for details.${DEFAULT_ENDPOINT ? `
 Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
     return 0;
@@ -23610,8 +23955,28 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
     const questsDir = options.questsDir ?? join11(skillDir, "quests");
     const dataDir = options.dataDir ?? process.env.VIBERPG_DATA_DIR ?? join11(homedir4(), ".viberpg");
     const runsFile = join11(dataDir, "trials", "runs.jsonl");
-    const catalog = async () => options.catalog ?? exports_external.object({ skills: exports_external.array(SkillSchema), workflows: exports_external.array(WorkflowSchema) }).parse(JSON.parse(await readFile8(join11(skillDir, "catalog.json"), "utf8")));
+    const catalog = async () => options.catalog ?? exports_external.object({
+      skills: exports_external.array(SkillSchema),
+      workflows: exports_external.array(WorkflowSchema),
+      phases: exports_external.record(SlugSchema, exports_external.enum(PHASES)).optional(),
+      classes: exports_external.array(exports_external.object({ slug: SlugSchema, className: exports_external.string() })).optional()
+    }).parse(JSON.parse(await readFile8(join11(skillDir, "catalog.json"), "utf8")));
     switch (command) {
+      case "medals": {
+        const { values, positionals } = parseArgs2({ args, allowPositionals: true, options: { base: { type: "string" } } });
+        if (positionals.length)
+          throw new Error(HELP.medals);
+        const [major = 0, minor = 0] = process.versions.node.split(".").map(Number);
+        if (major === 20 && minor < 12)
+          throw new Error(`spell-report medals requires Node 20.12 or newer; found Node ${process.versions.node}.`);
+        const base = values.base !== undefined ? endpointUrl(values.base.replace(/\/*$/, "/")) : DEFAULT_ENDPOINT ? new URL("../", DEFAULT_ENDPOINT) : null;
+        const library = await catalog();
+        const quests = await loadQuests(questsDir);
+        const roots = options.roots ?? await scanLogs(err);
+        for (const line of await medalsReport(roots, options.runs ?? await readRuns(runsFile), quests, library, base))
+          out(line);
+        return 0;
+      }
       case "quests":
         if (args.length)
           throw new Error(HELP.quests);
@@ -23649,7 +24014,7 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
           throw new Error(HELP.trials);
         const library = await catalog();
         const quests = await loadQuests(questsDir);
-        const cells = cellsFromRuns(await readRuns(runsFile), quests, library);
+        const cells = cellsFromRuns(await withLines(await readRuns(runsFile), join11(dataDir, "trials", "outputs")), quests, library);
         for (const line of describeCells(cells, library, quests))
           out(line);
         if (!cells.length)
@@ -23723,7 +24088,7 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
             if (!slugs.has(slug))
               throw new Error(`No spell or workflow "${slug}" in the library.`);
           const runs = await readRuns(runsFile);
-          const cells = cellsFromRuns(runs, await loadQuests(questsDir), library);
+          const cells = cellsFromRuns(await withLines(runs, join11(dataDir, "trials", "outputs")), await loadQuests(questsDir), library);
           const selected = cells.filter((cell) => cell.loadout.kind !== "unarmed" && (values.trials.includes(cell.loadout.slug ?? "") || cell.loadout.spells.some((slug) => values.trials.includes(slug))));
           meta3.trials = cells.filter((cell) => selected.includes(cell) || cell.loadout.kind === "unarmed" && selected.some((armed) => sameSetup(armed, cell))).map((cell) => ({ ...cell, source: { kind: "community", name: meta3.submitter.name } }));
         }

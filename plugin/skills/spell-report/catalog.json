@@ -10,7 +10,8 @@
       ],
       "categories": [
         "testing-debugging",
-        "frontend-design"
+        "frontend-design",
+        "qa-testing"
       ],
       "summary": "Inspects a live page through Chrome DevTools MCP: DOM, console, network, and performance.",
       "sourceUrl": "https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md",
@@ -184,7 +185,8 @@
         "codex"
       ],
       "categories": [
-        "code-review"
+        "code-review",
+        "security-testing"
       ],
       "summary": "Checks input handling, auth, sessions, dependencies, and privacy rules before accepting untrusted data.",
       "sourceUrl": "https://github.com/addyosmani/agent-skills/blob/main/skills/security-and-hardening/SKILL.md",
@@ -234,6 +236,65 @@
       "media": []
     },
     {
+      "slug": "adobe-for-creativity",
+      "name": "Adobe for Creativity",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation",
+        "video-editing"
+      ],
+      "summary": "Adobe's hosted connector for photo retouching, template designs, social sizes, video resizing and highlight cuts.",
+      "sourceUrl": "https://github.com/adobe/skills/tree/main/plugins/creative-cloud/adobe-for-creativity",
+      "evidenceUrl": "https://github.com/adobe/skills/blob/main/plugins/creative-cloud/adobe-for-creativity/.claude-plugin/plugin.json",
+      "install": "/plugin marketplace add adobe/skills\n/plugin install adobe-for-creativity@adobe-skills",
+      "publisher": "Adobe",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-06",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code plugin 3.2.0 adds Adobe's hosted MCP at https://adobe-creativity.adobe.io/mcp. It is in the adobe-skills marketplace; the README shows that install pattern but does not name this plugin. Codex has a separate Adobe plugin (8.0.0) in /plugins. Skills cover batch photo edits, portrait retouching, Express templates, social variations, photo and video resizing, Premiere Quick Cut reels, data-merged PDFs and Adobe Fonts. Sign in with an Adobe account; the Codex listing says guests get fewer tools.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:adobe-for-creativity",
+        "plugin:adobe"
+      ],
+      "media": []
+    },
+    {
+      "slug": "ahrefs-mcp",
+      "name": "Ahrefs MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "marketing-sales"
+      ],
+      "summary": "Ahrefs' hosted MCP server: backlinks, keywords, SERPs, rank tracking, site audits and web analytics from your Ahrefs account.",
+      "sourceUrl": "https://docs.ahrefs.com/en/mcp/docs/introduction",
+      "evidenceUrl": "https://docs.ahrefs.com/en/mcp/docs/claude-code",
+      "install": "claude mcp add ahrefs https://api.ahrefs.com/mcp/mcp -t http",
+      "publisher": "Ahrefs",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a paid Ahrefs plan, Lite or higher. Calls spend API units from your monthly allowance; keys created through OAuth for MCP default to a 200,000-unit monthly cap. After adding the server, run /mcp in Claude Code, log in and allow a workspace. A tools query parameter limits which tool groups load. Codex setup is not documented on Ahrefs' site. No SPDX license is published for the hosted service.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:ahrefs"
+      ],
+      "media": []
+    },
+    {
       "slug": "ai-game-developer-unity",
       "name": "AI Game Developer (Unity)",
       "kind": "mcp_server",
@@ -259,6 +320,122 @@
       },
       "match": [
         "mcp:ai-game-developer"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-agent-sdk-dev-plugin",
+      "name": "Anthropic Agent SDK Dev",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Scaffolds a Claude Agent SDK app in Python or TypeScript with /new-sdk-app, then checks it with verifier agents.",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/agent-sdk-dev",
+      "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/agent-sdk-dev",
+      "install": "/plugin install agent-sdk-dev@claude-plugins-official",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-02-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code only. /new-sdk-app asks for language, name, agent type, starting point and package manager, installs the latest SDK, writes the project and runs a type or syntax check. agent-sdk-verifier-py and agent-sdk-verifier-ts report PASS, PASS WITH WARNINGS or FAIL against SDK docs. You still need an ANTHROPIC_API_KEY to run the app. The plugin README's own install note is out of date; the line shown follows the marketplace README.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:agent-sdk-dev",
+        "command:new-sdk-app"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-algorithmic-art",
+      "name": "Anthropic Algorithmic Art",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation"
+      ],
+      "summary": "Writes a generative art philosophy, then builds a seeded p5.js sketch you can explore in the browser.",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/main/skills/algorithmic-art/SKILL.md",
+      "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/algorithmic-art/SKILL.md",
+      "install": "/plugin marketplace add anthropics/skills\n/plugin install example-skills@anthropic-agent-skills",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-04-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code install is the example-skills plugin from anthropics/skills, which also adds canvas-design and other skills. In Codex, copy the algorithmic-art folder into ~/.agents/skills or a repo's .agents/skills. Output is a .md philosophy, an .html viewer and .js code in p5.js with seeded randomness and parameters you can adjust. Templates are bundled. No image model, API key or credits.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:algorithmic-art"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-canvas-design",
+      "name": "Anthropic Canvas Design",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation"
+      ],
+      "summary": "Writes a short design philosophy, then draws a poster or art piece as a PNG or PDF.",
+      "sourceUrl": "https://github.com/anthropics/skills/blob/main/skills/canvas-design/SKILL.md",
+      "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/canvas-design/SKILL.md",
+      "install": "/plugin marketplace add anthropics/skills\n/plugin install example-skills@anthropic-agent-skills",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-04-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Claude Code install is the example-skills plugin from anthropics/skills, which also adds algorithmic-art and other skills. In Codex, copy the canvas-design folder into ~/.agents/skills or a repo's .agents/skills. The agent writes a .md philosophy, then draws a .png or .pdf with code and the bundled fonts. It calls no image model, so no API key or credits. The skill tells the agent to make original work and not copy existing artists.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:canvas-design"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-claude-security",
+      "name": "Anthropic Claude Security Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Claude Code plugin that scans your repo or a diff with a team of agents, verifies each finding, and drafts patch files.",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security",
+      "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security",
+      "install": "/plugin install claude-security@claude-plugins-official\n/reload-plugins",
+      "publisher": "Anthropic",
+      "license": null,
+      "lastActivity": "2026-09-25",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 0.12.0. Proprietary Anthropic license: internal use with Anthropic products only. Run /claude-security to scan the codebase, scan changes, or suggest patches. A scan asks you to confirm its time and token cost. Results go to CLAUDE-SECURITY-<timestamp>/ as Markdown, JSONL and SARIF. Patches are never applied for you. Needs Python 3.9+. Meant for code you control; for repos you do not trust, the README suggests running inside sandbox-runtime. Sends usage counts unless telemetry is off.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "command:claude-security",
+        "plugin:claude-security"
       ],
       "media": []
     },
@@ -289,6 +466,60 @@
         "command:code-review",
         "plugin:code-review"
       ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-customer-support-plugin",
+      "name": "Anthropic Customer Support Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations"
+      ],
+      "summary": "Anthropic's support role plugin: triage tickets, research customer questions, draft replies, package escalations and write KB articles.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/customer-support",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/customer-support",
+      "install": "claude plugin install customer-support@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills: ticket-triage, customer-research, draft-response, customer-escalation and kb-article. Bundled connectors are Slack, Intercom, HubSpot, Guru, Notion, Atlassian and Microsoft 365, each needing its own account; without them you paste in the customer context. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:customer-support"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-data-plugin",
+      "name": "Anthropic Data",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Data analyst plugin with skills for SQL, data profiling, charts, HTML dashboards and a check before you share results.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/data",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/data",
+      "install": "claude plugin marketplace add anthropics/knowledge-work-plugins\nclaude plugin install data@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Built for Cowork, also works in Claude Code. Not the Astronomer Airflow plugin that is also named data in claude-plugins-official. Skills include write-query, explore-data, analyze, create-viz, build-dashboard and validate-data. .mcp.json ships entries for Snowflake, Databricks, BigQuery, Hex, Amplitude, Definite and Atlassian; Snowflake and Databricks have empty URLs you fill in. Without a warehouse you paste results or upload CSV or Excel files.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [],
       "media": []
     },
     {
@@ -373,6 +604,34 @@
       "media": []
     },
     {
+      "slug": "anthropic-finance-plugin",
+      "name": "Anthropic Finance Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations"
+      ],
+      "summary": "Anthropic's finance role plugin: journal entries, reconciliations, financial statements, variance analysis, month-end close and SOX testing.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/finance",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/finance",
+      "install": "claude plugin install finance@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include journal-entry, reconciliation, financial-statements, variance-analysis, close-management and sox-testing. The README says it gives no financial, tax or audit advice and its output needs review by qualified professionals. Connectors: Snowflake, Databricks, BigQuery, Slack and Microsoft 365, each with its own account. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:finance"
+      ],
+      "media": []
+    },
+    {
       "slug": "anthropic-frontend-design-plugin",
       "name": "Anthropic Frontend Design Plugin",
       "kind": "plugin",
@@ -427,6 +686,90 @@
       },
       "match": [
         "skill:frontend-design"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-legal-plugin",
+      "name": "Anthropic Legal Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations"
+      ],
+      "summary": "Anthropic's legal role plugin for in-house teams: contract review, NDA triage, compliance checks, risk assessment and legal briefs.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/legal",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/legal",
+      "install": "claude plugin install legal@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Put your negotiation playbook in .claude/legal.local.md so reviews compare against your standard positions. Skills include review-contract, triage-nda, compliance-check, legal-risk-assessment and vendor-check. Not legal advice; the README says licensed attorneys should review its analysis. Connectors: Slack, Box, Egnyte, Jira, Microsoft 365. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:legal"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-marketing-plugin",
+      "name": "Anthropic Marketing Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "marketing-sales"
+      ],
+      "summary": "Anthropic's marketing role plugin: draft content, plan campaigns, check brand voice, brief on competitors, run SEO audits and report results.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/marketing",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/marketing",
+      "install": "claude plugin install marketing@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Built mainly for Claude Cowork; the README says it also works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include draft-content, campaign-plan, brand-review, competitive-brief, seo-audit, email-sequence and performance-report. It works from what you give it; connectors such as HubSpot, Canva, Ahrefs, Klaviyo and SimilarWeb need their own accounts. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:marketing"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-mcp-builder",
+      "name": "Anthropic MCP Builder",
+      "kind": "skill",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Anthropic skill for building MCP servers in Python (FastMCP) or TypeScript, from API research to tests and an eval set.",
+      "sourceUrl": "https://github.com/anthropics/skills/tree/main/skills/mcp-builder",
+      "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/mcp-builder/SKILL.md",
+      "install": "/plugin marketplace add anthropics/skills\n/plugin install example-skills@anthropic-agent-skills",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-04-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Four phases: research and planning, implementation, review and test, then writing 10 evaluation questions. Reference files cover MCP best practices and Python and Node guides; scripts/evaluation.py runs the eval set. Claude Code install is the example-skills plugin, which also installs the other example skills. The skill folder carries its own Apache-2.0 LICENSE.txt.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:mcp-builder"
       ],
       "media": []
     },
@@ -537,6 +880,91 @@
       "media": []
     },
     {
+      "slug": "anthropic-product-management-plugin",
+      "name": "Anthropic Product Management Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "documents-productivity"
+      ],
+      "summary": "Anthropic's product management plugin: feature specs and PRDs, roadmap updates, stakeholder updates, research synthesis and metrics reviews.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/product-management",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/product-management",
+      "install": "claude plugin install product-management@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include write-spec, roadmap-update, stakeholder-update, synthesize-research, competitive-brief, metrics-review and sprint-planning, plus a brainstorm command. Connectors include Linear, Asana, Jira, monday, ClickUp, Notion, Figma, Amplitude and Intercom, each with its own account. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:product-management"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-sales-plugin",
+      "name": "Anthropic Sales Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "marketing-sales",
+        "business-operations"
+      ],
+      "summary": "Anthropic's sales role plugin: 36 skills for call prep, follow-ups, account research, deal and pipeline reviews and the forecast.",
+      "sourceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/sales",
+      "evidenceUrl": "https://github.com/anthropics/knowledge-work-plugins/tree/main/sales",
+      "install": "claude plugin install sales@knowledge-work-plugins",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Made mainly for Claude Cowork but works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Works with your CRM, email, calendar, chat and call recorder through connectors (HubSpot, Close, Clay, ZoomInfo, Fireflies and others, each needing an account), or with uploaded files. It can update CRM records, send email and book meetings when you ask; changes it suggests on its own are shown to you first. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:sales"
+      ],
+      "media": []
+    },
+    {
+      "slug": "anthropic-security-guidance",
+      "name": "Anthropic Security Guidance Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Claude Code hooks that flag risky code on edit, review each turn's diff, and review commits for multi-file flaws.",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/security-guidance",
+      "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/security-guidance",
+      "install": "/plugin install security-guidance@claude-plugins-official",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 2.0.16. Needs Claude Code 2.1.144+ and Python 3.8+. Three layers: regex warnings for about 25 risky patterns, an LLM review of each turn's diff on Stop, and an agentic reviewer on git commit. The LLM reviews default to the newest Opus and cost tokens or plan usage. Diffs and related files go to your model endpoint. Add your own rules in .claude/claude-security-guidance.md. Turn layers off with env vars such as ENABLE_STOP_REVIEW=0.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:security-guidance"
+      ],
+      "media": []
+    },
+    {
       "slug": "anthropic-webapp-testing",
       "name": "Anthropic Webapp Testing",
       "kind": "skill",
@@ -546,7 +974,8 @@
       ],
       "categories": [
         "full-stack-web",
-        "testing-debugging"
+        "testing-debugging",
+        "qa-testing"
       ],
       "summary": "Writes Python Playwright scripts to test local web apps, with a server helper.",
       "sourceUrl": "https://github.com/anthropics/skills/blob/main/skills/webapp-testing/SKILL.md",
@@ -574,7 +1003,8 @@
         "claude-code"
       ],
       "categories": [
-        "documents-productivity"
+        "documents-productivity",
+        "data-analysis"
       ],
       "summary": "Creates and edits spreadsheets with formulas, formatting, and a LibreOffice recalculation check.",
       "sourceUrl": "https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md",
@@ -590,6 +1020,239 @@
         "note": null
       },
       "match": [],
+      "media": []
+    },
+    {
+      "slug": "apify-plugin",
+      "name": "Apify",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Connects the agent to Apify's MCP server and Actor store to run scrapers, plus skills for building your own Actors.",
+      "sourceUrl": "https://github.com/apify/apify-claude-code-plugin",
+      "evidenceUrl": "https://docs.apify.com/agents/plugins",
+      "install": "/plugin marketplace add apify/apify-claude-code-plugin\n/plugin install apify@apify\n/reload-plugins",
+      "publisher": "Apify",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Bundles the hosted MCP server at https://mcp.apify.com, five skills and, in Claude Code, an apify routing agent. After install run /mcp, enable plugin:apify:apify and authenticate. Codex: in /plugins add the marketplace apify/apify-codex-plugin, then install Apify. Actor development and scraping skills also need apify-cli and apify login. Actor runs are billed to your Apify account.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:apify"
+      ],
+      "media": []
+    },
+    {
+      "slug": "applitools-eyes-mcp",
+      "name": "Applitools Eyes MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "MCP server that adds Applitools Eyes visual checkpoints to Playwright tests and reviews visual diffs in test batches.",
+      "sourceUrl": "https://applitools.com/docs/eyes/integrations/mcp-servers/applitools-mcp",
+      "evidenceUrl": "https://applitools.com/docs/eyes/integrations/mcp-servers/applitools-mcp",
+      "install": null,
+      "publisher": "Applitools",
+      "license": null,
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Install left blank: the docs name Claude Code as a client but print only a generic JSON config (npx --yes @applitools/mcp@latest), no claude mcp add line. Needs Node.js 18+ and Applitools keys: APPLITOOLS_API_KEY to run tests, plus separate read and write keys for inspect, review and resolve tools. Setup and checkpoint tools support only the Playwright Fixtures SDK; review tools work with any Eyes SDK. Saving or resetting a baseline needs your approval. npm license: SEE LICENSE IN LICENSE.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:applitools-mcp"
+      ],
+      "media": []
+    },
+    {
+      "slug": "asana-mcp",
+      "name": "Asana MCP Server (V2)",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "documents-productivity"
+      ],
+      "summary": "Asana's V2 MCP server: find, create and update tasks and projects in your Asana workspace from the agent.",
+      "sourceUrl": "https://developers.asana.com/docs/using-asanas-mcp-server",
+      "evidenceUrl": "https://developers.asana.com/docs/connecting-mcp-clients-to-asanas-v2-server",
+      "install": "claude mcp add --transport http --client-id YOUR_CLIENT_ID --client-secret --callback-port 8080 asana https://mcp.asana.com/v2/mcp",
+      "publisher": "Asana",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an Asana account and a one-time Asana MCP app from the developer console, with the redirect URL http://localhost:8080/callback. Claude Code asks for the client secret after the command, then opens the browser to authorize. Your workspace admin must not block the app. Only the V2 endpoint is current. Other clients such as Codex need the community mcp-remote bridge, which Asana calls experimental and does not support. The asana plugin in the Claude Code marketplace wraps the same server (/asana-setup).",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:asana",
+        "plugin:asana"
+      ],
+      "media": []
+    },
+    {
+      "slug": "assemblyai-skill",
+      "name": "AssemblyAI Skill",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Teaches a coding agent AssemblyAI's current speech to text, streaming, dictation and voice agent APIs and SDKs.",
+      "sourceUrl": "https://github.com/AssemblyAI/assemblyai-skill",
+      "evidenceUrl": "https://www.assemblyai.com/docs/coding-agent-prompts",
+      "install": null,
+      "publisher": "AssemblyAI",
+      "license": null,
+      "lastActivity": "2026-10-14",
+      "verifiedOn": "2026-10-22",
+      "notes": "Install is left empty because the repo has no license file; the README and AssemblyAI's docs show a skills CLI install for Claude Code, Codex and other agents. It is one skill for writing app code, not a transcription tool the agent runs itself. It covers pre-recorded and streaming transcription, dictation, LiveKit and Pipecat voice agents, PII redaction and the LLM Gateway, and steers away from the deprecated LeMUR API. The code it writes needs an AssemblyAI API key.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:assemblyai"
+      ],
+      "media": []
+    },
+    {
+      "slug": "atlassian-rovo-mcp",
+      "name": "Atlassian Rovo MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "documents-productivity"
+      ],
+      "summary": "Atlassian's hosted MCP server for Jira and Confluence: search, create and update issues and pages, with OAuth or an API token.",
+      "sourceUrl": "https://github.com/atlassian/atlassian-mcp-server",
+      "evidenceUrl": "https://github.com/atlassian/atlassian-mcp-server",
+      "install": "claude mcp add --transport http atlassian https://mcp.atlassian.com/v2/mcp",
+      "publisher": "Atlassian",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-07",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an Atlassian Cloud site with Jira, Confluence, Jira Service Management, Bitbucket or Compass. Use the v2 endpoint shown here. Claude Code: run /mcp in a session to authenticate. Codex: codex mcp add atlassian --url https://mcp.atlassian.com/v2/mcp. Admins grant access by permission group; delete and manage tools must be enabled by an admin. Also published as the atlassian plugin in the Claude Code marketplace and as Atlassian Rovo in Codex Desktop.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:atlassian",
+        "plugin:atlassian",
+        "plugin:atlassian-rovo"
+      ],
+      "media": []
+    },
+    {
+      "slug": "aws-core-plugin",
+      "name": "Agent Toolkit for AWS (aws-core)",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "AWS plugin with skills and the managed AWS MCP Server for service choice, CDK and CloudFormation, serverless, containers, billing and deploys.",
+      "sourceUrl": "https://github.com/aws/agent-toolkit-for-aws",
+      "evidenceUrl": "https://github.com/aws/agent-toolkit-for-aws",
+      "install": "/plugin install aws-core@claude-plugins-official",
+      "publisher": "Amazon Web Services",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "API calls and sandboxed scripts need an AWS account with local credentials; documentation search works without them. Needs uv. If Claude Code says Plugin not found, run /plugin marketplace update claude-plugins-official first. Codex: run codex plugin marketplace add aws/agent-toolkit-for-aws, then install aws-core from /plugins. Sibling plugins aws-agents, aws-data-analytics and aws-agents-for-devsecops install the same way. AWS calls it the successor to the AWS Labs MCP servers.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:aws-core"
+      ],
+      "media": []
+    },
+    {
+      "slug": "azure-skills-plugin",
+      "name": "Azure Skills Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "Microsoft's Azure plugin: Azure skills plus the Azure MCP Server and Foundry MCP for deploys, diagnostics, cost and access control.",
+      "sourceUrl": "https://github.com/microsoft/azure-skills",
+      "evidenceUrl": "https://github.com/microsoft/azure-skills",
+      "install": "/plugin install azure@claude-plugins-official",
+      "publisher": "Microsoft",
+      "license": "MIT",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an Azure subscription, Node.js 18+ (the MCP servers start with npx) and the Azure CLI signed in with az login. Deployment workflows also need azd auth login. Codex: codex plugin marketplace add microsoft/azure-skills, then install azure from /plugins; /skills turns single skills on or off. Sovereign clouds (China, US Government) need a --cloud argument on the Azure MCP Server.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:azure"
+      ],
+      "media": []
+    },
+    {
+      "slug": "bigquery-data-analytics-plugin",
+      "name": "BigQuery Data Analytics",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Google plugin that finds BigQuery tables, runs SQL and adds forecasting and contribution analysis from plain questions.",
+      "sourceUrl": "https://github.com/GoogleCloudPlatform/bigquery-data-analytics-plugin",
+      "evidenceUrl": "https://github.com/GoogleCloudPlatform/bigquery-data-analytics-plugin",
+      "install": "/plugin install bigquery-data-analytics@claude-plugins-official",
+      "publisher": "Google",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-28",
+      "verifiedOn": "2026-10-22",
+      "notes": "Beta before v1.0; breaking changes possible. Needs Node.js, a Google Cloud project with the BigQuery API, Application Default Credentials, the BigQuery User role, and BIGQUERY_PROJECT set before install. Tools come from MCP Toolbox's prebuilt bigquery server. Claude Code 2.1.94+ and Codex 0.117.0+. Codex: codex plugin marketplace add GoogleCloudPlatform/data-cloud-plugins, then codex plugin add bigquery-data-analytics@data-cloud-plugins.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:bigquery-data-analytics"
+      ],
       "media": []
     },
     {
@@ -650,6 +1313,63 @@
       "media": []
     },
     {
+      "slug": "brightdata-mcp",
+      "name": "Bright Data MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Hosted Bright Data server for search results, pages as markdown, prebuilt site scrapers and remote browser automation.",
+      "sourceUrl": "https://github.com/brightdata/brightdata-mcp",
+      "evidenceUrl": "https://github.com/brightdata/brightdata-mcp",
+      "install": "claude mcp add --transport http brightdata \"https://mcp.brightdata.com/mcp?token=YOUR_API_TOKEN\"",
+      "publisher": "Bright Data",
+      "license": "MIT",
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an API token. Free tier is 5,000 requests a month; after that requests stop unless you have deposited funds. 32 tools in total; limit them with groups= or tools= in the URL (groups: scrapers, browser, geo, advanced_scraping). Handles bot detection, CAPTCHAs and proxies for you. Check each target site's terms before scraping. Bright Data also lists a brightdata-plugin with skills in claude-plugins-official. No Codex setup in the README.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:brightdata"
+      ],
+      "media": []
+    },
+    {
+      "slug": "browserstack-mcp",
+      "name": "BrowserStack MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Runs manual and automated tests on BrowserStack's real devices and browsers, plus accessibility, test management and load tests.",
+      "sourceUrl": "https://github.com/browserstack/mcp-server",
+      "evidenceUrl": "https://www.browserstack.com/docs/browserstack-mcp-server/get-started/local-mcp",
+      "install": "claude mcp add --scope user browserstack -e BROWSERSTACK_USERNAME=YOUR_USERNAME -e BROWSERSTACK_ACCESS_KEY=YOUR_ACCESS_KEY -- npx -y @browserstack/mcp-server@latest",
+      "publisher": "BrowserStack",
+      "license": "AGPL-3.0",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a BrowserStack account and plan; open-source projects can get a free plan. The local server needs Node 20.9+ and can test localhost and staging. A hosted remote server at https://mcp.browserstack.com/mcp signs in with OAuth but cannot reach localhost. Five core tools search a catalog and run the capability you need; changes to data need your approval. File and app uploads need MCP_UPLOAD_BASE_DIR.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:browserstack"
+      ],
+      "media": []
+    },
+    {
       "slug": "build123d-mcp",
       "name": "build123d MCP (pzfreo)",
       "kind": "mcp_server",
@@ -679,6 +1399,96 @@
       "media": []
     },
     {
+      "slug": "canva-plugin",
+      "name": "Canva Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation",
+        "marketing-sales"
+      ],
+      "summary": "Edits, resizes, reviews and brand-checks Canva designs through the Canva MCP server.",
+      "sourceUrl": "https://github.com/canva-sdks/canva-skills",
+      "evidenceUrl": "https://github.com/canva-sdks/canva-skills/blob/main/README.md",
+      "install": "/plugin marketplace add canva-sdks/canva-skills\n/plugin install canva@canva-skills",
+      "publisher": "Canva",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Canva account; sign in when the canva MCP server (https://mcp.canva.com/mcp) connects. Codex: codex plugin marketplace add canva-sdks/canva-skills, codex plugin add canva@canva-skills, then codex mcp login canva. Six skills: resize-for-social-media, bulk-create, implement-feedback, edit-design, get-design-feedback and brand-check. Edits commit only after you approve. bulk-create fills brand templates from a table and needs Canva Enterprise. Also listed as canva in the official Claude marketplace.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:canva",
+        "mcp:canva"
+      ],
+      "media": []
+    },
+    {
+      "slug": "cartesia-mcp",
+      "name": "Cartesia MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Hosted MCP for Cartesia text to speech, transcription, voice cloning and pronunciation dictionaries.",
+      "sourceUrl": "https://docs.cartesia.ai/tools/ai/mcp",
+      "evidenceUrl": "https://github.com/cartesia-ai/cartesia-mcp",
+      "install": "claude mcp add --transport http --scope user cartesia https://mcp.cartesia.ai/mcp",
+      "publisher": "Cartesia",
+      "license": null,
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Cartesia account: run /mcp, pick cartesia and sign in, and a Cartesia MCP API key is made for your organization. Usage counts against your Cartesia credits; get_credit_usage needs an org admin. A local mode runs uvx cartesia-mcp with CARTESIA_API_KEY. Models are Sonic for speech and Ink for transcription. text_to_speech returns a download link that lasts 24 hours. Codex setup is not documented. The repo has no license file. Cartesia also ships coding skills in cartesia-ai/skills.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:cartesia",
+        "mcp:cartesia-mcp"
+      ],
+      "media": []
+    },
+    {
+      "slug": "caveman",
+      "name": "Caveman",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "agent-modes"
+      ],
+      "summary": "Terse reply mode: answer first, no greetings or recaps, while code, commands, paths and errors stay exact. On until you say stop caveman.",
+      "sourceUrl": "https://github.com/JuliusBrussee/caveman/blob/main/skills/caveman/SKILL.md",
+      "evidenceUrl": "https://github.com/JuliusBrussee/caveman/blob/main/INSTALL.md",
+      "install": "/plugin marketplace add JuliusBrussee/caveman\n/plugin install caveman@caveman\nnpx -y github:JuliusBrussee/caveman -- --only codex",
+      "publisher": "Julius Brussee / JuliusBrussee",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-17",
+      "verifiedOn": "2026-10-22",
+      "notes": "The Claude Code plugin starts it every session, subagents included. The Codex installer adds a start hook you trust once in /hooks; without it, type $caveman. Only chat replies shrink: code, commits, docs, security warnings and questions to you stay in full sentences. OMP: npx -y github:JuliusBrussee/caveman -- --only omp. pi-caveman (jonjonrankin/pi-caveman, MIT) ports it to pi and OMP as an extension: pi install git:github.com/jonjonrankin/pi-caveman. It adds the rules to every prompt, so the usage scan never sees it. The full caveman CLI sends usage stats unless turned off.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:caveman",
+        "skill:caveman:caveman"
+      ],
+      "media": []
+    },
+    {
       "slug": "chrome-devtools-mcp",
       "name": "Chrome DevTools MCP",
       "kind": "mcp_server",
@@ -688,7 +1498,8 @@
       ],
       "categories": [
         "frontend-design",
-        "testing-debugging"
+        "testing-debugging",
+        "qa-testing"
       ],
       "summary": "Drives live Chrome for clicks, console, network, screenshots, and performance traces.",
       "sourceUrl": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
@@ -705,6 +1516,35 @@
       },
       "match": [
         "mcp:chrome-devtools"
+      ],
+      "media": []
+    },
+    {
+      "slug": "claude-financial-services",
+      "name": "Claude for Financial Services",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations",
+        "data-analysis"
+      ],
+      "summary": "Anthropic's financial services plugins: comps, DCF, LBO and 3-statement models, earnings notes, IC memos and agents such as GL Reconciler.",
+      "sourceUrl": "https://github.com/anthropics/financial-services",
+      "evidenceUrl": "https://github.com/anthropics/financial-services",
+      "install": "claude plugin install financial-analysis@claude-for-financial-services",
+      "publisher": "Anthropic",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Add the marketplace first: claude plugin marketplace add anthropics/financial-services. financial-analysis is the core plugin with the shared skills and all data connectors; add verticals (investment-banking, equity-research, private-equity, fund-admin) or named agents such as pitch-agent and gl-reconciler. Data connectors (FactSet, Morningstar, S&P Global, PitchBook and others) may need a subscription or API key. Drafts analyst work for professional review; not investment advice. No Codex setup is documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:financial-analysis"
       ],
       "media": []
     },
@@ -738,6 +1578,66 @@
       "media": []
     },
     {
+      "slug": "clickup-mcp",
+      "name": "ClickUp MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "documents-productivity"
+      ],
+      "summary": "ClickUp's hosted MCP server: manage tasks, docs, comments and time tracking in your ClickUp Workspace from the agent.",
+      "sourceUrl": "https://developer.clickup.com/docs/connect-an-ai-assistant-to-clickups-mcp-server",
+      "evidenceUrl": "https://developer.clickup.com/docs/connect-an-ai-assistant-to-clickups-mcp-server-1",
+      "install": "claude mcp add --transport http clickup https://mcp.clickup.com/mcp",
+      "publisher": "ClickUp",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Available on all ClickUp plans; run /mcp in Claude Code to sign in. Without the Everything AI add-on, tool calls are capped per rolling 24 hours, per Workspace and per client: 100 on Free Forever, 300 on Core and Unlimited, more on higher plans. Codex: install the ClickUp plugin from /plugins (OpenAI's curated catalog, MIT). No SPDX license is published for the hosted service.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:clickup",
+        "plugin:clickup"
+      ],
+      "media": []
+    },
+    {
+      "slug": "cloudinary-plugin",
+      "name": "Cloudinary Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "image-generation"
+      ],
+      "summary": "Connects Claude Code to Cloudinary's MCP servers to upload, transform, analyze and deliver images and video.",
+      "sourceUrl": "https://github.com/cloudinary-devs/cloudinary-plugin",
+      "evidenceUrl": "https://github.com/cloudinary-devs/cloudinary-plugin/blob/main/README.md",
+      "install": "/plugin install cloudinary@claude-plugins-official",
+      "publisher": "Cloudinary",
+      "license": "MIT",
+      "lastActivity": "2026-08-24",
+      "verifiedOn": "2026-10-22",
+      "notes": "The install line follows the official Claude marketplace pattern; the README only says to install it in Cursor or Claude Code. Codex setup is not documented. Adds five MCP servers: asset management, environment config, structured metadata, AI analysis and MediaFlows. The first four sign in with OAuth; MediaFlows needs cloud_name, api_key and api_secret in mcp.json. claimable-cloud makes a free cloud with no signup that you claim by email within 24 hours. No LICENSE file; the manifest says MIT.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:cloudinary",
+        "skill:cloudinary-transformations",
+        "skill:cloudinary-docs"
+      ],
+      "media": []
+    },
+    {
       "slug": "coderabbit-plugin",
       "name": "CodeRabbit Plugin",
       "kind": "plugin",
@@ -767,6 +1667,36 @@
       "media": []
     },
     {
+      "slug": "consensus-mcp",
+      "name": "Consensus MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Searches over 400 million scholarly articles from the agent and returns papers with citations and links.",
+      "sourceUrl": "https://docs.consensus.app/consensus-mcp",
+      "evidenceUrl": "https://docs.consensus.app/mcp-clients/claude-code",
+      "install": "claude mcp add --transport http consensus https://mcp.consensus.app/mcp",
+      "publisher": "Consensus",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Hosted service at https://mcp.consensus.app/mcp; no public source repository, so license and last activity are empty. Sign in with OAuth on first use, or continue without an account at reduced limits. An API key works for headless use and shares the account's monthly pool. Plan limits set papers per search and monthly calls. Also listed as the consensus plugin in OpenAI's Codex catalog.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:consensus",
+        "plugin:consensus"
+      ],
+      "media": []
+    },
+    {
       "slug": "context7-mcp",
       "name": "Context7 MCP",
       "kind": "mcp_server",
@@ -775,7 +1705,8 @@
         "codex"
       ],
       "categories": [
-        "full-stack-web"
+        "full-stack-web",
+        "web-research"
       ],
       "summary": "Looks up current library docs and code examples by name, then by library id.",
       "sourceUrl": "https://github.com/upstash/context7",
@@ -792,6 +1723,129 @@
       },
       "match": [
         "mcp:context7"
+      ],
+      "media": []
+    },
+    {
+      "slug": "coreyhaines-marketing-skills",
+      "name": "Marketing Skills by Corey Haines",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "marketing-sales"
+      ],
+      "summary": "52 community marketing skills for coding agents: CRO, copywriting, SEO, paid ads, cold email, pricing, launches and more.",
+      "sourceUrl": "https://github.com/coreyhaines31/marketingskills",
+      "evidenceUrl": "https://github.com/coreyhaines31/marketingskills",
+      "install": "npx skills add coreyhaines31/marketingskills",
+      "publisher": "Corey Haines",
+      "license": "MIT",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Free. When you run the install from inside an agent session, add -a claude-code so the skills land in .claude/skills. Claude Code plugin: /plugin marketplace add coreyhaines31/marketingskills, then /plugin install marketing-skills. Codex: codex plugin marketplace add coreyhaines31/marketingskills, then install marketing-skills from /plugins. The README lists paid Verified Partners whose tools appear beside neutral options; the author says partners do not change what the core skills recommend.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:marketing-skills"
+      ],
+      "media": []
+    },
+    {
+      "slug": "cypress-ai-toolkit",
+      "name": "Cypress AI Toolkit",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Cypress plugin with five skills to write, explain and debug Cypress tests, plus Cloud MCP for run history and flaky tests.",
+      "sourceUrl": "https://github.com/cypress-io/ai-toolkit",
+      "evidenceUrl": "https://www.cypress.io/blog/how-to-connect-claude-code-to-cypress",
+      "install": "/plugin marketplace add cypress-io/ai-toolkit\n/plugin install cypress@cypress",
+      "publisher": "Cypress",
+      "license": "MIT",
+      "lastActivity": "2026-09-28",
+      "verifiedOn": "2026-10-22",
+      "notes": "Plugin version 1.4.0. Skills: cypress-author, cypress-explain, cypress-tap, cypress-cloud-cli and cypress-docs. They are free and need no account. Skills only: npx skills add cypress-io/ai-toolkit. Cloud MCP (https://mcp.cypress.io/mcp) needs runs recorded to Cypress Cloud and an org admin to turn it on; it is free on every Cloud plan. Flaky-test, accessibility and UI Coverage data depend on your plan. cypress-tap works with an open cypress open session.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:cypress",
+        "skill:cypress-author",
+        "skill:cypress-explain",
+        "skill:cypress-tap",
+        "mcp:cypress-cloud"
+      ],
+      "media": []
+    },
+    {
+      "slug": "databricks-agent-skills",
+      "name": "Databricks Agent Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Databricks skills for data discovery, SQL, jobs, pipelines, apps, Lakebase and model serving, with setup hooks.",
+      "sourceUrl": "https://github.com/databricks/databricks-agent-skills",
+      "evidenceUrl": "https://github.com/databricks/databricks-agent-skills",
+      "install": "/plugin marketplace add databricks/databricks-agent-skills\n/plugin install databricks@databricks-agent-skills",
+      "publisher": "Databricks",
+      "license": null,
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Replaces the deprecated databricks-solutions/ai-dev-kit. Latest release v0.2.32. The Databricks License only allows use with Databricks services, so license is left empty. databricks aitools install is the canonical path and the only one with experimental skills. Codex: codex plugin marketplace add databricks/databricks-agent-skills, then codex plugin add databricks, then review hooks with /hooks. Needs a Databricks workspace.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:databricks",
+        "skill:databricks-core",
+        "skill:databricks-data-discovery"
+      ],
+      "media": []
+    },
+    {
+      "slug": "datadog-plugin",
+      "name": "Datadog Plugin and MCP Server",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "Queries Datadog logs, metrics, traces, monitors and dashboards from the agent through Datadog's hosted MCP server.",
+      "sourceUrl": "https://github.com/datadog-labs/claude-code-plugin",
+      "evidenceUrl": "https://docs.datadoghq.com/mcp_server/setup/",
+      "install": "/plugin install datadog@claude-plugins-official",
+      "publisher": "Datadog",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-08-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "The plugin is in Preview and needs Claude Code 2.1.30 or later and a Datadog account. Run /ddsetup to pick your Datadog site and finish OAuth; /ddtoolsets turns tool groups on or off. Remove any Datadog MCP server you added by hand first. Codex: add [mcp_servers.datadog] with your site's endpoint to ~/.codex/config.toml, then run codex mcp login datadog. Not available on Datadog's government sites. Fair-use limits: 50 calls per 10 seconds and 100,000 tool calls a month.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:datadog",
+        "mcp:datadog",
+        "mcp:datadog-mcp"
       ],
       "media": []
     },
@@ -849,6 +1903,264 @@
       },
       "match": [
         "skill:davinci-resolve-mcp"
+      ],
+      "media": []
+    },
+    {
+      "slug": "dbt-mcp",
+      "name": "dbt MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Gives the agent your dbt project: model lineage, Semantic Layer metrics, model health and dbt build, compile and docs commands.",
+      "sourceUrl": "https://github.com/dbt-labs/dbt-mcp",
+      "evidenceUrl": "https://docs.getdbt.com/docs/dbt-ai/integrate-mcp-claude",
+      "install": "{\"mcpServers\":{\"dbt\":{\"command\":\"uvx\",\"args\":[\"dbt-mcp\"],\"env\":{\"DBT_PROJECT_DIR\":\"/path/to/your/dbt/project\",\"DBT_PATH\":\"/path/to/your/dbt/executable\"}}}}",
+      "publisher": "dbt Labs",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-13",
+      "verifiedOn": "2026-10-22",
+      "notes": "Latest release v2.8.0. dbt documents Claude Code and Claude Desktop, not Codex. The config shown goes in .mcp.json at the project root and is CLI only; add DBT_HOST for dbt platform tools with OAuth (Starter, Enterprise or Enterprise+). A remote server runs at https://YOUR_DBT_HOST_URL/api/ai/v1/mcp. CLI tools such as build can change models and warehouse objects. execute_sql over a token needs a personal access token.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:dbt"
+      ],
+      "media": []
+    },
+    {
+      "slug": "deepgram-mcp",
+      "name": "Deepgram MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "Local MCP server that gives Claude Code Deepgram's transcription, speech and audio intelligence tools.",
+      "sourceUrl": "https://github.com/deepgram/mcp",
+      "evidenceUrl": "https://github.com/deepgram/mcp/blob/main/README.md",
+      "install": "pip install deepgram-mcp\nclaude mcp add deepgram -- deepgram-mcp",
+      "publisher": "Deepgram",
+      "license": "MIT",
+      "lastActivity": "2026-05-06",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Deepgram API key in DEEPGRAM_API_KEY; the README says you can get one free at console.deepgram.com. The tool list comes from Deepgram's API at runtime, so the README does not list tools and new ones appear without an upgrade. Also ships inside the Deepgram CLI (pip install deepctl) as dg mcp. Claude Code, Cursor and Windsurf setup is documented; Codex is not. Small project: PyPI version 0.1.1 from April 2026.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:deepgram"
+      ],
+      "media": []
+    },
+    {
+      "slug": "deque-axe-accessibility",
+      "name": "Deque Axe Accessibility",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Claude Code plugin for the Axe MCP Server: scan a page for accessibility violations, batch the fixes, and rescan to zero.",
+      "sourceUrl": "https://github.com/dequelabs/axe-accessibility",
+      "evidenceUrl": "https://github.com/dequelabs/axe-accessibility/blob/main/README.md",
+      "install": "/plugin marketplace add dequelabs/axe-accessibility\n/plugin install axe-accessibility",
+      "publisher": "Deque Systems",
+      "license": "MIT",
+      "lastActivity": "2026-10-06",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an Axe DevTools for Web subscription; the Bundle plan includes Axe MCP Server access. The plugin is MIT; the server it starts is Deque's. The npm setup needs Node 22.19+ and a one-time npx -y playwright@1.62.1 install chromium; Docker also works. remediate and guided tests use AI credits; plain analyze does not. Advanced Rules findings are probabilistic and send screenshots to Deque. Commands: /axe-accessibility:mcp-setup, mcp-audit and mcp-generate-instructions.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:axe-accessibility"
+      ],
+      "media": []
+    },
+    {
+      "slug": "descript-mcp",
+      "name": "Descript MCP Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "audio-production",
+        "video-editing"
+      ],
+      "summary": "Edits audio and video in Descript from your agent: import, transcribe, clean up, caption, publish and export.",
+      "sourceUrl": "https://github.com/descriptinc/descript-mcp",
+      "evidenceUrl": "https://www.descript.com/mcp",
+      "install": "/plugin marketplace add descriptinc/descript-mcp\n/plugin install descript@descript",
+      "publisher": "Descript",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-30",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Descript account; sign in with OAuth on first connect and pick the Drive the agent may use. Sign-up is free; plan limits were not checked. Codex: codex plugin marketplace add descriptinc/descript-mcp --ref main, then codex plugin add descript@descript. The server is https://api.descript.com/v2/mcp; do not add it twice. Edits go through Underlord, so Studio Sound, filler word and retake removal, captions and translation work. Exports transcripts (TXT, SRT and more) and Premiere or Resolve timelines. YouTube links do not import yet.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:descript",
+        "mcp:descript"
+      ],
+      "media": []
+    },
+    {
+      "slug": "docker-mcp-gateway",
+      "name": "Docker MCP Gateway (MCP Toolkit)",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "Docker CLI plugin that runs MCP servers from the Docker MCP Catalog in containers and serves them to your agent through one gateway.",
+      "sourceUrl": "https://github.com/docker/mcp-gateway",
+      "evidenceUrl": "https://docs.docker.com/reference/cli/docker/mcp/client/connect/",
+      "install": "docker mcp client connect claude-code --profile dev-tools --global",
+      "publisher": "Docker",
+      "license": "MIT",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs Docker Desktop 4.59 or later with MCP Toolkit turned on under Beta features, or the CLI plugin built from source. Create a profile and add catalog servers first (docker mcp profile create); dev-tools is the README's example profile. docker mcp client connect supports claude-code and codex among other clients. Docker Desktop keeps the servers' secrets and OAuth tokens. Each catalog server still needs its own account or key if its service requires one.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [],
+      "media": []
+    },
+    {
+      "slug": "duckdb-motherduck-mcp",
+      "name": "DuckDB / MotherDuck MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Local MCP server that runs DuckDB SQL on in-memory databases, local files, S3 or MotherDuck and lists tables and columns.",
+      "sourceUrl": "https://github.com/motherduckdb/mcp-server-motherduck",
+      "evidenceUrl": "https://github.com/motherduckdb/mcp-server-motherduck",
+      "install": "claude mcp add --scope user duckdb --transport stdio -- uvx mcp-server-motherduck --db-path :memory: --read-write --allow-switch-databases",
+      "publisher": "MotherDuck",
+      "license": "MIT",
+      "lastActivity": "2026-10-07",
+      "verifiedOn": "2026-10-22",
+      "notes": "Latest release v1.1.0. Needs uv. The install shown is the in-memory dev mode with read-write and database switching. Point --db-path at a .duckdb file without --read-write for read-only. MotherDuck needs motherduck_token. Results cap at 1024 rows and 50,000 characters by default. The README warns that read-only mode still allows local file access, so it is not safe to expose to third parties as is.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:duckdb",
+        "mcp:motherduck"
+      ],
+      "media": []
+    },
+    {
+      "slug": "elevenlabs-skills",
+      "name": "ElevenLabs Skills",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "ElevenLabs skills for speech, transcription, music, sound effects, dubbing, voice changing and voice agents.",
+      "sourceUrl": "https://github.com/elevenlabs/skills",
+      "evidenceUrl": "https://github.com/elevenlabs/skills/blob/main/README.md",
+      "install": "npx skills add elevenlabs/skills",
+      "publisher": "ElevenLabs",
+      "license": "MIT",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an ElevenLabs API key in ELEVENLABS_API_KEY; the onboarding skill can add one to your project's env file. Twelve skills include text-to-speech, speech-to-text, music, sound-effects, dubbing, voice-changer, voice-isolator and agents. They write code with the Python or JavaScript SDK or call the elevenlabs CLI. Text to speech examples default to the eleven_v4 model. Music streaming needs a paid plan. The skills CLI installs the pack for Claude Code, Codex and other agents.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [],
+      "media": []
+    },
+    {
+      "slug": "endor-labs-agent-kit",
+      "name": "Endor Labs Agent Kit",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Subagents that read Endor Labs findings to triage AI SAST results, plan dependency fixes and explain vulnerabilities.",
+      "sourceUrl": "https://github.com/endorlabs/ai-plugins",
+      "evidenceUrl": "https://github.com/endorlabs/ai-plugins/blob/main/README.md",
+      "install": "/plugin marketplace add endorlabs/ai-plugins\n/plugin install endor-labs-agent-kit@endorlabs\n/reload-plugins",
+      "publisher": "Endor Labs",
+      "license": "MIT",
+      "lastActivity": "2026-08-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "Package version 2.2.2. Works from your Endor Labs namespace through endorctl; the setup skill checks readiness and runs no scans. Twelve agents: most are read-only, while SCA Remediation and AI SAST Remediation ask before each edit, push, PR or ticket. In Codex, add the marketplace with the --sparse paths, restart, then install Endor Labs Agent Kit from the plugin directory. Do not enable endor-labs-agent-kit and the older ai-plugins id together.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:endor-labs-agent-kit"
+      ],
+      "media": []
+    },
+    {
+      "slug": "exa-mcp",
+      "name": "Exa",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Hosted Exa search for agents: web search, page fetch as markdown, and optional multi-step Exa Agent research.",
+      "sourceUrl": "https://github.com/exa-labs/exa-mcp-server",
+      "evidenceUrl": "https://github.com/exa-labs/exa-mcp-server",
+      "install": "claude plugin install exa@claude-plugins-official",
+      "publisher": "Exa",
+      "license": "MIT",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Server at https://mcp.exa.ai/mcp. Works anonymously with rate limits; sign in with OAuth (?login) or an API key for higher limits and agent_run. Default tools are web_search_exa and web_fetch_exa. Add web_search_advanced_exa or agent_run with ?tools=, which replaces the defaults. The Claude plugin also installs the search and exa-agent skills. Codex: codex mcp add exa --url https://mcp.exa.ai/mcp.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:exa",
+        "mcp:exa"
       ],
       "media": []
     },
@@ -969,6 +2281,37 @@
       "media": []
     },
     {
+      "slug": "fal-mcp",
+      "name": "fal MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation",
+        "video-generation",
+        "audio-production"
+      ],
+      "summary": "Hosted MCP that searches fal's model catalog, shows prices and runs image, video and audio generations.",
+      "sourceUrl": "https://fal.ai/docs/documentation/setting-up/mcp",
+      "evidenceUrl": "https://fal.ai/docs/documentation/setting-up/mcp/claude-code",
+      "install": "claude mcp add --transport http --scope user fal https://mcp.fal.ai/mcp-relay",
+      "publisher": "fal",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a fal account. Generations spend fal credits. The docs suggest asking the agent to show the estimated cost first, but the server has no approval gate. Sign in with OAuth: in Claude Code run /mcp, pick fal, then Authenticate. Codex: codex mcp add fal --url https://mcp.fal.ai/mcp-relay, then codex mcp login fal. Tools include search_models, get_pricing, run_model, submit_job, check_job and upload_file. Pick the paying account under MCP & connectors in the fal dashboard. Hosted service with no published license.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:fal"
+      ],
+      "media": []
+    },
+    {
       "slug": "ffmpeg-mcp-lite",
       "name": "FFmpeg MCP Lite",
       "kind": "mcp_server",
@@ -1056,6 +2399,34 @@
       "media": []
     },
     {
+      "slug": "firecrawl-plugin",
+      "name": "Firecrawl",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Claude Code plugin on Firecrawl's hosted MCP: web search, page reading and indexes of dev docs, papers and US government data.",
+      "sourceUrl": "https://github.com/firecrawl/firecrawl-claude-plugin",
+      "evidenceUrl": "https://github.com/firecrawl/firecrawl-claude-plugin",
+      "install": "/plugin install firecrawl@claude-plugins-official",
+      "publisher": "Firecrawl",
+      "license": "MIT",
+      "lastActivity": "2026-10-14",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 2.0.0 uses the hosted MCP server, not the Firecrawl CLI; connect your account with /mcp. Skills: firecrawl, firecrawl-developer-index and firecrawl-research-index. Map, crawl and the other CLI skills moved to firecrawl/cli (npx skills add firecrawl/cli). Install only one Firecrawl plugin; the CLI skills reuse the same names. Firecrawl's standalone MCP server repo documents other clients, not Codex.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:firecrawl"
+      ],
+      "media": []
+    },
+    {
       "slug": "freecad-contextform-mcp",
       "name": "FreeCAD MCP (contextform)",
       "kind": "mcp_server",
@@ -1119,7 +2490,8 @@
       ],
       "categories": [
         "full-stack-web",
-        "code-review"
+        "code-review",
+        "cloud-devops"
       ],
       "summary": "Reads GitHub repos, issues, pull requests, Actions, and security findings with your token.",
       "sourceUrl": "https://github.com/github/github-mcp-server",
@@ -1195,6 +2567,93 @@
       "media": []
     },
     {
+      "slug": "google-analytics-mcp",
+      "name": "Google Analytics MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "marketing-sales",
+        "data-analysis"
+      ],
+      "summary": "Experimental local MCP server from Google Analytics: account details, core, funnel and realtime reports through the GA Admin and Data APIs.",
+      "sourceUrl": "https://github.com/googleanalytics/google-analytics-mcp",
+      "evidenceUrl": "https://github.com/googleanalytics/google-analytics-mcp",
+      "install": "claude mcp add analytics-mcp --scope user -e \"GOOGLE_APPLICATION_CREDENTIALS=PATH_TO_CREDENTIALS_JSON\" -e \"GOOGLE_PROJECT_ID=YOUR_PROJECT_ID\" -- pipx run analytics-mcp",
+      "publisher": "Google Analytics",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Marked experimental. Needs pipx, a Google Cloud project with the Analytics Admin and Data APIs enabled, and Application Default Credentials with the analytics.readonly scope for a user who can see your properties. Read-only by default; --allow-write plus the analytics.edit scope adds create_property_annotation. Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:analytics-mcp"
+      ],
+      "media": []
+    },
+    {
+      "slug": "grafana-k6-mcp",
+      "name": "Grafana k6 MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Experimental MCP server that writes, validates and runs k6 load tests locally and searches the k6 docs.",
+      "sourceUrl": "https://github.com/grafana/mcp-k6",
+      "evidenceUrl": "https://github.com/grafana/mcp-k6/blob/main/README.md",
+      "install": "claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/mcp-k6",
+      "publisher": "Grafana Labs",
+      "license": "AGPL-3.0",
+      "lastActivity": "2026-10-07",
+      "verifiedOn": "2026-10-22",
+      "notes": "Marked experimental. The Docker image includes k6; Homebrew and native installs use claude mcp add --scope=user --transport=stdio k6 mcp-k6. validate_script runs a script with 1 VU and 1 iteration, run_script runs a local test with optional VU, duration and iteration overrides, and the generate_script prompt drafts tests from plain-English requirements. The README gives a JSON config for Codex CLI. A shared deployment has no built-in authentication. Load tests send real traffic, so aim them at systems you run.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:k6"
+      ],
+      "media": []
+    },
+    {
+      "slug": "grafana-mcp",
+      "name": "Grafana MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "Grafana's MCP server: search dashboards, run PromQL and LogQL queries, and manage alert rules, incidents and OnCall from the agent.",
+      "sourceUrl": "https://github.com/grafana/mcp-grafana",
+      "evidenceUrl": "https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-mcp",
+      "install": "/plugin install grafana-mcp@claude-plugins-official",
+      "publisher": "Grafana Labs",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "The Claude Code plugin runs the server in Docker and asks for your Grafana URL and a service account token (Viewer role, Editor for writes), kept in the system keychain. Grafana Cloud users can install grafana-cloud-mcp instead, a hosted server that needs no Docker or token. The plugin adds 40+ tools to context, so turn it on only when you need a live Grafana. The server also has a read-only mode. Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:grafana-mcp",
+        "mcp:grafana"
+      ],
+      "media": []
+    },
+    {
       "slug": "graphify",
       "name": "Graphify",
       "kind": "skill",
@@ -1220,6 +2679,158 @@
       },
       "match": [
         "skill:graphify"
+      ],
+      "media": []
+    },
+    {
+      "slug": "heygen-mcp",
+      "name": "HeyGen MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "video-generation"
+      ],
+      "summary": "Hosted MCP that makes avatar videos from a prompt, translates videos with lip-sync and clones voices.",
+      "sourceUrl": "https://developers.heygen.com/mcp/overview",
+      "evidenceUrl": "https://developers.heygen.com/mcp/claude-code",
+      "install": "claude mcp add --transport http -s user heygen https://mcp.heygen.com/mcp/v1/",
+      "publisher": "HeyGen",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a HeyGen account. Usage draws on your HeyGen plan's credits; HeyGen points batches and production work to its CLI with an API key. Sign in with OAuth through /mcp. Codex: codex mcp add heygen --url https://mcp.heygen.com/mcp/v1 with no trailing slash; codex mcp login heygen signs in again. Tools cover Video Agent sessions, avatar videos (Avatar III, IV or V), templates, voices, video translation, AI clipping and batches. Some tools delete videos permanently. Hosted service with no published license.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:heygen"
+      ],
+      "media": []
+    },
+    {
+      "slug": "higgsfield-skills",
+      "name": "Higgsfield Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation",
+        "video-generation"
+      ],
+      "summary": "Skills that drive the Higgsfield CLI to make images, video, audio and 3D, plus product shoots and brand kits.",
+      "sourceUrl": "https://github.com/higgsfield-ai/skills",
+      "evidenceUrl": "https://higgsfield.ai/mcp",
+      "install": "/plugin marketplace add higgsfield-ai/skills\n/plugin install higgsfield@higgsfield",
+      "publisher": "Higgsfield AI",
+      "license": "MIT",
+      "lastActivity": "2026-09-26",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Higgsfield account. The skills install the higgsfield CLI and ask you to run higgsfield auth login. Jobs have a cost you can check with higgsfield generate cost. Eight skills: generate, soul-id, product-photoshoot, brandkit, marketplace-cards, websites, video-explainer and youtube-thumbnail. The README lists models such as Nano Banana 2, Veo 3.1, Kling 3.0 and Seedance 2.5. Codex: install Higgsfield from /plugins, or npx skills add higgsfield-ai/skills. A hosted MCP also exists at https://mcp.higgsfield.ai/mcp.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:higgsfield",
+        "skill:higgsfield-generate",
+        "skill:higgsfield-product-photoshoot",
+        "skill:higgsfield-soul-id"
+      ],
+      "media": []
+    },
+    {
+      "slug": "hubspot-sales-plugin",
+      "name": "HubSpot Sales Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "marketing-sales",
+        "business-operations"
+      ],
+      "summary": "HubSpot's Claude Code plugin: contact import, call prep, daily brief, follow-ups, call logging and pipeline views on HubSpot's MCP server.",
+      "sourceUrl": "https://github.com/HubSpot/hubspot-mcp-plugins",
+      "evidenceUrl": "https://developers.hubspot.com/docs/build-with-ai/remote-mcp-server",
+      "install": "/plugin install hubspot-sales@claude-plugins-official",
+      "publisher": "HubSpot",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-11",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a HubSpot account; the remote MCP server connects over OAuth and acts as you, reading and writing contacts, companies, deals and tickets. The plugin points at https://mcp.hubspot.com/anthropic. HubSpot's own README installs it with /install-plugin https://github.com/HubSpot/hubspot-mcp-plugins and also offers a HubSpot Partner plugin for Solutions Partners. Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:hubspot-sales",
+        "mcp:hubspot"
+      ],
+      "media": []
+    },
+    {
+      "slug": "huggingface-mcp",
+      "name": "Hugging Face MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Official Hub server: search models, datasets, Spaces and papers, and call Gradio apps on Spaces as tools.",
+      "sourceUrl": "https://github.com/huggingface/hf-mcp-server",
+      "evidenceUrl": "https://huggingface.co/docs/hub/hf-mcp-server",
+      "install": "claude mcp add hf-mcp-server -t http https://huggingface.co/mcp?login",
+      "publisher": "Hugging Face",
+      "license": "MIT",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Hosted at https://huggingface.co/mcp. The ?login URL starts sign-in when you open claude; a token in an Authorization header also works. Choose tools and add community Spaces at huggingface.co/settings/mcp. Hugging Face's docs name Codex as a client; that settings page generates its config, but no Codex command is printed. Add ?no_image_content=true to drop image blocks from Gradio tools.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:hf-mcp-server"
+      ],
+      "media": []
+    },
+    {
+      "slug": "huggingface-skills",
+      "name": "Hugging Face Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Hugging Face skills for the hf CLI and Hub, plus on-demand skills for datasets, training, evals, Gradio and local models.",
+      "sourceUrl": "https://github.com/huggingface/skills",
+      "evidenceUrl": "https://github.com/huggingface/skills",
+      "install": "/plugin marketplace add huggingface/skills\n/plugin install hf-cli@huggingface/skills",
+      "publisher": "Hugging Face",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-08",
+      "verifiedOn": "2026-10-22",
+      "notes": "The plugin installs only hf-cli, which teaches the agent the hf commands. Add others with hf skills add <skill-name>, for example huggingface-llm-trainer (TRL or Unsloth on Hugging Face Jobs), huggingface-community-evals or huggingface-gradio. Codex: copy skills into .agents/skills; hf-cli is also in the Codex plugin directory. Training jobs run on Hugging Face Jobs infrastructure. Also listed as huggingface-skills in claude-plugins-official.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:hf-cli",
+        "skill:hf-cli",
+        "plugin:huggingface-skills"
       ],
       "media": []
     },
@@ -1279,6 +2890,185 @@
       },
       "match": [
         "mcp:hyper3d-rodin"
+      ],
+      "media": []
+    },
+    {
+      "slug": "hyperframes",
+      "name": "HyperFrames",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "video-generation",
+        "video-editing"
+      ],
+      "summary": "HeyGen's open-source framework and skills that turn HTML, CSS and animations into deterministic MP4 video.",
+      "sourceUrl": "https://github.com/heygen-com/hyperframes",
+      "evidenceUrl": "https://github.com/heygen-com/hyperframes/blob/main/README.md",
+      "install": "claude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes",
+      "publisher": "HeyGen",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Runs locally and needs Node.js 22+ and FFmpeg. HeyGen is optional, used by media-use for generated media such as avatar video and voiceover. After install, use /hyperframes:hyperframes. Core skills: hyperframes, hyperframes-cli, hyperframes-registry (about 450 blocks) and media-use; figma, slideshow and remotion-to-hyperframes install on demand. Codex: install HyperFrames from /plugins, or npx skills add heygen-com/hyperframes. It overlaps Remotion, and remotion-to-hyperframes ports Remotion projects.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:hyperframes",
+        "skill:hyperframes",
+        "skill:hyperframes-cli",
+        "skill:hyperframes-registry"
+      ],
+      "media": []
+    },
+    {
+      "slug": "intercom-plugin",
+      "name": "Intercom Plugin and MCP Server",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations"
+      ],
+      "summary": "Read-only Intercom access in Claude Code: search conversations, look up contacts and companies, build customer profiles, add the Messenger.",
+      "sourceUrl": "https://github.com/intercom/claude-plugin-external",
+      "evidenceUrl": "https://developers.intercom.com/docs/guides/mcp",
+      "install": "/plugin install intercom@claude-plugins-official",
+      "publisher": "Intercom",
+      "license": "MIT",
+      "lastActivity": "2026-04-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs an Intercom workspace. The plugin points at the US endpoint, and its README says it supports US-hosted workspaces only. Intercom's MCP docs also list an EU endpoint, https://mcp.eu.intercom.com/mcp, and no AU support. The plugin cannot create, update or delete Intercom data. Commands: /intercom:customer-360, /intercom:install-messenger and /intercom:install-cli. Intercom's docs show only generic JSON for other clients, so Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:intercom",
+        "mcp:intercom"
+      ],
+      "media": []
+    },
+    {
+      "slug": "intuit-quickbooks-plugin",
+      "name": "QuickBooks Plugin for Claude",
+      "kind": "plugin",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations"
+      ],
+      "summary": "Intuit's plugin for QuickBooks Online: business health briefings, benchmarks, payroll analysis, invoice reminders and estimate drafting.",
+      "sourceUrl": "https://github.com/intuit/quickbooks-claude-plugin",
+      "evidenceUrl": "https://github.com/intuit/quickbooks-claude-plugin/blob/main/SETUP.md",
+      "install": "/plugin install intuit-quickbooks@claude-plugins-official",
+      "publisher": "Intuit",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-09-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a QuickBooks Online company and the QuickBooks connector added at claude.ai (Customize, Connectors). In Claude Code, sign in with your claude.ai account (/login); connectors do not load with an API key, Bedrock or setup-token login. Do not add a QuickBooks server with claude mcp add, which hides the connector. Skills that send reminders, create estimates or change payroll confirm before writing. Not tax, legal or lending advice. Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:intuit-quickbooks"
+      ],
+      "media": []
+    },
+    {
+      "slug": "kubernetes-mcp-server",
+      "name": "Kubernetes MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "MCP server that talks to the Kubernetes API directly, not through kubectl: resources, pods, logs, events and Helm on Kubernetes or OpenShift.",
+      "sourceUrl": "https://github.com/containers/kubernetes-mcp-server",
+      "evidenceUrl": "https://github.com/containers/kubernetes-mcp-server/blob/main/docs/getting-started-claude-code.md",
+      "install": "claude mcp add-json kubernetes-mcp-server '{\"command\":\"npx\",\"args\":[\"-y\",\"kubernetes-mcp-server@latest\",\"--config\",\"'\"${HOME}\"'/.config/kubernetes-mcp-server.toml\"],\"env\":{\"KUBECONFIG\":\"'${HOME}'/.kube/mcp-viewer.kubeconfig\"}}' -s user",
+      "publisher": "containers (GitHub organization)",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Free and open source; you need access to a cluster. The setup guide first creates a ServiceAccount, a kubeconfig for it (mcp-viewer.kubeconfig) and ~/.config/kubernetes-mcp-server.toml with read_only = true. Runtime flags such as --read-only are no longer accepted. With read_only off, tools can delete pods, change resources and install or uninstall Helm charts. Needs Node.js for npx, or use the native binary. Codex setup is not documented.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:kubernetes-mcp-server"
+      ],
+      "media": []
+    },
+    {
+      "slug": "langfuse-skills",
+      "name": "Langfuse Skills",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Langfuse skills to set up tracing, query traces, prompts and datasets through the API, and migrate from other tools.",
+      "sourceUrl": "https://github.com/langfuse/skills",
+      "evidenceUrl": "https://github.com/langfuse/skills",
+      "install": "npx skills add langfuse/skills --skill \"langfuse\"",
+      "publisher": "Langfuse",
+      "license": "MIT",
+      "lastActivity": "2026-10-17",
+      "verifiedOn": "2026-10-22",
+      "notes": "Two skills: langfuse (tracing setup, instrumentation audits, prompt management, API queries and docs lookup) and migrate-to-langfuse (moves tracing, traces, datasets and prompts from LangSmith, Arize, Braintrust and others). Needs a Langfuse Cloud or self-hosted project and LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL. Also listed as langfuse@claude-plugins-official.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:langfuse",
+        "skill:langfuse"
+      ],
+      "media": []
+    },
+    {
+      "slug": "linear-mcp",
+      "name": "Linear MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "documents-productivity"
+      ],
+      "summary": "Linear's hosted MCP server: search, create and update issues, projects and comments in your Linear workspace.",
+      "sourceUrl": "https://linear.app/docs/mcp",
+      "evidenceUrl": "https://linear.app/docs/mcp",
+      "install": "claude mcp add --transport http linear-server https://mcp.linear.app/mcp",
+      "publisher": "Linear",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Linear account; sign in with OAuth (run /mcp in Claude Code). Codex: codex mcp add linear --url https://mcp.linear.app/mcp, which prompts for login. For read-only access, connect to https://mcp.linear.app/mcp/readonly or request only the read scope. Linear also ships plugins in the Claude Code and Codex marketplaces that use this server. No SPDX license is published for the hosted service.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:linear-server",
+        "mcp:linear",
+        "plugin:linear"
       ],
       "media": []
     },
@@ -1507,6 +3297,97 @@
       },
       "match": [
         "mcp:meshy"
+      ],
+      "media": []
+    },
+    {
+      "slug": "mixpanel-headless-plugin",
+      "name": "Mixpanel Headless",
+      "kind": "plugin",
+      "agents": [
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Codex skills that install Mixpanel's Python SDK and run funnel, retention, flow and segmentation analyses in code.",
+      "sourceUrl": "https://github.com/openai/plugins/tree/main/plugins/mixpanel-headless",
+      "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/mixpanel-headless/README.md",
+      "install": null,
+      "publisher": "Mixpanel",
+      "license": "MIT",
+      "lastActivity": "2026-06-08",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, from the plugin browser (/plugins). Manifest version 0.1.2. Separate from the mixpanel plugin that wraps the hosted connector: this one writes Python with the mixpanel_headless SDK, pandas and plotting libraries. Skills: setup, mixpanel-auth, mixpanelyst and dashboard-expert. Sign in with mp login, or set MP_OAUTH_TOKEN, MP_PROJECT_ID and MP_REGION. Needs a Mixpanel account.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:mixpanel-headless"
+      ],
+      "media": []
+    },
+    {
+      "slug": "mlflow-skills",
+      "name": "MLflow Skills",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "MLflow skills to add tracing to an AI app, debug failing traces, build scorers and run agent evaluations.",
+      "sourceUrl": "https://github.com/mlflow/skills",
+      "evidenceUrl": "https://github.com/mlflow/skills",
+      "install": "npx skills add mlflow/skills",
+      "publisher": "MLflow",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Skills include instrumenting-with-mlflow-tracing (Python and TypeScript, OpenAI, Anthropic, LangChain and more), analyze-mlflow-trace, debug-agent, agent-evaluation, build-a-scorer and querying-mlflow-metrics. An optional UserPromptSubmit hook suggests a skill from your prompt. Also listed as mlflow@claude-plugins-official.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:mlflow",
+        "skill:instrumenting-with-mlflow-tracing",
+        "skill:agent-evaluation"
+      ],
+      "media": []
+    },
+    {
+      "slug": "monday-mcp",
+      "name": "monday.com MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "documents-productivity",
+        "business-operations"
+      ],
+      "summary": "monday.com's hosted MCP server: search boards, create and update items and columns, assign owners and post updates.",
+      "sourceUrl": "https://github.com/mondaycom/mcp",
+      "evidenceUrl": "https://github.com/mondaycom/mcp/tree/master/plugins/monday-crm",
+      "install": "/plugin install monday-crm@claude-plugins-official",
+      "publisher": "monday.com",
+      "license": "MIT",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Hosted at https://mcp.monday.com/mcp with OAuth; monday marks the MCP integration as beta. The README has no Claude Code or Codex one-liner. In Claude Code, the monday-crm plugin bundles this server plus five CRM skills (daily briefing, forecast, meeting-to-deal, workspace builder, data cleanup). In Codex, install monday.com from /plugins. The plugin README says it works with monday CRM's free tier.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:monday",
+        "plugin:monday-crm",
+        "plugin:monday-com"
       ],
       "media": []
     },
@@ -1817,6 +3698,122 @@
       "media": []
     },
     {
+      "slug": "openai-codex-security",
+      "name": "OpenAI Codex Security",
+      "kind": "plugin",
+      "agents": [
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Codex plugin and CLI that scan a repo or diff for vulnerabilities, validate findings, and draft and verify fixes.",
+      "sourceUrl": "https://github.com/openai/codex-security",
+      "evidenceUrl": "https://learn.chatgpt.com/docs/security/plugin",
+      "install": "npm install --global @openai/codex-security\ncs login",
+      "publisher": "OpenAI",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "In Codex, enter /plugins, search Codex Security and install it, then ask for a scan. Skills include $security-scan, $security-diff-scan, $deep-security-scan, $triage-finding, $fix-finding and $verify-fix. The CLI (cs scan .) needs Node 22.13+, 24 or 26 and Python 3.10+. Scans save report.md, findings and coverage and leave source unchanged. Some requests and protected findings need Trusted Access for Cyber approval. A scan with no findings does not prove the repo is secure.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:codex-security",
+        "skill:security-scan",
+        "skill:security-diff-scan",
+        "skill:deep-security-scan"
+      ],
+      "media": []
+    },
+    {
+      "slug": "openai-creative-production",
+      "name": "OpenAI Creative Production",
+      "kind": "plugin",
+      "agents": [
+        "codex"
+      ],
+      "categories": [
+        "image-generation",
+        "marketing-sales"
+      ],
+      "summary": "Codex plugin that turns a brief or product image into a board of concept images, ads and social posts.",
+      "sourceUrl": "https://github.com/openai/plugins/tree/main/plugins/creative-production",
+      "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/creative-production/.codex-plugin/plugin.json",
+      "install": null,
+      "publisher": "OpenAI",
+      "license": null,
+      "lastActivity": "2026-08-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, version 0.1.25. The manifest license is Proprietary, so license is left empty. Install it from /plugins in the Codex CLI or the Plugins tab in the ChatGPT desktop app, then start a new session; sign-in happens on first use. Two skills: intake opens a starter board, produce builds and refines visuals on it. A bundled local MCP server runs the board. It can use whatever image generation, Figma and Canva tools you already have.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:creative-production"
+      ],
+      "media": []
+    },
+    {
+      "slug": "openai-data-analytics-plugin",
+      "name": "OpenAI Data Analytics",
+      "kind": "plugin",
+      "agents": [
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Codex plugin that turns product and business questions into analyses, metric diagnoses, KPI plans, dashboards and notebooks.",
+      "sourceUrl": "https://github.com/openai/plugins/tree/main/plugins/data-analytics",
+      "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/data-analytics/.codex-plugin/plugin.json",
+      "install": null,
+      "publisher": "OpenAI",
+      "license": null,
+      "lastActivity": "2026-08-27",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, through the plugin browser (/plugins in Codex CLI or the Plugins tab in the ChatGPT desktop app). Manifest version 0.2.8, license field Proprietary, so license is left empty. Skills include metric-diagnostics, design-kpis, build-dashboard, jupyter-notebooks, market-sizing, validate-data and analyze-data-quality. Uses connected warehouses (Databricks, BigQuery, Snowflake) and BI tools such as Mixpanel, PostHog and Metabase when available, or uploads and pasted results.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:data-analytics"
+      ],
+      "media": []
+    },
+    {
+      "slug": "openai-developers-plugin",
+      "name": "OpenAI Developers",
+      "kind": "plugin",
+      "agents": [
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Codex plugin for building on the OpenAI API: Agents SDK apps, ChatGPT Apps, API keys and API error triage.",
+      "sourceUrl": "https://github.com/openai/plugins/tree/main/plugins/openai-developers",
+      "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/openai-developers/README.md",
+      "install": null,
+      "publisher": "OpenAI",
+      "license": null,
+      "lastActivity": "2026-06-17",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, from the plugin browser (/plugins). Manifest version 1.2.3; license field Proprietary, so license is left empty. Skills: agents-sdk, build-chatgpt-app, chatgpt-app-submission, openai-api-troubleshooting and openai-platform-api-key. The key skill creates a Platform API key through the OpenAI Platform connector and asks you to confirm the env file before writing it. Needs an OpenAI Platform account.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:openai-developers"
+      ],
+      "media": []
+    },
+    {
       "slug": "openai-frontend-testing-debugging",
       "name": "OpenAI Frontend Testing and Debugging",
       "kind": "skill",
@@ -1826,7 +3823,8 @@
       ],
       "categories": [
         "frontend-design",
-        "testing-debugging"
+        "testing-debugging",
+        "qa-testing"
       ],
       "summary": "Checks a rendered page with the Browser plugin, or Playwright if Browser is missing.",
       "sourceUrl": "https://github.com/openai/plugins/blob/main/plugins/build-web-apps/skills/frontend-testing-debugging/SKILL.md",
@@ -1868,6 +3866,36 @@
         "note": null
       },
       "match": [],
+      "media": []
+    },
+    {
+      "slug": "openai-test-android-apps",
+      "name": "OpenAI Test Android Apps",
+      "kind": "plugin",
+      "agents": [
+        "codex"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Codex plugin that drives an Android emulator to reproduce bugs, inspect UI, read logcat and capture performance traces.",
+      "sourceUrl": "https://github.com/openai/plugins/tree/main/plugins/test-android-apps",
+      "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/test-android-apps/.codex-plugin/plugin.json",
+      "install": null,
+      "publisher": "OpenAI",
+      "license": "MIT",
+      "lastActivity": "2026-06-08",
+      "verifiedOn": "2026-10-22",
+      "notes": "Codex only, version 0.1.2, listed in the openai-curated marketplace. The repo has no one-line install command. Skills android-emulator-qa and android-performance build and install app variants, drive a booted emulator with adb input events, inspect UI trees, take screenshots, and collect logcat plus Simpleperf, Perfetto, gfxinfo, or memory and leak evidence.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:test-android-apps",
+        "skill:android-emulator-qa",
+        "skill:android-performance"
+      ],
       "media": []
     },
     {
@@ -1928,6 +3956,64 @@
       "media": []
     },
     {
+      "slug": "perplexity-mcp",
+      "name": "Perplexity MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Perplexity's official server: ranked web search plus quick answers, step-by-step reasoning and deep research with citations.",
+      "sourceUrl": "https://github.com/perplexityai/modelcontextprotocol",
+      "evidenceUrl": "https://github.com/perplexityai/modelcontextprotocol",
+      "install": "claude mcp add --transport http perplexity https://api.perplexity.ai/mcp --header \"Authorization: Bearer YOUR_API_KEY\"",
+      "publisher": "Perplexity",
+      "license": "MIT",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Perplexity API key, and every call bills the API. Tools: perplexity_search (Search API with recency and domain filters), perplexity_ask (Agent API fast preset), perplexity_reason (medium) and perplexity_research (high; runs can take minutes). Hosted at https://api.perplexity.ai/mcp. Local server for Codex shown in the guide. Also installs as a Claude Code plugin from this repository.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:perplexity",
+        "plugin:perplexity"
+      ],
+      "media": []
+    },
+    {
+      "slug": "playwright-cli",
+      "name": "Microsoft Playwright CLI",
+      "kind": "skill",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Playwright command line plus an agent skill: open pages, click, type and screenshot without loading MCP tool schemas.",
+      "sourceUrl": "https://github.com/microsoft/playwright-cli",
+      "evidenceUrl": "https://github.com/microsoft/playwright-cli/blob/main/README.md",
+      "install": "npm install -g @playwright/cli@latest\nplaywright-cli install --skills",
+      "publisher": "Microsoft",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 0.1.22. Needs Node.js 18+. The README says coding agents fit the CLI best because it uses fewer tokens, and keeps Playwright MCP (playwright-mcp) for long exploratory or self-healing loops. Headless by default; pass --headed to watch. Sessions keep cookies in memory, -s=<name> picks a browser, and playwright-cli show opens a dashboard of running sessions. The README names Claude Code and GitHub Copilot.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:playwright-cli"
+      ],
+      "media": []
+    },
+    {
       "slug": "playwright-mcp",
       "name": "Microsoft Playwright MCP",
       "kind": "mcp_server",
@@ -1938,7 +4024,8 @@
       "categories": [
         "full-stack-web",
         "frontend-design",
-        "testing-debugging"
+        "testing-debugging",
+        "qa-testing"
       ],
       "summary": "Browser automation and inspection through Playwright and structured accessibility snapshots.",
       "sourceUrl": "https://github.com/microsoft/playwright-mcp",
@@ -1955,6 +4042,124 @@
       },
       "match": [
         "mcp:playwright"
+      ],
+      "media": []
+    },
+    {
+      "slug": "ponytail-review",
+      "name": "Ponytail Review",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "code-review"
+      ],
+      "summary": "Reviews a change and the code around it for bugs, security, load, missing tests, speed and dead weight, in plain English. Changes no code.",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail/blob/main/skills/ponytail-review/SKILL.md",
+      "evidenceUrl": "https://github.com/DietrichGebert/ponytail/blob/main/README.md",
+      "install": "/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail",
+      "publisher": "Dietrich Gebert / DietrichGebert",
+      "license": "MIT",
+      "lastActivity": "2026-10-18",
+      "verifiedOn": "2026-10-22",
+      "notes": "Ships in the Ponytail plugin, so installing it also turns on the always-on ponytail mode. The skill itself stands alone. Name a target (uncommitted, staged, a branch or a PR link); with none it reviews uncommitted changes, or the last commit. Each numbered finding says what the code does, the problem, the fix and what happens if you skip it, grouped as must fix, should fix and nice to have, then a verdict. In Codex call it as $ponytail:ponytail-review.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:ponytail-review",
+        "skill:ponytail:ponytail-review"
+      ],
+      "media": []
+    },
+    {
+      "slug": "ponytail",
+      "name": "Ponytail",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "agent-modes"
+      ],
+      "summary": "Always-on mode that makes the agent take the smallest complete change: reuse what exists, then the standard library, then minimal code.",
+      "sourceUrl": "https://github.com/DietrichGebert/ponytail/blob/main/skills/ponytail/SKILL.md",
+      "evidenceUrl": "https://github.com/DietrichGebert/ponytail/blob/main/INSTALL.md",
+      "install": "/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail",
+      "publisher": "Dietrich Gebert / DietrichGebert",
+      "license": "MIT",
+      "lastActivity": "2026-10-18",
+      "verifiedOn": "2026-10-22",
+      "notes": "The plugin's hooks keep the mode on every session; the skill alone loads only when asked. Levels are lite, full (default) and ultra; say stop ponytail to end it. In Codex, trust its two hooks in /hooks and start a new thread. OMP: omp plugin marketplace add DietrichGebert/ponytail, then omp plugin install ponytail@ponytail. Pi: pi install git:github.com/DietrichGebert/ponytail. Risky logic still gets one small test, and validation, security and accessibility are never cut. The plugin also ships ponytail-review, -audit, -debt, -gain and -help.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "skill:ponytail",
+        "skill:ponytail:ponytail"
+      ],
+      "media": []
+    },
+    {
+      "slug": "posthog-plugin",
+      "name": "PostHog",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "data-analysis"
+      ],
+      "summary": "Official PostHog plugin: query insights, manage feature flags and experiments, read errors, plus 30+ skills.",
+      "sourceUrl": "https://github.com/PostHog/ai-plugin",
+      "evidenceUrl": "https://github.com/PostHog/ai-plugin",
+      "install": "claude plugin install posthog",
+      "publisher": "PostHog",
+      "license": "MIT",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Connects PostHog's MCP server; run /mcp, pick plugin:posthog:posthog and sign in. Codex: codex plugin marketplace add PostHog/ai-plugin, then install PostHog from /plugins. Can create and change flags, experiments, dashboards and surveys, so watch what you approve. Optional hook sends Claude Code sessions to PostHog LLM Analytics when POSTHOG_LLMA_CC_ENABLED and POSTHOG_API_KEY are set. Self-hosted: set POSTHOG_MCP_URL. License MIT per README and plugin.json.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:posthog"
+      ],
+      "media": []
+    },
+    {
+      "slug": "postman-mcp",
+      "name": "Postman MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "qa-testing"
+      ],
+      "summary": "Lets the agent manage Postman workspaces, collections, specs, mocks and monitors, and keep code in sync with them.",
+      "sourceUrl": "https://github.com/postmanlabs/postman-mcp-server",
+      "evidenceUrl": "https://learning.postman.com/docs/reference/postman-api/postman-mcp-server/postman-mcp-remote-server",
+      "install": "claude mcp add --transport http postman https://mcp.postman.com/minimal",
+      "publisher": "Postman",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Postman account. The US remote server signs in with OAuth; the EU server and the local npx server need a Postman API key. The endpoint picks a tool set: /minimal (default), /code, /mcp (full, 100+ tools), /learn or /context-graph. Postman's docs say coding agents working in a repo should prefer the Postman CLI and its agent skills. Remote servers collect anonymous telemetry.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:postman"
       ],
       "media": []
     },
@@ -2017,6 +4222,181 @@
       "media": []
     },
     {
+      "slug": "replicate-mcp",
+      "name": "Replicate MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "image-generation",
+        "video-generation"
+      ],
+      "summary": "MCP server for Replicate's HTTP API: search and compare models, run predictions and fetch results.",
+      "sourceUrl": "https://replicate.com/docs/reference/mcp",
+      "evidenceUrl": "https://mcp.replicate.com/",
+      "install": "claude mcp add replicate https://mcp.replicate.com/sse --transport sse --scope user",
+      "publisher": "Replicate",
+      "license": "Apache-2.0",
+      "lastActivity": "2025-12-18",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Replicate API token; the remote server asks for it in a web sign-in step. Replicate bills each run by hardware time or by input and output. Codex runs the local package: codex mcp add replicate --env REPLICATE_API_TOKEN=r8_xxxxxx -- npx -y replicate-mcp@latest. It covers every operation in Replicate's HTTP API, so it can run public image and video models. The npm latest tag (0.9.0) dates from June 2025; the newest alpha is from December 2025. License is the npm package's.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:replicate"
+      ],
+      "media": []
+    },
+    {
+      "slug": "runway-dev",
+      "name": "Runway Dev",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "video-generation"
+      ],
+      "summary": "Helps a coding agent build Runway API video, image and audio generation into an app, with a Runway Dev MCP.",
+      "sourceUrl": "https://github.com/runwayml/skills",
+      "evidenceUrl": "https://github.com/runwayml/skills/blob/main/README.md",
+      "install": "claude plugin marketplace add runwayml/skills\nclaude plugin install runway-api@runway-dev",
+      "publisher": "Runway",
+      "license": "MIT",
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Runway Developer Portal account. The MCP signs in with browser OAuth at https://dev.runwayml.com/mcp; your app uses its own RUNWAYML_API_SECRET. API generations may use credits. It is for adding Runway to your code: the MCP looks up models, prices and limits, sets up Model Routers with an optional credit cap, and inspects failed tasks. Seven skills cover setup, SDKs, models, routers, real-time characters, recipes and workflows. Codex: codex plugin marketplace add runwayml/skills, then codex plugin add runway-api@runway-dev.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:runway-api",
+        "skill:runway-dev",
+        "skill:runway-dev-setup",
+        "skill:runway-dev-models"
+      ],
+      "media": []
+    },
+    {
+      "slug": "salesforce-hosted-mcp",
+      "name": "Salesforce Hosted MCP Servers",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "business-operations"
+      ],
+      "summary": "Salesforce-hosted MCP servers that let an agent read and change org records and run Flows and Apex actions, with per-user OAuth.",
+      "sourceUrl": "https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/hosted-mcp-servers-overview.html",
+      "evidenceUrl": "https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/claude.html",
+      "install": null,
+      "publisher": "Salesforce",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "No one-line setup. An admin turns the feature on and creates an External Client App in Salesforce Setup. You then add a custom connector in Claude (Customize, Connectors) with https://api.salesforce.com/platform/mcp/v1/<SERVER-NAME> and the app's consumer key; Salesforce says Claude Code inherits that connector. Meant for customers with Flex Credits, and usage may be billed. Agent actions follow each user's Salesforce permissions. Codex is not among the tested clients.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [],
+      "media": []
+    },
+    {
+      "slug": "save-to-spotify",
+      "name": "Save to Spotify",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "audio-production"
+      ],
+      "summary": "CLI and skill that script, narrate and upload audio episodes, such as daily briefings, to your Spotify.",
+      "sourceUrl": "https://github.com/spotify/save-to-spotify",
+      "evidenceUrl": "https://github.com/spotify/save-to-spotify/blob/main/README.md",
+      "install": "/plugin marketplace add spotify/save-to-spotify\n/plugin install save-to-spotify@save-to-spotify",
+      "publisher": "Spotify",
+      "license": "Apache-2.0",
+      "lastActivity": "2026-10-13",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Spotify login: save-to-spotify auth login opens the browser. The CLI does not make speech itself. Kokoro runs locally for free (about 340 MB), OpenAI TTS needs OPENAI_API_KEY and ElevenLabs needs ELEVENLABS_API_KEY. The skill runs the save-to-spotify CLI; curl -fsSL https://saveto.spotify.com/install.sh | bash installs the CLI and the skill. Codex: npx skills add spotify/save-to-spotify, then call $save-to-spotify. upload creates the show and the episode in one step.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:save-to-spotify",
+        "skill:save-to-spotify"
+      ],
+      "media": []
+    },
+    {
+      "slug": "semgrep-guardian",
+      "name": "Semgrep Guardian",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Plugin that scans each file the agent writes with Semgrep Code, Supply Chain and Secrets, and sends findings back to fix.",
+      "sourceUrl": "https://github.com/semgrep/guardian",
+      "evidenceUrl": "https://docs.semgrep.dev/semgrep-guardian/quickstart",
+      "install": "claude plugin install semgrep@claude-plugins-official",
+      "publisher": "Semgrep",
+      "license": null,
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Version 2.9.0. Needs a Semgrep account; you sign in through the browser once. Codex install: add the semgrep/guardian marketplace, then codex plugin add semgrep@semgrep-marketplace. Hooks fire on every file write in every project and send those files to scanner.semgrep.ai. The plugin path uses a fixed ruleset, not your org's Policies. Sends telemetry unless you turn it off. The repo has no license file.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:semgrep"
+      ],
+      "media": []
+    },
+    {
+      "slug": "semrush-mcp",
+      "name": "Semrush MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "marketing-sales"
+      ],
+      "summary": "Semrush's hosted MCP server: SEO and traffic data plus read-only access to your Semrush projects.",
+      "sourceUrl": "https://developer.semrush.com/api/v4/introduction/semrush-mcp/",
+      "evidenceUrl": "https://developer.semrush.com/api/v4/introduction/semrush-mcp/",
+      "install": "claude mcp add semrush https://mcp.semrush.com/v2/mcp -t http",
+      "publisher": "Semrush",
+      "license": null,
+      "lastActivity": null,
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a paid plan: Semrush One Starter or Pro+, or SEO Classic Pro or Guru, for SEO data (50,000 API units), or a Trends API plan for traffic and market data. Every request uses API units. Project data is read-only. After adding the server, run /mcp, pick Semrush and sign in with OAuth. Codex setup is not documented. No SPDX license is published for the hosted service.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:semrush"
+      ],
+      "media": []
+    },
+    {
       "slug": "sentry-mcp",
       "name": "Sentry MCP",
       "kind": "mcp_server",
@@ -2025,7 +4405,8 @@
         "codex"
       ],
       "categories": [
-        "testing-debugging"
+        "testing-debugging",
+        "cloud-devops"
       ],
       "summary": "Pulls Sentry issues, errors, traces, and project context into the agent over OAuth.",
       "sourceUrl": "https://github.com/getsentry/toolkit",
@@ -2104,6 +4485,64 @@
       "media": []
     },
     {
+      "slug": "snyk-studio",
+      "name": "Snyk Studio",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Snyk MCP server and hooks that scan agent code, dependencies, containers and IaC, and rescan after each fix.",
+      "sourceUrl": "https://docs.snyk.io/agent-security/agentic-security-with-snyk-studio/getting-started-with-snyk-studio",
+      "evidenceUrl": "https://docs.snyk.io/agent-security/agentic-security-with-snyk-studio/quickstart-guides/claude-code-guide",
+      "install": "curl -fsSL 'https://raw.githubusercontent.com/snyk/studio-recipes/main/installer/dist/snyk-studio-install.sh' -o snyk-studio-install.sh\nbash ./snyk-studio-install.sh",
+      "publisher": "Snyk",
+      "license": null,
+      "lastActivity": "2026-10-20",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a Snyk account. The hooks installer supports Claude Code, Codex CLI, Cursor, Gemini CLI and Copilot, and asks before installing uv, Python, Node and the Snyk CLI. Older rules-based setup for Claude Code: npx -y snyk@latest mcp configure --tool=claude-cli. Tools include snyk_code_scan, snyk_sca_scan, snyk_iac_scan and snyk_container_scan. The server runs locally through the Snyk CLI; Snyk has no hosted one. Installer repo snyk/studio-recipes is Apache-2.0; GitHub reports no SPDX license for snyk/cli.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:snyk"
+      ],
+      "media": []
+    },
+    {
+      "slug": "sonarqube-agent-plugin",
+      "name": "SonarQube Agent Plugin",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Connects the agent to SonarQube CLI and MCP Server for issues, quality gates, coverage, secrets scanning and dependency risks.",
+      "sourceUrl": "https://github.com/SonarSource/sonarqube-agent-plugins",
+      "evidenceUrl": "https://github.com/SonarSource/sonarqube-agent-plugins/blob/master/README.md",
+      "install": "/plugin install sonarqube@claude-plugins-official",
+      "publisher": "SonarSource",
+      "license": null,
+      "lastActivity": "2026-10-19",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a SonarQube Cloud, Server or Community Build account, the SonarQube CLI (sonar), and Docker, Podman or Nerdctl for the MCP server image. After install run /sonarqube:sonar-integrate, or sonar auth login then sonar integrate claude. In Codex, install sonarqube@sonar from the SonarSource marketplace, then run sonar integrate codex. Vortex analysis after each edit depends on your SonarQube Cloud org. License: Sonar Source-Available License v1.0.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:sonarqube"
+      ],
+      "media": []
+    },
+    {
       "slug": "spline-embed",
       "name": "Spline Embed",
       "kind": "skill",
@@ -2160,6 +4599,37 @@
       "media": []
     },
     {
+      "slug": "stackhawk-agent-skills",
+      "name": "StackHawk Agent Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Skills that configure and run HawkScan DAST against your running app, turn findings into fix tasks, and rescan.",
+      "sourceUrl": "https://github.com/stackhawk/agent-skills",
+      "evidenceUrl": "https://github.com/stackhawk/agent-skills/blob/main/README.md",
+      "install": "/plugin marketplace add stackhawk/agent-skills\n/plugin install wingman@stackhawk",
+      "publisher": "StackHawk",
+      "license": "MIT",
+      "lastActivity": "2026-10-09",
+      "verifiedOn": "2026-10-22",
+      "notes": "Needs a StackHawk account and HAWK_API_KEY; the README offers a 14-day free trial. wingman installs hawkscan, stackhawk-api, stackhawk-data-seed and stackhawk-optimize. hawkscan-ci installs separately and writes CI workflow files. The README gives the same /plugin commands for Codex. HawkScan attacks a live app, so run it only against apps you own or are authorized to test.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:hawkscan",
+        "plugin:stackhawk-api",
+        "skill:hawkscan"
+      ],
+      "media": []
+    },
+    {
       "slug": "stripe-mcp",
       "name": "Stripe MCP",
       "kind": "mcp_server",
@@ -2168,7 +4638,8 @@
         "codex"
       ],
       "categories": [
-        "full-stack-web"
+        "full-stack-web",
+        "business-operations"
       ],
       "summary": "Searches Stripe docs and calls Stripe API reads and writes from the agent.",
       "sourceUrl": "https://docs.stripe.com/mcp",
@@ -2248,6 +4719,64 @@
       "media": []
     },
     {
+      "slug": "tavily-mcp",
+      "name": "Tavily MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code"
+      ],
+      "categories": [
+        "web-research"
+      ],
+      "summary": "Hosted Tavily server with search, extract, map and crawl tools for live web data.",
+      "sourceUrl": "https://github.com/tavily-ai/tavily-mcp",
+      "evidenceUrl": "https://github.com/tavily-ai/tavily-mcp",
+      "install": "claude mcp add --transport http tavily https://mcp.tavily.com/mcp",
+      "publisher": "Tavily",
+      "license": "MIT",
+      "lastActivity": "2026-10-15",
+      "verifiedOn": "2026-10-22",
+      "notes": "The install shown uses OAuth; finish sign-in from /mcp in Claude Code. You can instead put tavilyApiKey in the URL. A local npx server also exists. Default search settings can be set as JSON (for example search_depth and max_results). Tavily's separate skills plugin is tavily@claude-plugins-official. The README documents Claude Code and Cursor, not Codex. Needs a Tavily account.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:tavily"
+      ],
+      "media": []
+    },
+    {
+      "slug": "terraform-mcp",
+      "name": "HashiCorp Terraform MCP Server",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "cloud-devops"
+      ],
+      "summary": "Looks up Terraform Registry providers, modules and policies, and manages HCP Terraform or Terraform Enterprise workspaces.",
+      "sourceUrl": "https://github.com/hashicorp/terraform-mcp-server",
+      "evidenceUrl": "https://github.com/hashicorp/terraform-mcp-server",
+      "install": "claude mcp add terraform -s user -t stdio -- docker run -i --rm hashicorp/terraform-mcp-server",
+      "publisher": "HashiCorp",
+      "license": "MPL-2.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "Runs locally in Docker, so Docker must be running. Registry tools work without an account. Workspace and run tools need TFE_TOKEN and TFE_ADDRESS for HCP Terraform or Terraform Enterprise, passed to docker with -e. Tools that change infrastructure stay off until ENABLE_TF_OPERATIONS is set. HashiCorp warns against untrusted MCP clients or models and asks you to review its output. Also listed as the terraform plugin in the Claude Code marketplace.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:terraform",
+        "plugin:terraform"
+      ],
+      "media": []
+    },
+    {
       "slug": "threejs-geometry",
       "name": "Three.js Geometry",
       "kind": "skill",
@@ -2302,6 +4831,71 @@
       },
       "match": [
         "skill:threejs-loaders"
+      ],
+      "media": []
+    },
+    {
+      "slug": "together-ai-skills",
+      "name": "Together AI Skills",
+      "kind": "skill",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "One Together AI skill with guides and scripts for inference, fine-tuning, evaluations, batch jobs, media generation and GPUs.",
+      "sourceUrl": "https://github.com/togethercomputer/skills",
+      "evidenceUrl": "https://github.com/togethercomputer/skills",
+      "install": "npx skills add togethercomputer/skills",
+      "publisher": "Together AI",
+      "license": "MIT",
+      "lastActivity": "2026-10-13",
+      "verifiedOn": "2026-10-22",
+      "notes": "A single together-ai skill routes to 15 domain guides with runnable Python v2 SDK and TypeScript scripts. Covers chat completions, batch inference, LoRA and full fine-tuning, LLM-as-a-judge evaluations, image, video and audio generation, sandboxes and GPU clusters. Needs TOGETHER_API_KEY; jobs bill your Together account. Also listed as togetherai-skills in claude-plugins-official.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:togetherai-skills",
+        "skill:together-ai"
+      ],
+      "media": []
+    },
+    {
+      "slug": "trailofbits-skills",
+      "name": "Trail of Bits Skills",
+      "kind": "plugin",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "security-testing"
+      ],
+      "summary": "Trail of Bits marketplace of security plugins for code audits, Semgrep and CodeQL, smart contracts and variant analysis.",
+      "sourceUrl": "https://github.com/trailofbits/skills",
+      "evidenceUrl": "https://github.com/trailofbits/skills/blob/main/README.md",
+      "install": "/plugin marketplace add trailofbits/skills\n/plugin menu",
+      "publisher": "Trail of Bits",
+      "license": "CC-BY-SA-4.0",
+      "lastActivity": "2026-10-21",
+      "verifiedOn": "2026-10-22",
+      "notes": "A marketplace of 46 plugins that you install one by one. Security picks include audit-context-building, differential-review, insecure-defaults, sharp-edges, static-analysis, variant-analysis, supply-chain-risk-auditor and building-secure-contracts. Codex reads the same marketplace: codex plugin marketplace add trailofbits/skills, then codex plugin add <plugin-name>@trailofbits. Some plugins are not security tools, such as let-fate-decide and culture-index. Audit only code you own or are authorized to review.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "plugin:audit-context-building",
+        "plugin:differential-review",
+        "plugin:insecure-defaults",
+        "plugin:sharp-edges",
+        "plugin:variant-analysis",
+        "plugin:supply-chain-risk-auditor",
+        "plugin:building-secure-contracts"
       ],
       "media": []
     },
@@ -2371,7 +4965,8 @@
         "codex"
       ],
       "categories": [
-        "full-stack-web"
+        "full-stack-web",
+        "cloud-devops"
       ],
       "summary": "Reads Vercel docs, projects, deployments, logs, and Web Analytics after you sign in.",
       "sourceUrl": "https://vercel.com/docs/agent-resources/vercel-mcp",
@@ -2512,6 +5107,35 @@
       "media": []
     },
     {
+      "slug": "wandb-mcp",
+      "name": "Weights & Biases MCP",
+      "kind": "mcp_server",
+      "agents": [
+        "claude-code",
+        "codex"
+      ],
+      "categories": [
+        "ai-engineering"
+      ],
+      "summary": "Queries W&B runs and Weave traces, compares and diagnoses runs, summarizes evals and writes W&B reports.",
+      "sourceUrl": "https://github.com/wandb/wandb-mcp-server",
+      "evidenceUrl": "https://github.com/wandb/wandb-mcp-server",
+      "install": "claude mcp add --transport http wandb https://mcp.withwandb.com/mcp --scope user --header \"Authorization: Bearer <your-api-key-here>\"",
+      "publisher": "Weights & Biases",
+      "license": "MIT",
+      "lastActivity": "2026-10-16",
+      "verifiedOn": "2026-10-22",
+      "notes": "Hosted at https://mcp.withwandb.com/mcp with your W&B API key; a local server also exists. Tools include query_weave_traces_tool, query_wandb_tool, compare_runs_tool, diagnose_run_tool, summarize_evaluation_tool and create_wandb_report_tool. log_analysis_to_wandb and report creation write to your account; tool profiles and a read-only mode can limit that. Codex install sets WANDB_API_KEY first.",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "match": [
+        "mcp:wandb"
+      ],
+      "media": []
+    },
+    {
       "slug": "windmill-mcp",
       "name": "Windmill MCP",
       "kind": "mcp_server",
@@ -2571,6 +5195,29 @@
   ],
   "workflows": [
     {
+      "slug": "agent-sdk-traced-eval",
+      "name": "Build a Claude agent, then trace and grade it",
+      "category": "ai-engineering",
+      "steps": [
+        {
+          "skill": "anthropic-agent-sdk-dev-plugin",
+          "note": "Scaffolds and verifies a Claude Agent SDK app."
+        },
+        {
+          "skill": "mlflow-skills",
+          "note": "Adds MLflow tracing, then builds scorers and runs an evaluation."
+        }
+      ],
+      "why": "The Agent SDK plugin gets a working, verified starter agent. MLflow skills then add tracing (Anthropic is a supported library) and an evaluation, so changes to the agent can be measured instead of guessed.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
       "slug": "build123d-exported-mesh-review",
       "name": "Python CAD model, checked for printing",
       "category": "cad-design",
@@ -2585,6 +5232,33 @@
         }
       ],
       "why": "Build the model in build123d and export it as STL, then use OpenSCAD MCP to measure the exported mesh and check that it will print. Only the exported file passes between them; the parametric history stays in build123d.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
+      "slug": "devops-terraform-aws-watch",
+      "name": "Terraform plan to watched AWS deploy",
+      "category": "cloud-devops",
+      "steps": [
+        {
+          "skill": "terraform-mcp",
+          "note": "Looks up current provider and module docs so the HCL uses real arguments."
+        },
+        {
+          "skill": "aws-core-plugin",
+          "note": "Builds and deploys the service on AWS with the AWS MCP Server."
+        },
+        {
+          "skill": "datadog-plugin",
+          "note": "Checks logs, traces and monitors for the new service after the deploy."
+        }
+      ],
+      "why": "Write infrastructure from current docs, deploy it, then confirm it is healthy from real telemetry. Each step needs its own account: HCP Terraform is optional, AWS and Datadog are not.",
       "basis": "proposed",
       "sourceUrl": null,
       "verdict": {
@@ -2639,6 +5313,52 @@
         }
       ],
       "why": "Pull in the workspace context you are authorized to use, shape the document and test it on a reader, then check the prose against a set of written rules.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
+      "slug": "duckdb-local-analysis",
+      "name": "Analyze local files, then check the result",
+      "category": "data-analysis",
+      "steps": [
+        {
+          "skill": "duckdb-motherduck-mcp",
+          "note": "Runs DuckDB SQL on local files or an in-memory database."
+        },
+        {
+          "skill": "anthropic-data-plugin",
+          "note": "Profiles the data, charts the answer and validates it before you share."
+        }
+      ],
+      "why": "DuckDB gives the agent a SQL engine for local files with no warehouse account. The Data plugin then profiles the results, draws the chart and runs its validation pass before anyone sees the numbers.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
+      "slug": "fal-image-to-cloudinary",
+      "name": "Generated image, sized for every slot",
+      "category": "image-generation",
+      "steps": [
+        {
+          "skill": "fal-mcp",
+          "note": "Generates the image after you see and approve the estimated cost."
+        },
+        {
+          "skill": "cloudinary-plugin",
+          "note": "Uploads the image and writes transformation URLs for each size and crop."
+        }
+      ],
+      "why": "fal makes the image and returns a download link. Cloudinary stores that file and serves resized and cropped versions through transformation URLs, so one generated image covers every placement.",
       "basis": "proposed",
       "sourceUrl": null,
       "verdict": {
@@ -2764,6 +5484,29 @@
       "media": []
     },
     {
+      "slug": "heygen-avatar-in-hyperframes",
+      "name": "Avatar clip inside a captioned video",
+      "category": "video-generation",
+      "steps": [
+        {
+          "skill": "heygen-mcp",
+          "note": "Renders the talking avatar clip from your script."
+        },
+        {
+          "skill": "hyperframes",
+          "note": "Adds titles, captions and music around the clip and renders the MP4."
+        }
+      ],
+      "why": "HeyGen makes the avatar footage. HyperFrames places that clip in an HTML composition with captions and titles, then renders the final MP4 on your machine.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
       "slug": "make-guided-scenarios",
       "name": "Build Make scenarios with guidance",
       "category": "workflow-automation",
@@ -2780,6 +5523,56 @@
       "why": "Make's official scenario guidance shows how to find, configure and run scenarios with Make MCP. The plugin can also register the server for you.",
       "basis": "documented",
       "sourceUrl": "https://github.com/integromat/make-skills",
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
+      "slug": "marketing-keyword-to-page",
+      "name": "Keyword research to measured page",
+      "category": "marketing-sales",
+      "steps": [
+        {
+          "skill": "ahrefs-mcp",
+          "note": "Finds keywords and the pages that rank for them."
+        },
+        {
+          "skill": "anthropic-marketing-plugin",
+          "note": "Drafts the page and checks it against your brand voice."
+        },
+        {
+          "skill": "google-analytics-mcp",
+          "note": "Reads traffic and events for the page once it is live."
+        }
+      ],
+      "why": "Pick a target from search data, write for it, then measure the result instead of guessing. Ahrefs needs a paid plan and Google Analytics needs a Cloud project with credentials.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
+      "slug": "meeting-recap-episode",
+      "name": "Meeting recording to a Spotify recap",
+      "category": "audio-production",
+      "steps": [
+        {
+          "skill": "deepgram-mcp",
+          "note": "Transcribes the meeting recording."
+        },
+        {
+          "skill": "save-to-spotify",
+          "note": "Turns the transcript into a short narrated recap and uploads it."
+        }
+      ],
+      "why": "Deepgram turns the recording into a transcript. Save to Spotify lists meeting recaps from a transcript as one of its uses: it writes a short summary, narrates it and saves the episode to Spotify.",
+      "basis": "proposed",
+      "sourceUrl": null,
       "verdict": {
         "tier": null,
         "note": null
@@ -2952,6 +5745,29 @@
       "media": []
     },
     {
+      "slug": "papers-then-current-web",
+      "name": "Check the papers, then the latest news",
+      "category": "web-research",
+      "steps": [
+        {
+          "skill": "consensus-mcp",
+          "note": "Finds peer-reviewed papers with citations."
+        },
+        {
+          "skill": "perplexity-mcp",
+          "note": "Adds recent web sources the papers may not cover yet."
+        }
+      ],
+      "why": "Consensus covers published research with citations. Perplexity search fills in recent web sources, so the answer shows both the evidence base and what changed since.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
       "slug": "plain-language-pass",
       "name": "Plain language pass",
       "category": "documents-productivity",
@@ -3094,6 +5910,33 @@
       "media": []
     },
     {
+      "slug": "support-ticket-to-bug",
+      "name": "Support ticket to filed bug",
+      "category": "business-operations",
+      "steps": [
+        {
+          "skill": "intercom-plugin",
+          "note": "Finds the conversations and the customer's history."
+        },
+        {
+          "skill": "anthropic-customer-support-plugin",
+          "note": "Triages the issue, drafts the reply and writes the escalation."
+        },
+        {
+          "skill": "linear-mcp",
+          "note": "Files the escalation as a Linear issue for engineering."
+        }
+      ],
+      "why": "Read what customers report, answer them, and hand real bugs to engineering with repro steps attached. The Intercom plugin is read-only, so replies are sent from Intercom by a person.",
+      "basis": "proposed",
+      "sourceUrl": null,
+      "verdict": {
+        "tier": null,
+        "note": null
+      },
+      "media": []
+    },
+    {
       "slug": "test-first-bug-hunt",
       "name": "Test-first bug hunt",
       "category": "testing-debugging",
@@ -3169,6 +6012,281 @@
         "note": null
       },
       "media": []
+    }
+  ],
+  "phases": {
+    "addy-browser-testing-with-devtools": "test",
+    "addy-code-review-and-quality": "test",
+    "addy-debugging-and-error-recovery": "test",
+    "addy-frontend-ui-engineering": "craft",
+    "addy-git-workflow-and-versioning": "ship",
+    "addy-incremental-implementation": "craft",
+    "addy-security-and-hardening": "test",
+    "addy-source-driven-development": "scout",
+    "adobe-for-creativity": "craft",
+    "ahrefs-mcp": "scout",
+    "ai-game-developer-unity": "craft",
+    "anthropic-agent-sdk-dev-plugin": "craft",
+    "anthropic-algorithmic-art": "craft",
+    "anthropic-canvas-design": "craft",
+    "anthropic-claude-security": "test",
+    "anthropic-code-review-plugin": "test",
+    "anthropic-customer-support-plugin": "craft",
+    "anthropic-data-plugin": "scout",
+    "anthropic-doc-coauthoring": "craft",
+    "anthropic-docx": "craft",
+    "anthropic-feature-dev-plugin": "craft",
+    "anthropic-finance-plugin": "craft",
+    "anthropic-frontend-design": "craft",
+    "anthropic-frontend-design-plugin": "craft",
+    "anthropic-legal-plugin": "test",
+    "anthropic-marketing-plugin": "craft",
+    "anthropic-mcp-builder": "craft",
+    "anthropic-pdf": "craft",
+    "anthropic-pptx": "craft",
+    "anthropic-pr-code-reviewer": "test",
+    "anthropic-pr-review-toolkit": "test",
+    "anthropic-product-management-plugin": "craft",
+    "anthropic-sales-plugin": "scout",
+    "anthropic-security-guidance": "craft",
+    "anthropic-webapp-testing": "test",
+    "anthropic-xlsx": "craft",
+    "apify-plugin": "scout",
+    "applitools-eyes-mcp": "test",
+    "asana-mcp": "ship",
+    "assemblyai-skill": "craft",
+    "atlassian-rovo-mcp": "scout",
+    "aws-core-plugin": "craft",
+    "azure-skills-plugin": "craft",
+    "bigquery-data-analytics-plugin": "scout",
+    "blender-community-mcp": "craft",
+    "blender-lab-mcp": "scout",
+    "brightdata-mcp": "scout",
+    "browserstack-mcp": "test",
+    "build123d-mcp": "craft",
+    "canva-plugin": "craft",
+    "cartesia-mcp": "craft",
+    "caveman": "craft",
+    "chrome-devtools-mcp": "test",
+    "claude-financial-services": "craft",
+    "cli-anything-kdenlive": "craft",
+    "clickup-mcp": "ship",
+    "cloudinary-plugin": "craft",
+    "coderabbit-plugin": "test",
+    "consensus-mcp": "scout",
+    "context7-mcp": "scout",
+    "coreyhaines-marketing-skills": "craft",
+    "cypress-ai-toolkit": "test",
+    "databricks-agent-skills": "scout",
+    "datadog-plugin": "ship",
+    "davinci-resolve-mcp": "craft",
+    "davinci-resolve-workflows": "craft",
+    "dbt-mcp": "scout",
+    "deepgram-mcp": "scout",
+    "deque-axe-accessibility": "test",
+    "descript-mcp": "craft",
+    "docker-mcp-gateway": "craft",
+    "duckdb-motherduck-mcp": "scout",
+    "elevenlabs-skills": "craft",
+    "endor-labs-agent-kit": "test",
+    "exa-mcp": "scout",
+    "expo-eas-workflows": "ship",
+    "expo-overview": "scout",
+    "expo-router": "craft",
+    "expo-upgrade": "craft",
+    "fal-mcp": "craft",
+    "ffmpeg-mcp-lite": "craft",
+    "ffmpeg-usage": "craft",
+    "figma-mcp": "scout",
+    "firecrawl-plugin": "scout",
+    "freecad-contextform-mcp": "craft",
+    "fusion360-mcp-bridge": "craft",
+    "github-mcp": "scout",
+    "godot-ai": "craft",
+    "godot-mcp": "craft",
+    "google-analytics-mcp": "test",
+    "grafana-k6-mcp": "test",
+    "grafana-mcp": "ship",
+    "graphify": "scout",
+    "heygen-mcp": "craft",
+    "higgsfield-skills": "craft",
+    "hubspot-sales-plugin": "craft",
+    "huggingface-mcp": "scout",
+    "huggingface-skills": "craft",
+    "humanizer": "craft",
+    "hyper3d-rodin-mcp": "craft",
+    "hyperframes": "craft",
+    "intercom-plugin": "scout",
+    "intuit-quickbooks-plugin": "scout",
+    "kubernetes-mcp-server": "ship",
+    "langfuse-skills": "test",
+    "linear-mcp": "scout",
+    "make-mcp": "craft",
+    "make-skills-plugin": "craft",
+    "mattpocock-codebase-design": "craft",
+    "mattpocock-diagnosing-bugs": "test",
+    "mattpocock-tdd": "test",
+    "mcp-for-unity": "craft",
+    "meshy-3d-generation": "craft",
+    "meshy-mcp": "craft",
+    "mixpanel-headless-plugin": "scout",
+    "mlflow-skills": "test",
+    "monday-mcp": "ship",
+    "n8n-instance-mcp": "craft",
+    "n8n-mcp-community": "craft",
+    "n8n-mcp-tools-expert": "craft",
+    "n8n-official-skills-plugin": "craft",
+    "next-devtools-mcp": "test",
+    "notion-mcp": "scout",
+    "obra-systematic-debugging": "test",
+    "obra-test-driven-development": "test",
+    "onshape-featurescript-mcp": "craft",
+    "openai-build-ios-apps-plugin": "craft",
+    "openai-build-web-apps-plugin": "craft",
+    "openai-codex-security": "test",
+    "openai-creative-production": "craft",
+    "openai-data-analytics-plugin": "scout",
+    "openai-developers-plugin": "craft",
+    "openai-frontend-testing-debugging": "test",
+    "openai-notion-plugin": "craft",
+    "openai-test-android-apps": "test",
+    "openscad-design": "craft",
+    "openscad-mcp": "craft",
+    "perplexity-mcp": "scout",
+    "playwright-cli": "test",
+    "playwright-mcp": "test",
+    "ponytail": "craft",
+    "ponytail-review": "test",
+    "posthog-plugin": "scout",
+    "postman-mcp": "test",
+    "remotion-best-practices": "craft",
+    "remotion-claude-plugin": "craft",
+    "replicate-mcp": "craft",
+    "runway-dev": "craft",
+    "salesforce-hosted-mcp": "craft",
+    "save-to-spotify": "ship",
+    "semgrep-guardian": "craft",
+    "semrush-mcp": "scout",
+    "sentry-mcp": "test",
+    "shadcn-mcp": "craft",
+    "shadcn-skill": "craft",
+    "snyk-studio": "craft",
+    "sonarqube-agent-plugin": "test",
+    "spline-embed": "craft",
+    "spline-mcp": "craft",
+    "stackhawk-agent-skills": "test",
+    "stripe-mcp": "craft",
+    "supabase-mcp": "craft",
+    "supabase-postgres-best-practices": "scout",
+    "tavily-mcp": "scout",
+    "terraform-mcp": "scout",
+    "threejs-geometry": "craft",
+    "threejs-loaders": "craft",
+    "together-ai-skills": "craft",
+    "trailofbits-skills": "test",
+    "ui-ux-pro-max": "craft",
+    "unreal-engine-claude-plugin": "craft",
+    "vercel-mcp": "ship",
+    "vercel-react-best-practices": "scout",
+    "vercel-react-native-skills": "craft",
+    "vercel-web-design-guidelines": "test",
+    "vercel-writing-guidelines": "test",
+    "wandb-mcp": "test",
+    "windmill-mcp": "craft",
+    "zapier-mcp": "craft"
+  },
+  "classes": [
+    {
+      "slug": "video-editing",
+      "className": "Bard"
+    },
+    {
+      "slug": "workflow-automation",
+      "className": "Artificer"
+    },
+    {
+      "slug": "cad-design",
+      "className": "Architect"
+    },
+    {
+      "slug": "3d-modeling",
+      "className": "Sculptor"
+    },
+    {
+      "slug": "full-stack-web",
+      "className": "Paladin"
+    },
+    {
+      "slug": "frontend-design",
+      "className": "Illusionist"
+    },
+    {
+      "slug": "code-review",
+      "className": "Inquisitor"
+    },
+    {
+      "slug": "testing-debugging",
+      "className": "Hunter"
+    },
+    {
+      "slug": "documents-productivity",
+      "className": "Scribe"
+    },
+    {
+      "slug": "mobile-development",
+      "className": "Ranger"
+    },
+    {
+      "slug": "game-development",
+      "className": "Worldbuilder"
+    },
+    {
+      "slug": "security-testing",
+      "className": "Rogue"
+    },
+    {
+      "slug": "qa-testing",
+      "className": "Sentinel"
+    },
+    {
+      "slug": "image-generation",
+      "className": "Painter"
+    },
+    {
+      "slug": "video-generation",
+      "className": "Dreamweaver"
+    },
+    {
+      "slug": "audio-production",
+      "className": "Minstrel"
+    },
+    {
+      "slug": "data-analysis",
+      "className": "Alchemist"
+    },
+    {
+      "slug": "web-research",
+      "className": "Sage"
+    },
+    {
+      "slug": "cloud-devops",
+      "className": "Castellan"
+    },
+    {
+      "slug": "ai-engineering",
+      "className": "Summoner"
+    },
+    {
+      "slug": "marketing-sales",
+      "className": "Herald"
+    },
+    {
+      "slug": "business-operations",
+      "className": "Steward"
+    },
+    {
+      "slug": "agent-modes",
+      "className": "Monk"
     }
   ]
 }

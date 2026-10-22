@@ -1,13 +1,15 @@
 {
   "name": "viberpg",
   "description": "Test-report tools for the VibeRPGSimulator spell library.",
-  "owner": { "name": "VibeRPGSimulator" },
+  "owner": {
+    "name": "VibeRPGSimulator"
+  },
   "plugins": [
     {
       "name": "spell-report",
       "source": "./plugin",
       "description": "Write, check, sign and send test reports on agent skills, plugins and MCP servers.",
-      "version": "0.4.0"
+      "version": "0.6.0"
     }
   ]
 }
