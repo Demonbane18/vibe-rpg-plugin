@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Book a class - Tidepool Clay Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="promo" id="promo">
+    <p>Members get 10% off spring classes. Share your invite link: <span class="invite-link">https://tidepoolclay.example/invite/spring-members-2026?ref=newsletter-april</span></p>
+    <button type="button" class="icon-btn promo-close" id="promo-close">&times;</button>
+  </div>
+
+  <div class="site-header">
+    <a class="logo" href="/">Tidepool Clay Studio</a>
+    <div class="site-nav">
+      <a href="/classes">Classes</a>
+      <a href="/open-studio">Open studio</a>
+      <a href="/gift-cards">Gift cards</a>
+      <a href="/contact">Contact</a>
+    </div>
+  </div>
+
+  <div class="page">
+    <svg class="hero-art" width="560" height="120" viewBox="0 0 560 120" aria-hidden="true">
+      <rect width="560" height="120" rx="16" fill="#efe6dc"/>
+      <circle cx="90" cy="70" r="38" fill="#c8775a"/>
+      <circle cx="210" cy="62" r="28" fill="#7a9e9f"/>
+      <rect x="300" y="40" width="70" height="60" rx="10" fill="#d9a441"/>
+    </svg>
+
+    <div class="page-title">Book a class</div>
+    <p class="intro">Six-week courses for every level. Pick a class, tell us how to reach you, and set a password for your member account.</p>
+
+    <div class="error-summary" id="error-summary" hidden>
+      <p>Some details need fixing before we can book your place.</p>
+    </div>
+
+    <form class="form-card" id="booking-form" action="/api/bookings" method="post" autocomplete="off" novalidate>
+      <h3>Your details</h3>
+      <div class="row">
+        <div class="field">
+          <input type="text" id="fullName" name="fullName" placeholder="Full name" required>
+          <span class="error" id="fullName-error"></span>
+        </div>
+        <div class="field">
+          <input type="text" id="email" name="email" placeholder="Email address" required>
+          <span class="error" id="email-error"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Phone (optional)</label>
+          <input type="text" id="phone" name="phone">
+          <span class="error" id="phone-error"></span>
+        </div>
+        <div class="field">
+          <label>Postcode</label>
+          <input type="text" id="postcode" name="postcode" required>
+          <span class="error" id="postcode-error"></span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="pw">Create a password</label>
+        <div class="password-wrap">
+          <input type="text" id="password" name="password" required minlength="10">
+          <button type="button" class="icon-btn" id="toggle-password"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3" fill="currentColor"/></svg></button>
+        </div>
+        <span class="hint">At least 10 characters.</span>
+        <span class="error" id="password-error"></span>
+      </div>
+
+      <h3>Choose a class</h3>
+      <div class="choices">
+        <p class="choices-title">Which class?</p>
+        <label class="choice"><input type="radio" name="course" value="wheel"> Wheel throwing, Tuesdays 6pm</label>
+        <label class="choice"><input type="radio" name="course" value="handbuilding"> Handbuilding, Thursdays 10am</label>
+        <label class="choice"><input type="radio" name="course" value="glaze"> Glaze lab, Saturdays 2pm</label>
+        <span class="error" id="course-error"></span>
+      </div>
+      <div class="field">
+        <label for="level">Experience</label>
+        <select id="level" name="level">
+          <option value="new">New to clay</option>
+          <option value="some">Some experience</option>
+          <option value="lots">Experienced</option>
+        </select>
+      </div>
+      <div class="field">
+        <input type="checkbox" id="terms" name="terms" required> I agree to the studio policies
+        <span class="error" id="terms-error"></span>
+      </div>
+
+      <button type="submit" class="btn">Book my place</button>
+      <p class="success" id="success" hidden>Thanks! Check your email for your booking.</p>
+    </form>
+    <p class="help">Need step-free access or a seated wheel? Email <a href="mailto:accessibility@tidepoolclaystudio.example">accessibility@tidepoolclaystudio.example</a> before your first class.</p>
+  </div>
+
+  <div class="site-footer">
+    <p>Tidepool Clay Studio, 14 Harbour Lane. <a href="/policies">Studio policies</a></p>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

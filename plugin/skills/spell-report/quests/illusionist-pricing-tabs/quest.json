@@ -1,0 +1,121 @@
+{
+  "id": "illusionist-pricing-tabs",
+  "version": 8,
+  "name": "Illusionist: pricing plan switcher",
+  "school": "frontend-design",
+  "rank": "grandmaster",
+  "summary": "Build an accessible, responsive pricing page with a billing tab switcher from a design brief and unaudited colour tokens.",
+  "prompt": "Please build the Fieldnote pricing page described in BRIEF.md, in index.html, styles.css and app.js. tokens.css and base.css are shared with the rest of the site, so leave them as they are. Plain HTML, CSS and JavaScript only; do not install packages or use the network.",
+  "maxPrompts": 1,
+  "timeLimitSec": 1200,
+  "checks": [
+    {
+      "id": "tokens",
+      "label": "Shared design files stay as delivered",
+      "type": "unchanged",
+      "paths": [
+        "tokens.css",
+        "base.css"
+      ]
+    },
+    {
+      "id": "palette",
+      "label": "Colours come from the design tokens",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/palette.test.mjs"
+      ]
+    },
+    {
+      "id": "contrast",
+      "label": "Text is readable against its background",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/contrast.test.mjs"
+      ]
+    },
+    {
+      "id": "focus",
+      "label": "Keyboard focus is clearly visible",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/focus.test.mjs"
+      ]
+    },
+    {
+      "id": "sticky-header",
+      "label": "Pinned header never hides keyboard focus",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/sticky.test.mjs"
+      ]
+    },
+    {
+      "id": "structure",
+      "label": "Page content and structure match the brief",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/structure.test.mjs"
+      ]
+    },
+    {
+      "id": "switcher",
+      "label": "Billing switcher works like a tab control",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/dom.mjs",
+        "quest-checks/tabs.test.mjs"
+      ]
+    },
+    {
+      "id": "forced-colors",
+      "label": "Selection and focus survive high contrast mode",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/forced.test.mjs"
+      ]
+    },
+    {
+      "id": "layout",
+      "label": "Layout adapts from phones to desktops",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/layout.test.mjs"
+      ]
+    },
+    {
+      "id": "rtl",
+      "label": "Layout mirrors for right-to-left languages",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/pricing.mjs",
+        "quest-checks/rtl.test.mjs"
+      ]
+    },
+    {
+      "id": "motion",
+      "label": "Reduced motion setting is respected",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/motion.test.mjs"
+      ]
+    }
+  ]
+}

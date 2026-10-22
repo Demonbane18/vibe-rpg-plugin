@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Pantry",
+    "slug": "pantry",
+    "version": "2.4.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": { "bundleIdentifier": "app.pantry.mobile", "supportsTablet": true },
+    "android": { "package": "app.pantry.mobile" }
+  }
+}

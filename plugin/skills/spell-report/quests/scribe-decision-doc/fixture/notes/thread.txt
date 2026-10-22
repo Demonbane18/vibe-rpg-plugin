@@ -1,0 +1,23 @@
+#search-migration export
+
+[2026-10-09 10:14] Ines Duarte: dual-write script is up in a branch, on track for the 10-26 start
+[2026-10-09 10:20] Marek Lind: nice
+[2026-10-12 16:40] Marek Lind: heads up, the k8s node pool upgrade lands the week of 11-02. proposing we push cutover two weeks to 2026-11-16. objections?
+[2026-10-12 16:52] Hana Brooks: fine by me
+[2026-10-12 17:05] Sol Abara: +1. also if cutover is the 16th, platform should own search on-call from then, not backend. backend won't have the typesense context. I can own the rota
+[2026-10-12 17:09] Ines Duarte: yes please
+[2026-10-12 17:11] Marek Lind: ok agreed: cutover 2026-11-16, platform (Sol) owns search on-call from 2026-11-16
+[2026-10-13 09:30] Ines Duarte: re how long to keep the pg index: keep it as a fallback until 2026-12-31, then drop it. it's only 12 GB
+[2026-10-13 09:41] Marek Lind: agreed, Ines owns the drop
+[2026-10-13 14:05] Ines Duarte: with cutover on the 16th we could run shadow 3 weeks instead of 2. would catch the end-of-month traffic too
+[2026-10-13 14:22] Marek Lind: maybe. let's look at the diff rate after the first week of shadow and decide then
+[2026-10-14 11:02] Rui Tan: still waiting on the support leads about the CSV export, should hear next week
+[2026-10-14 11:20] Hana Brooks: finance hasn't answered on the budget yet. legal will get back to us on the EU indexes, they want to see where the cluster runs first
+[2026-10-14 11:25] Sol Abara: could we move autocomplete to typesense while we're at it?
+[2026-10-14 11:31] Marek Lind: not in this migration, autocomplete stays where it is
+[2026-10-15 09:10] Hana Brooks: finance came back: hosting comes out of the platform budget, approved up to $1,500/mo
+[2026-10-15 09:12] Sol Abara: works for us
+[2026-10-15 15:48] Ines Duarte: fyi I'm on leave 2026-12-14 to 2026-12-31. Sol, could you take the pg index drop?
+[2026-10-15 15:51] Sol Abara: sure, it's mine
+[2026-10-15 15:53] Marek Lind: thanks both
+[2026-10-16 10:05] Rui Tan: support leads answered: the legacy CSV export should stay on the pg full-text query. they don't want to touch it before the 2027 contract renewals

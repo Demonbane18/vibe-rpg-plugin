@@ -1,0 +1,81 @@
+{
+  "id": "scribe-incident-rewrite",
+  "version": 1,
+  "name": "Scribe's reckoning: incident write-up",
+  "school": "documents-productivity",
+  "rank": "grandmaster",
+  "summary": "Cut a padded outage postmortem to half its length under a house style guide, keeping every fact, figure and piece of evidence exact.",
+  "prompt": "Can you rewrite POSTMORTEM.md in place before it goes out on Friday? It's the write-up for Tuesday's checkout outage. It reads like a chatbot wrote it and runs about twice as long as it should. It has to follow our house style in STYLE.md. It goes to customers and the whole company, so keep every fact and add nothing. Leave the quote, the timeline, the config diff and the action items table exactly as they are.",
+  "maxPrompts": 2,
+  "timeLimitSec": 900,
+  "checks": [
+    {
+      "id": "evidence-blocks",
+      "label": "Keep the evidence blocks exact and in order",
+      "type": "keeps-blocks",
+      "file": "POSTMORTEM.md",
+      "source": "POSTMORTEM.md",
+      "blocks": ["code", "quote", "table"]
+    },
+    {
+      "id": "incident-facts",
+      "label": "Keep the incident facts",
+      "type": "contains",
+      "file": "POSTMORTEM.md",
+      "values": [
+        "2026-10-13",
+        "eu-west",
+        "38 minutes",
+        "4,312",
+        "1,187",
+        "62%",
+        "214",
+        "23",
+        "2026-10-14",
+        "18:00 UTC",
+        "640",
+        "25%",
+        "900",
+        "charged twice",
+        "code review"
+      ]
+    },
+    {
+      "id": "no-new-figures",
+      "label": "Add no figures beyond the incident record",
+      "type": "no-new-numbers",
+      "file": "POSTMORTEM.md",
+      "source": "POSTMORTEM.md"
+    },
+    {
+      "id": "length",
+      "label": "Meet the length target",
+      "type": "word-ratio",
+      "file": "POSTMORTEM.md",
+      "source": "POSTMORTEM.md",
+      "min": 0.4,
+      "max": 0.62
+    },
+    {
+      "id": "plain-wording",
+      "label": "Read as plain, human writing",
+      "type": "avoids",
+      "file": "POSTMORTEM.md",
+      "patterns": [
+        "[—–]| -- ",
+        "\\b(?:delve|tapestry|testament|pivotal|seamless(?:ly)?|showcas\\w*|underscor\\w*|crucial(?:ly)?|vibrant|meticulous\\w*|game[ -]changer|elevate|unlock|unwavering|deeply regrettable)\\b",
+        "\\bnot\\s+(?:just|only|merely)\\b|\\blet['’]s\\s+(?:dive|explore|unpack)\\b|\\bat its core\\b",
+        "^\\s*(?:[-*+]|\\d+[.)])\\s+\\*\\*",
+        "!(?!\\[)",
+        "\\b(?:let that sink in|the future looks bright|stronger than ever)\\b"
+      ],
+      "skip": ["code", "inline-code", "quote", "table", "link-url"]
+    },
+    {
+      "id": "house-style",
+      "label": "Follow the house style guide",
+      "type": "node-test",
+      "files": ["quest-checks/style.test.mjs"]
+    }
+  ]
+}

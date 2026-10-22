@@ -1,0 +1,16 @@
+{
+  "id": "paladin-rsvp-waitlist",
+  "version": 7,
+  "name": "Paladin: RSVP Capacity and Waitlist",
+  "school": "full-stack-web",
+  "rank": "journeyman",
+  "summary": "Add seat limits, a waitlist and expiring seat offers to a small layered Node API, with tests.",
+  "prompt": "We want seat limits and a waitlist in the Gatherly API. docs/waitlist.md has the behaviour we agreed on, and README.md explains how the app is put together. Please build it end to end and cover the new behaviour with tests under test/, in a new file; leave test/app.test.mjs as it is. Use only Node.js built-ins; do not install packages or use the network.",
+  "maxPrompts": 2,
+  "timeLimitSec": 1200,
+  "checks": [
+    { "id": "existing-tests", "label": "Existing API tests stay unchanged", "type": "unchanged", "paths": ["test/app.test.mjs"] },
+    { "id": "own-tests", "label": "Test suite passes with new feature tests", "type": "own-tests", "dir": "test", "minTests": 9 },
+    { "id": "waitlist-spec", "label": "API matches the agreed waitlist behaviour", "type": "node-test", "files": ["quest-checks/waitlist.test.mjs"] }
+  ]
+}

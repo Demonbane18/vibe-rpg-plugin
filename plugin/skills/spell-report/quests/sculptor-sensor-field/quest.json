@@ -1,0 +1,20 @@
+{
+  "id": "sculptor-sensor-field",
+  "version": 2,
+  "name": "Sculptor: sensor field at scale",
+  "school": "3d-modeling",
+  "rank": "journeyman",
+  "summary": "Rework a three.js r186 terrain and sensor-pin scene module so it scales to real surveys, stays correct as data changes and frees GPU memory.",
+  "prompt": "The sensor field view in src/field.mjs was built against our 200-sensor demo survey. On real surveys it crawls, and GPU memory grows every time someone opens and closes the view. Please rework src/field.mjs so it meets BRIEF.md, keeping the exported API the app already calls. The app ships three.js r186; it is not installed here and there is no network, so you cannot run three. Do not install packages.",
+  "maxPrompts": 3,
+  "timeLimitSec": 1200,
+  "checks": [
+    { "id": "pins", "label": "Sensor pins match the survey within the draw-call budget", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/pins.test.mjs"] },
+    { "id": "status", "label": "Pins show and update their status colours", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/status.test.mjs"] },
+    { "id": "moves", "label": "Moving sensors keeps pins visible and clickable", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/moves.test.mjs"] },
+    { "id": "resize", "label": "Replacing the sensor list draws exactly the new set", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/resize.test.mjs"] },
+    { "id": "terrain", "label": "Terrain surface matches the survey grid", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/terrain.test.mjs"] },
+    { "id": "landuse", "label": "Terrain shows the land-use colours", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/landuse.test.mjs"] },
+    { "id": "teardown", "label": "Closing the view frees memory and restores the scene", "type": "node-test", "files": ["quest-checks/lib.mjs", "quest-checks/three.mjs", "quest-checks/teardown.test.mjs"] }
+  ]
+}

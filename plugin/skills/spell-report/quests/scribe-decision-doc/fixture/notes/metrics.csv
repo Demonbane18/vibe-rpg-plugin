@@ -1,0 +1,6 @@
+metric,postgres_fulltext,typesense_bench
+p95_latency_ms,840,95
+p50_latency_ms,210,31
+zero_result_rate,18.4%,9.1%
+index_size_gb,12,7
+est_monthly_cost_usd,0,1450

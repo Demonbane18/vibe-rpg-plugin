@@ -1,0 +1,41 @@
+/* Fieldnote marketing site base styles. Shared by every page on the site. */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+  background: var(--color-page);
+}
+
+img, svg { display: block; max-width: 100%; height: auto; }
+
+h1, h2, h3, h4 { margin-block: 0 var(--space-3); line-height: var(--leading-tight); }
+p { margin-block: 0 var(--space-4); }
+
+a { color: var(--color-brand); text-underline-offset: 0.15em; }
+a:hover { color: var(--color-brand-strong); }
+
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus { outline: none; }
+
+:focus-visible { outline: 3px solid var(--color-brand-strong); outline-offset: 2px; }
+
+.container { width: 100%; max-width: 1120px; margin-inline: auto; padding-inline: var(--space-4); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

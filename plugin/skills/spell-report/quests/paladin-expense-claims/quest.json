@@ -1,0 +1,18 @@
+{
+  "id": "paladin-expense-claims",
+  "version": 1,
+  "name": "Paladin: expense claims migration",
+  "school": "full-stack-web",
+  "rank": "grandmaster",
+  "summary": "Write a Supabase migration for expense claims with constraints, row level security, indexes and an approval function.",
+  "prompt": "We're starting on expense claims for Tallyhouse. Can you write the database side? The feature is described in docs/expense-claims.md and README.md covers how the project is set up. Add it as a new migration in migrations/ on top of migrations/001_workspaces.sql and migrations/002_access_helpers.sql, which are already applied in production. The web app work is being done separately, so only the SQL is needed. There's no database in this environment, so you can't run it.",
+  "maxPrompts": 1,
+  "timeLimitSec": 900,
+  "checks": [
+    { "id": "applied-migrations", "label": "Applied migrations stay unchanged", "type": "unchanged", "paths": ["migrations/001_workspaces.sql", "migrations/002_access_helpers.sql"] },
+    { "id": "schema", "label": "Tables, columns and constraints match the spec", "type": "node-test", "files": ["quest-checks/sql.mjs", "quest-checks/schema.test.mjs"] },
+    { "id": "row-security", "label": "Row level security matches who can do what", "type": "node-test", "files": ["quest-checks/sql.mjs", "quest-checks/rls.test.mjs"] },
+    { "id": "indexes", "label": "Indexes support lookups at scale", "type": "node-test", "files": ["quest-checks/sql.mjs", "quest-checks/indexes.test.mjs"] },
+    { "id": "decision-function", "label": "Claim decisions are safe to expose", "type": "node-test", "files": ["quest-checks/sql.mjs", "quest-checks/rpc.test.mjs"] }
+  ]
+}

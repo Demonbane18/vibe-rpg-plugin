@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/plugin/cli.ts; spell-report 0.3.1. Rebuild with bun run build:plugin.
+// Generated from src/plugin/cli.ts; spell-report 0.4.0. Rebuild with bun run build:plugin.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -17,10 +17,11 @@ var __export = (target, all) => {
 
 // src/plugin/cli.ts
 import { spawn as spawn3 } from "node:child_process";
-import { constants as constants3 } from "node:fs";
-import { access, lstat as lstat4, mkdir as mkdir6, open as open2, readFile as readFile7, writeFile as writeFile5 } from "node:fs/promises";
+import { constants as constants4 } from "node:fs";
+import { access, lstat as lstat4, mkdir as mkdir7, open as open3, readFile as readFile8, writeFile as writeFile6 } from "node:fs/promises";
 import { homedir as homedir4 } from "node:os";
-import { basename as basename3, dirname as dirname5, extname, join as join9, resolve as resolve4, sep as sep3 } from "node:path";
+import { basename as basename3, dirname as dirname5, extname, join as join11, resolve as resolve4, sep as sep4 } from "node:path";
+import { createInterface as createInterface2 } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import { parseArgs as parseArgs2 } from "node:util";
 
@@ -19452,6 +19453,58 @@ var WEAPONS = ["greatsword", "longsword", "dagger", "warhammer", "staff"];
 var LOADOUT_LIMITS = { perPhase: 3, spells: 12, title: 60, task: 90, notes: 300, author: 32 };
 var SINGLE_LINE = /^[^\r\n\u0085\u2028\u2029]*$/;
 
+// src/shared/looks.ts
+var ICON_BASES = [
+  { id: "scroll", name: "Scroll", kind: "skill" },
+  { id: "tome", name: "Tome", kind: "skill" },
+  { id: "tablet", name: "Rune tablet", kind: "skill" },
+  { id: "letter", name: "Sealed letter", kind: "skill" },
+  { id: "talisman", name: "Talisman", kind: "skill" },
+  { id: "medallion", name: "Medallion", kind: "plugin" },
+  { id: "amulet", name: "Amulet", kind: "plugin" },
+  { id: "crown", name: "Crown", kind: "plugin" },
+  { id: "chalice", name: "Chalice", kind: "plugin" },
+  { id: "ring", name: "Ring", kind: "plugin" },
+  { id: "orb", name: "Orb", kind: "mcp_server" },
+  { id: "crystal", name: "Crystal", kind: "mcp_server" },
+  { id: "lantern", name: "Lantern", kind: "mcp_server" },
+  { id: "mirror", name: "Mirror", kind: "mcp_server" },
+  { id: "key", name: "Key", kind: "mcp_server" },
+  { id: "owl", name: "Owl", kind: "subagent" },
+  { id: "fox", name: "Fox", kind: "subagent" },
+  { id: "beaver", name: "Beaver", kind: "subagent" },
+  { id: "hedgehog", name: "Hedgehog", kind: "subagent" },
+  { id: "tortoise", name: "Tortoise", kind: "subagent" }
+];
+var PALETTES = [
+  { id: "ember", name: "Ember", primary: ["#6e2727", "#b33831", "#ea4f36", "#f57d4a"], accent: ["#f79617", "#f9c22b", "#fbff86"] },
+  { id: "frost", name: "Frost", primary: ["#484a77", "#4d65b4", "#4d9be6", "#8fd3ff"], accent: ["#9babb2", "#c7dcd0", "#ffffff"] },
+  { id: "verdant", name: "Verdant", primary: ["#165a4c", "#239063", "#1ebc73", "#91db69"], accent: ["#a2a947", "#d5e04b", "#fbff86"] },
+  { id: "royal", name: "Royal", primary: ["#45293f", "#6b3e75", "#905ea9", "#a884f3"], accent: ["#f79617", "#f9c22b", "#fbff86"] },
+  { id: "gilded", name: "Gilded", primary: ["#cd683d", "#f79617", "#f9c22b", "#fbff86"], accent: ["#4d65b4", "#4d9be6", "#8fd3ff"] },
+  { id: "shadow", name: "Shadow", primary: ["#2e222f", "#3e3546", "#625565", "#7f708a"], accent: ["#c32454", "#f04f78", "#f68181"] },
+  { id: "coral", name: "Coral", primary: ["#7a3045", "#cf657f", "#fca790", "#fdcbb0"], accent: ["#0b8a8f", "#0eaf9b", "#30e1b9"] },
+  { id: "tide", name: "Tide", primary: ["#0b5e65", "#0b8a8f", "#0eaf9b", "#30e1b9"], accent: ["#cd683d", "#e6904e", "#fbb954"] },
+  { id: "rose", name: "Rose", primary: ["#831c5d", "#c32454", "#f04f78", "#f68181"], accent: ["#9babb2", "#c7dcd0", "#ffffff"] },
+  { id: "moss", name: "Moss", primary: ["#374e4a", "#547e64", "#92a984", "#b2ba90"], accent: ["#676633", "#a2a947", "#d5e04b"] },
+  { id: "storm", name: "Storm", primary: ["#323353", "#484a77", "#9babb2", "#c7dcd0"], accent: ["#4d9be6", "#8fd3ff", "#ffffff"] },
+  { id: "rust", name: "Rust", primary: ["#4c3e24", "#7a3045", "#9e4539", "#cd683d"], accent: ["#547e64", "#92a984", "#b2ba90"] },
+  { id: "ivory", name: "Ivory", primary: ["#7f708a", "#9babb2", "#c7dcd0", "#ffffff"], accent: ["#f79617", "#f9c22b", "#fbff86"] },
+  { id: "plum", name: "Plum", primary: ["#45293f", "#753c54", "#a24b6f", "#cf657f"], accent: ["#905ea9", "#a884f3", "#eaaded"] },
+  { id: "sunset", name: "Sunset", primary: ["#6b3e75", "#c32454", "#fb6b1d", "#f9c22b"], accent: ["#4d65b4", "#4d9be6", "#8fd3ff"] },
+  { id: "mint", name: "Mint", primary: ["#239063", "#1ebc73", "#30e1b9", "#8ff8e2"], accent: ["#cf657f", "#ed8099", "#fca790"] },
+  { id: "ash", name: "Ash", primary: ["#4c3e24", "#966c6c", "#ab947a", "#c7dcd0"], accent: ["#ea4f36", "#f57d4a", "#fbb954"] },
+  { id: "crimson", name: "Crimson", primary: ["#45293f", "#6e2727", "#ae2334", "#e83b3b"], accent: ["#f79617", "#f9c22b", "#fbff86"] },
+  { id: "amber", name: "Amber", primary: ["#9e4539", "#e6904e", "#fbb954", "#fdcbb0"], accent: ["#165a4c", "#239063", "#1ebc73"] },
+  { id: "olive", name: "Olive", primary: ["#4c3e24", "#676633", "#a2a947", "#d5e04b"], accent: ["#cd683d", "#e6904e", "#fbb954"] }
+];
+function parseLook(look) {
+  const [baseId, paletteId, extra] = look.split("-");
+  const base = ICON_BASES.find((b) => b.id === baseId);
+  const palette = PALETTES.find((p) => p.id === paletteId);
+  return base && palette && extra === undefined ? { base, palette } : null;
+}
+
 // src/shared/content.ts
 var AGENTS = ["claude-code", "codex"];
 var KINDS = ["skill", "plugin", "mcp_server", "subagent"];
@@ -19470,7 +19523,8 @@ var MediaSchema = exports_external.object({
 });
 var VerdictSchema = exports_external.object({
   tier: exports_external.enum(TIERS).nullable(),
-  note: exports_external.string().max(280).nullable()
+  note: exports_external.string().max(280).nullable(),
+  pick: exports_external.boolean().optional()
 });
 var MatchIdSchema = exports_external.string().regex(/^(skill|mcp|plugin|command):[a-z0-9][a-z0-9._:@\/-]{0,99}$/);
 var SkillSchema = exports_external.object({
@@ -19485,7 +19539,6 @@ var SkillSchema = exports_external.object({
   install: exports_external.string().max(400).nullable(),
   publisher: exports_external.string().max(120).nullable(),
   license: exports_external.string().max(80).nullable(),
-  popularity: exports_external.string().max(200).nullable(),
   lastActivity: Day.nullable(),
   verifiedOn: Day,
   notes: exports_external.string().max(600).nullable(),
@@ -19516,7 +19569,8 @@ var BeatSchema = exports_external.object({
   action: exports_external.enum(ACTIONS),
   rpg: exports_external.string().min(10).max(120),
   plain: exports_external.string().min(10).max(180),
-  pop: exports_external.string().min(1).max(24).nullable()
+  pop: exports_external.string().min(1).max(24).nullable(),
+  allies: exports_external.array(exports_external.string().min(2).max(24)).min(1).max(6).optional()
 });
 var GuideSchema = exports_external.object({
   slug: SlugSchema,
@@ -19556,7 +19610,8 @@ var CuratedLoadoutSchema = exports_external.object({
   slug: SlugSchema,
   ...LoadoutBuildSchema.shape,
   basis: exports_external.enum(BASES),
-  sourceUrl: Https.nullable()
+  sourceUrl: Https.nullable(),
+  pick: exports_external.boolean().optional()
 });
 var SiteSchema = exports_external.object({
   title: exports_external.string().min(2).max(60),
@@ -19564,6 +19619,19 @@ var SiteSchema = exports_external.object({
   tagline: exports_external.string().min(10).max(160),
   baseUrl: exports_external.url({ protocol: /^https?$/ }),
   githubRepo: exports_external.string().regex(/^[A-Za-z0-9-]{1,39}\/[A-Za-z0-9._-]{1,100}$/, "Use owner/name").nullable()
+});
+var LooksSchema = exports_external.record(SlugSchema, exports_external.string().regex(/^[a-z]+-[a-z]+$/, "Use base-palette, like tome-ember"));
+var REGISTRIES = ["npm", "pypi"];
+var RepoSchema = exports_external.string().regex(/^[A-Za-z0-9-]{1,39}\/[A-Za-z0-9._-]{1,100}$/, "Use owner/name");
+var Count = exports_external.number().int().nonnegative();
+var PopularitySchema = exports_external.object({
+  checkedOn: Day,
+  spells: exports_external.record(SlugSchema, exports_external.object({
+    repo: RepoSchema.nullable(),
+    stars: Count.nullable(),
+    downloads: exports_external.object({ registry: exports_external.enum(REGISTRIES), package: exports_external.string().min(1).max(214), weekly: Count }).nullable()
+  })),
+  overrides: exports_external.record(SlugSchema, exports_external.object({ repo: RepoSchema.nullable().optional(), npm: exports_external.string().min(1).max(214).nullable().optional(), pypi: exports_external.string().min(1).max(214).nullable().optional() }))
 });
 
 // src/shared/media-type.ts
@@ -19587,6 +19655,19 @@ function sniffMediaType(bytes) {
   return null;
 }
 
+// src/shared/report-format.ts
+var REPORT_FORMAT = "viberpg-spell-report/1";
+var REPORT_SECTIONS = [
+  "What I used it for",
+  "How I tested it",
+  "Results",
+  "Problems and limits",
+  "How to reproduce",
+  "Links"
+];
+var SUBMIT_LIMITS = { reportBytes: 200000, signatureBytes: 1e4, attachments: 6, totalBytes: 4000000 };
+var GITHUB_USER = /^[A-Za-z0-9][A-Za-z0-9-]{0,38}$/;
+
 // src/shared/usage.ts
 var USAGE_AGENTS = ["codex", "claude-code", "omp"];
 var HARNESS_NAMES = { codex: "Codex", "claude-code": "Claude Code", omp: "OMP" };
@@ -19594,10 +19675,10 @@ var HARNESS_VERSION = /^\d{1,4}\.\d{1,4}(?:\.\d{1,6})?(?:-[0-9A-Za-z.-]{1,30})?$
 function harnessVersion(value) {
   return typeof value === "string" && HARNESS_VERSION.test(value) ? value : null;
 }
-var Count = exports_external.number().int().nonnegative();
-var ByAgent = exports_external.partialRecord(exports_external.enum(USAGE_AGENTS), Count);
-var ByMonth = exports_external.record(exports_external.string().regex(/^\d{4}-\d{2}$/), Count);
-var TestStatsSchema = exports_external.object({ sessionsWithFailingTest: Count, recovered: Count });
+var Count2 = exports_external.number().int().nonnegative();
+var ByAgent = exports_external.partialRecord(exports_external.enum(USAGE_AGENTS), Count2);
+var ByMonth = exports_external.record(exports_external.string().regex(/^\d{4}-\d{2}$/), Count2);
+var TestStatsSchema = exports_external.object({ sessionsWithFailingTest: Count2, recovered: Count2 });
 var HarnessVersionSchema = exports_external.string().regex(HARNESS_VERSION);
 var VersionsSchema = exports_external.partialRecord(exports_external.enum(USAGE_AGENTS), exports_external.object({ first: HarnessVersionSchema, last: HarnessVersionSchema }));
 var EnvironmentSchema = exports_external.object({
@@ -19611,40 +19692,41 @@ function environmentLabel(environment) {
   return harness.length > 0 ? `${system}; ${harness.join(", ")}` : system;
 }
 var SkillUsageSchema = exports_external.object({
-  sessions: Count,
+  sessions: Count2,
   byAgent: ByAgent,
   byMonth: ByMonth,
   firstUsed: exports_external.string().nullable(),
   lastUsed: exports_external.string().nullable(),
-  partners: exports_external.array(exports_external.object({ skill: exports_external.string(), sessions: Count })),
+  partners: exports_external.array(exports_external.object({ skill: exports_external.string(), sessions: Count2 })),
   tests: TestStatsSchema,
   versions: VersionsSchema
 });
 var WorkflowUsageSchema = exports_external.object({
   measurable: exports_external.boolean(),
-  together: Count,
-  inOrder: Count,
+  together: Count2,
+  inOrder: Count2,
   tests: TestStatsSchema
 });
 var PublishedUsageSchema = exports_external.object({
   generatedAt: exports_external.string(),
   window: exports_external.object({ from: exports_external.string().nullable(), to: exports_external.string().nullable() }),
-  totals: exports_external.object({ sessions: Count, byAgent: ByAgent, byMonth: ByMonth }),
+  totals: exports_external.object({ sessions: Count2, byAgent: ByAgent, byMonth: ByMonth }),
   skills: exports_external.record(exports_external.string(), SkillUsageSchema),
   workflows: exports_external.record(exports_external.string(), WorkflowUsageSchema),
   environment: EnvironmentSchema
 });
 
 // src/shared/trials.ts
-var RANKS = ["apprentice", "journeyman", "master"];
-var RANK_NAMES = { apprentice: "Apprentice", journeyman: "Journeyman", master: "Master" };
+var RANKS = ["apprentice", "journeyman", "master", "grandmaster"];
+var RANK_NAMES = { apprentice: "Apprentice", journeyman: "Journeyman", master: "Master", grandmaster: "Grandmaster" };
 var FOCUS_LEVELS = ["default", "off", "minimal", "low", "medium", "high", "xhigh", "max"];
 var CONTAINMENTS = ["sealed", "warded", "open"];
 var LOADOUT_KINDS = ["unarmed", "spell", "workflow", "combo"];
 var CASTS = ["invoked", "ambient"];
-var Count2 = exports_external.number().int().nonnegative();
+var Count3 = exports_external.number().int().nonnegative();
 var Day2 = exports_external.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 var CommitSchema = exports_external.string().regex(/^[0-9a-f]{7,40}$/);
+var ScryingFileSchema = exports_external.string().regex(/^[0-9a-f]{16}\.png$/);
 var CasterSchema = exports_external.string().regex(/^[A-Za-z0-9][A-Za-z0-9._:/@[\]-]{0,79}$/);
 var LoadoutSchema = exports_external.object({
   kind: exports_external.enum(LOADOUT_KINDS),
@@ -19680,19 +19762,20 @@ var TrialCellSchema = exports_external.object({
   containment: exports_external.enum(CONTAINMENTS),
   environment: EnvironmentSchema.pick({ os: true, arch: true }),
   source: exports_external.object({ kind: exports_external.enum(["curator", "community"]), name: exports_external.string().min(1).max(60).nullable() }),
-  runs: Count2,
-  mishaps: Count2,
-  cleared: Count2,
-  oneShot: Count2,
-  attuned: Count2,
+  runs: Count3,
+  mishaps: Count3,
+  cleared: Count3,
+  oneShot: Count3,
+  attuned: Count3,
   medianPromptsToClear: exports_external.number().positive().nullable(),
   meanScore: exports_external.number().min(0).max(1),
-  medianDurationMs: Count2.nullable(),
-  medianTokens: Count2.nullable(),
-  medianToolCalls: Count2.nullable(),
+  medianDurationMs: Count3.nullable(),
+  medianTokens: Count3.nullable(),
+  medianToolCalls: Count3.nullable(),
   medianCostUsd: exports_external.number().nonnegative().nullable(),
   firstRun: Day2,
-  lastRun: Day2
+  lastRun: Day2,
+  scrying: exports_external.object({ file: ScryingFileSchema, outcome: exports_external.enum(["cleared", "fizzled"]) }).optional()
 }).refine((cell) => cell.cleared <= cell.runs && cell.oneShot <= cell.cleared && cell.attuned <= cell.runs, "counts must nest: oneShot <= cleared <= runs, attuned <= runs").refine((cell) => cell.loadout.kind === "unarmed" === (cell.cast === null), "unarmed cells have no cast; armed cells have one");
 var TrialsFileSchema = exports_external.object({
   generatedAt: exports_external.string(),
@@ -19730,35 +19813,35 @@ function formatTokens(value) {
 }
 
 // src/shared/report.ts
-var REPORT_FORMAT = "viberpg-spell-report/1";
 var SIGNATURE_NAMESPACE = "viberpg-spell-report";
-var SUBMIT_LIMITS = { reportBytes: 200000, signatureBytes: 1e4, attachments: 6, totalBytes: 4000000 };
 var TEMPLATE_SOURCE_URL = "https://github.com/OWNER/REPO";
-var REPORT_SECTIONS = [
-  "What I used it for",
-  "How I tested it",
-  "Results",
-  "Problems and limits",
-  "How to reproduce",
-  "Links"
-];
-var Count3 = exports_external.number().int().nonnegative();
+var Count4 = exports_external.number().int().nonnegative();
 var Month = exports_external.string().regex(/^\d{4}-\d{2}$/);
 var ReportEvidenceSchema = exports_external.object({
   generator: exports_external.string().min(1).max(60),
   generatedAt: exports_external.string(),
   match: exports_external.array(MatchIdSchema).min(1).max(10),
-  sessions: Count3,
-  byAgent: exports_external.partialRecord(exports_external.enum(USAGE_AGENTS), Count3),
+  sessions: Count4,
+  byAgent: exports_external.partialRecord(exports_external.enum(USAGE_AGENTS), Count4),
   firstUsed: Month.nullable(),
   lastUsed: Month.nullable(),
-  tests: exports_external.object({ sessionsWithFailingTest: Count3, recovered: Count3 }),
+  tests: exports_external.object({ sessionsWithFailingTest: Count4, recovered: Count4 }),
   environment: EnvironmentSchema.optional()
 });
 var ReportAttachmentSchema = exports_external.object({
   file: exports_external.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,119}$/),
   sha256: exports_external.string().regex(/^[0-9a-f]{64}$/),
   alt: exports_external.string().min(3).max(200)
+});
+var ReportCardSchema = exports_external.object({
+  look: exports_external.string().refine((look) => parseLook(look) !== null, "Choose a known look, like tome-ember"),
+  summary: exports_external.string().min(10).max(160).regex(SINGLE_LINE, "Keep this to a single line"),
+  classes: exports_external.array(SlugSchema).min(1).max(3).refine((classes) => new Set(classes).size === classes.length, "Choose each class once"),
+  install: exports_external.partialRecord(exports_external.enum(AGENTS), exports_external.string().min(3).max(400).regex(SINGLE_LINE, "Keep this to a single line")),
+  phase: GuideSchema.shape.phase,
+  foe: GuideSchema.shape.foe,
+  tagline: GuideSchema.shape.tagline,
+  beats: exports_external.array(BeatSchema).min(3).max(5)
 });
 var ReportMetaSchema = exports_external.object({
   format: exports_external.literal(REPORT_FORMAT),
@@ -19771,7 +19854,7 @@ var ReportMetaSchema = exports_external.object({
   }),
   submitter: exports_external.object({
     name: exports_external.string().min(1).max(80),
-    github: exports_external.string().regex(/^[A-Za-z0-9][A-Za-z0-9-]{0,38}$/).nullable(),
+    github: exports_external.string().regex(GITHUB_USER).nullable(),
     email: exports_external.email().max(200).nullable()
   }),
   verdict: exports_external.object({
@@ -19780,12 +19863,17 @@ var ReportMetaSchema = exports_external.object({
   }),
   evidence: ReportEvidenceSchema.nullable(),
   trials: exports_external.array(TrialCellSchema).max(60).optional(),
-  attachments: exports_external.array(ReportAttachmentSchema).max(SUBMIT_LIMITS.attachments)
+  attachments: exports_external.array(ReportAttachmentSchema).max(SUBMIT_LIMITS.attachments),
+  card: ReportCardSchema.optional()
 }).superRefine((report, ctx) => {
   for (const [index, cell] of (report.trials ?? []).entries()) {
     if (cell.source.kind !== "community" || cell.source.name !== report.submitter.name) {
       ctx.addIssue({ code: "custom", path: ["trials", index, "source"], message: "Trial source must be community with the submitter's name." });
     }
+  }
+  const base = report.card && parseLook(report.card.look)?.base;
+  if (base && base.kind !== report.spell.kind) {
+    ctx.addIssue({ code: "custom", path: ["card", "look"], message: `The ${base.name} look is for a ${base.kind}, not a ${report.spell.kind}.` });
   }
 });
 var HEADER = /^---\n([\s\S]*?)\n---(?:\n|$)/;
@@ -21044,10 +21132,300 @@ async function cloneOutOfHome(commands, cacheRoot = join2(tmpdir(), "viberpg-are
 // src/trials/heroes.ts
 import { spawn } from "node:child_process";
 import { existsSync as existsSync2 } from "node:fs";
-import { cp as cp2, mkdir as mkdir2, readdir as readdir3, readFile as readFile2, stat as stat2, symlink, writeFile as writeFile2 } from "node:fs/promises";
+import { cp as cp2, mkdir as mkdir3, readdir as readdir4, readFile as readFile3, stat as stat3, symlink, writeFile as writeFile3 } from "node:fs/promises";
 import { homedir as homedir3 } from "node:os";
-import { dirname as dirname3, join as join3 } from "node:path";
+import { dirname as dirname3, join as join4 } from "node:path";
 import { createInterface } from "node:readline";
+
+// src/trials/spellbook.ts
+import { mkdir as mkdir2, readdir as readdir3, readFile as readFile2, rename as rename2, rm as rm2, stat as stat2, writeFile as writeFile2 } from "node:fs/promises";
+import { join as join3, posix } from "node:path";
+
+// src/shared/source-url.ts
+function parseSourceUrl(raw) {
+  const input2 = raw.trim();
+  if (!input2 || /[\u0000-\u001f\u007f\\]/.test(input2))
+    throw new Error("Enter a valid HTTP(S) source URL.");
+  let url2;
+  try {
+    url2 = new URL(/^[a-z][a-z\d+.-]*:/i.test(input2) ? input2 : `https:${input2.startsWith("//") ? input2 : `//${input2}`}`);
+  } catch {
+    throw new Error("Enter a valid HTTP(S) source URL.");
+  }
+  if (url2.protocol !== "http:" && url2.protocol !== "https:")
+    throw new Error("Source URLs must use HTTP or HTTPS.");
+  if (url2.username || url2.password || /^(?:https?:\/\/|\/\/)?[^/?#]*@/i.test(input2)) {
+    throw new Error("Source URLs must not contain credentials.");
+  }
+  url2.protocol = "https:";
+  const sourceUrl = url2.href;
+  if (url2.hostname !== "github.com" && url2.hostname !== "skills.sh")
+    return { type: "other", sourceUrl };
+  let segments;
+  try {
+    segments = url2.pathname.replace(/\/+$/, "").slice(1).split("/").map(decodeURIComponent);
+  } catch {
+    throw new Error("Source URL has invalid path encoding.");
+  }
+  const [owner, repo, view, ref, ...path] = segments;
+  if (!owner || !repo || !/^[a-z\d][a-z\d-]*$/i.test(owner) || !/^[a-z\d_.-]+$/i.test(repo) || repo === "." || repo === "..") {
+    throw new Error("Source URL must include a valid owner and repository.");
+  }
+  if (url2.hostname === "skills.sh") {
+    if (segments.length !== 3 || !view || !/^[a-z\d][a-z\d_.-]*$/i.test(view)) {
+      throw new Error("Use a skills.sh/owner/repository/skill URL.");
+    }
+    return { type: "skills.sh", sourceUrl, owner, repo, skill: view };
+  }
+  if (segments.length === 2)
+    return { type: "github", sourceUrl, owner, repo };
+  if (view !== "tree" && view !== "blob" || !ref || /[\u0000-\u001f\u007f\\]/.test(ref) || ref.split("/").some((part) => !part || part === "." || part === "..") || path.some((part) => !part || part === "." || part === ".." || /[\u0000-\u001f\u007f/\\]/.test(part))) {
+    throw new Error("Use a GitHub repository, tree, or blob URL with a valid ref and path.");
+  }
+  return { type: "github", sourceUrl, owner, repo, ref, ...path.length ? { path: path.join("/") } : {} };
+}
+
+// src/trials/spellbook.ts
+var EQUIPPABLE = ["skill", "plugin", "subagent"];
+var LIMITS = { files: 300, fileBytes: 1024 * 1024, totalBytes: 4 * 1024 * 1024 };
+var SKILL_NAME = /^[a-z0-9][a-z0-9._-]{0,63}$/;
+var HAZARDS = [
+  [/\b(?:curl|wget)\b[^\n|]*\|\s*(?:ba|z|da)?sh\b/i, "pipes a download into a shell"],
+  [/\brm\s+-[a-z]*r[a-z]*\s+(?:\/|~\/?|\$HOME\/?)(?=\s|$)/im, "deletes the root or home folder"],
+  [/(?:~|\$HOME|\/Users\/[^/\s]+|\/home\/[^/\s]+)\/\.(?:ssh|aws|gnupg|kube|docker|netrc)\b/i, "reads a credential folder"],
+  [/\bsecurity\s+(?:find|dump)-(?:generic|internet)-password\b|\bdump-keychain\b/i, "reads the keychain"],
+  [/\blaunchctl\s+(?:load|bootstrap)\b|\bcrontab\s+-[^l]|\/LaunchAgents\//i, "installs a background job"],
+  [/(?:^|[\s;&|`(])sudo\s+\S/m, "uses sudo"],
+  [/\bbase64\s+(?:-d|-D|--decode)\b[^\n]*\|\s*(?:ba|z)?sh\b/i, "runs decoded text in a shell"],
+  [/\beval\s*\(?\s*["'`]?\$\(\s*(?:curl|wget)\b/i, "evaluates downloaded code"],
+  [/\b(?:nc|ncat|netcat)\b[^\n]*\s-e\s/i, "opens a reverse shell"]
+];
+var EXECUTABLE_MAGIC = [[127, 69, 76, 70], [207, 250, 237, 254], [206, 250, 237, 254], [202, 254, 186, 190], [77, 90]];
+function skillFolder(sourceUrl, slug) {
+  const source = parseSourceUrl(sourceUrl);
+  if (source.type === "skills.sh")
+    return { owner: source.owner, repo: source.repo, ref: undefined, dirs: [`skills/${source.skill}`, source.skill] };
+  if (source.type !== "github")
+    return null;
+  const path = source.path ?? "";
+  const dir = path === "SKILL.md" ? "" : path.endsWith("/SKILL.md") ? posix.dirname(path) : path;
+  return { owner: source.owner, repo: source.repo, ref: source.ref, dirs: dir === "" && slug ? ["", `skills/${slug}`] : [dir] };
+}
+function pluginFolder(sourceUrl) {
+  const source = parseSourceUrl(sourceUrl);
+  if (source.type !== "github")
+    return null;
+  const dir = (source.path ?? "").replace(/(?:^|\/)\.claude-plugin\/plugin\.json$/, "");
+  return { owner: source.owner, repo: source.repo, ref: source.ref, dirs: [dir] };
+}
+function agentFile(sourceUrl) {
+  const source = parseSourceUrl(sourceUrl);
+  return source.type === "github" && source.path?.endsWith(".md") ? { owner: source.owner, repo: source.repo, ref: source.ref, dirs: [source.path] } : null;
+}
+var frontmatter = (text) => /^(?:\uFEFF)?---[\t ]*\r?\n([\s\S]*?)\r?\n---[\t ]*(?:\r?\n|$)/.exec(text)?.[1];
+function frontmatterName(text) {
+  const block = frontmatter(text);
+  const name = block && /^name:[\t ]*["']?([^"'\r\n]+?)["']?[\t ]*$/m.exec(block)?.[1]?.trim().toLowerCase();
+  return name && SKILL_NAME.test(name) ? name : null;
+}
+function screenPart(path, text) {
+  const findings = [];
+  if (path.startsWith("hooks/") || posix.basename(path) === "hooks.json")
+    findings.push(`${path} defines or runs hooks`);
+  if (posix.basename(path) === ".mcp.json")
+    findings.push(`${path} configures MCP servers`);
+  let keys = [];
+  if (path === ".claude-plugin/plugin.json") {
+    try {
+      keys = Object.keys(JSON.parse(text) ?? {});
+    } catch {}
+  } else if (path.endsWith(".md"))
+    keys = [...(frontmatter(text) ?? "").matchAll(/^([A-Za-z]+):/gm)].map((match) => match[1]);
+  if (keys.includes("hooks"))
+    findings.push(`${path} declares hooks`);
+  if (keys.includes("mcpServers"))
+    findings.push(`${path} declares MCP servers`);
+  return findings;
+}
+function screenFile(path, bytes) {
+  if (EXECUTABLE_MAGIC.some((magic) => magic.every((byte, i) => bytes[i] === byte)))
+    return [`${path} is an executable binary`];
+  if (bytes.subarray(0, 8000).includes(0))
+    return [];
+  const text = new TextDecoder().decode(bytes);
+  const findings = [];
+  for (const [pattern, reason] of HAZARDS) {
+    const match = pattern.exec(text);
+    if (match)
+      findings.push(`${path}:${text.slice(0, match.index).split(`
+`).length} ${reason}`);
+  }
+  return findings;
+}
+async function github(url2, accept, fetcher) {
+  const token = url2.startsWith("https://api.github.com/") ? process.env.GITHUB_TOKEN : undefined;
+  const response = await fetcher(url2, {
+    headers: { Accept: accept, "User-Agent": "VibeRPGSimulator-trials", ...token ? { Authorization: `Bearer ${token}` } : {} },
+    signal: AbortSignal.timeout(20000)
+  });
+  if (!response.ok)
+    throw new Error(`GitHub answered ${response.status} for ${url2.replace(/\?.*$/, "")}`);
+  return response;
+}
+async function cachedSpell(dir) {
+  try {
+    return JSON.parse(await readFile2(`${dir}.json`, "utf8"));
+  } catch {
+    return null;
+  }
+}
+async function countFiles(dir) {
+  let total = 0;
+  for (const entry of await readdir3(dir, { withFileTypes: true, recursive: true }))
+    if (entry.isFile())
+      total++;
+  return total;
+}
+var REF_TTL_MS = 12 * 60 * 60 * 1000;
+var cacheKey = (kind, dir) => kind === "skill" ? dir || "_root" : `_${kind}/${dir || "_root"}`;
+async function resolveCommit(folder, keys, cacheRoot, fetcher) {
+  const ref = folder.ref ?? "HEAD";
+  const file2 = join3(cacheRoot, "refs", `${folder.owner}__${folder.repo}__${ref.replaceAll("/", "__")}.json`);
+  try {
+    const cached2 = JSON.parse(await readFile2(file2, "utf8"));
+    if (Date.now() - cached2.at < REF_TTL_MS && /^[0-9a-f]{40}$/.test(cached2.sha))
+      return cached2.sha;
+  } catch {}
+  let sha;
+  try {
+    sha = (await (await github(`https://api.github.com/repos/${folder.owner}/${folder.repo}/commits/${encodeURIComponent(ref)}`, "application/vnd.github.sha", fetcher)).text()).trim();
+  } catch (error62) {
+    const repoDir = join3(cacheRoot, folder.owner, folder.repo);
+    const candidates = await readdir3(repoDir, { withFileTypes: true }).catch(() => []);
+    const usable = [];
+    for (const entry of candidates) {
+      if (!entry.isDirectory() || !/^[0-9a-f]{40}$/.test(entry.name))
+        continue;
+      for (const key of keys) {
+        const meta3 = join3(repoDir, entry.name, `${key}.json`);
+        const info = await stat2(meta3).catch(() => null);
+        if (info)
+          usable.push({ sha: entry.name, at: info.mtimeMs });
+      }
+    }
+    const newest = usable.sort((a, b) => b.at - a.at)[0];
+    if (!newest)
+      throw error62;
+    console.warn(`${folder.owner}/${folder.repo}: ${error62 instanceof Error ? error62.message : String(error62)}; using cached commit ${newest.sha.slice(0, 7)}`);
+    return newest.sha;
+  }
+  if (!/^[0-9a-f]{40}$/.test(sha))
+    throw new Error(`GitHub did not return a commit for ${folder.owner}/${folder.repo}@${ref}`);
+  await mkdir2(join3(cacheRoot, "refs"), { recursive: true });
+  await writeFile2(file2, JSON.stringify({ sha, at: Date.now() }));
+  return sha;
+}
+async function equipSpells(skills, opts) {
+  const fetcher = opts.fetcher ?? fetch;
+  const equipped = [];
+  spells:
+    for (const skill of skills) {
+      const kind = skill.kind;
+      if (!EQUIPPABLE.includes(kind))
+        throw new Error(`${skill.slug} is a ${skill.kind}; trials equip skills, plugins and subagents only`);
+      const folder = kind === "skill" ? skillFolder(skill.sourceUrl, skill.slug) : kind === "plugin" ? pluginFolder(skill.sourceUrl) : agentFile(skill.sourceUrl);
+      if (!folder)
+        throw new Error(`${skill.slug}: the source is not a GitHub ${kind === "subagent" ? "markdown file" : `${kind} folder`} (${skill.sourceUrl})`);
+      const api2 = `https://api.github.com/repos/${folder.owner}/${folder.repo}`;
+      const sha = await resolveCommit(folder, folder.dirs.map((dir) => cacheKey(kind, dir)), opts.cacheRoot, fetcher);
+      const entry = kind === "skill" ? "SKILL.md" : ".claude-plugin/plugin.json";
+      let picked = null;
+      let tree = null;
+      for (const dir of folder.dirs) {
+        const local2 = join3(opts.cacheRoot, folder.owner, folder.repo, sha, cacheKey(kind, dir));
+        const cached2 = await cachedSpell(local2);
+        if (cached2) {
+          equipped.push({ slug: skill.slug, kind, name: cached2.name, dir: local2, ref: sha, files: cached2.files, hazards: cached2.hazards });
+          continue spells;
+        }
+        if (!tree) {
+          const listing = await (await github(`${api2}/git/trees/${sha}?recursive=1`, "application/vnd.github+json", fetcher)).json();
+          if (listing.truncated)
+            throw new Error(`${skill.slug}: ${folder.owner}/${folder.repo} is too large to list`);
+          tree = listing.tree ?? [];
+        }
+        const prefix2 = dir ? `${dir}/` : "";
+        const blobs = kind === "subagent" ? tree.filter((item) => item.type === "blob" && item.mode !== "120000" && item.path === dir) : !tree.some((item) => item.type === "blob" && item.path === `${prefix2}${entry}`) ? [] : tree.filter((item) => item.type === "blob" && item.mode !== "120000" && item.path.startsWith(prefix2) && !item.path.slice(prefix2.length).split("/").some((part, depth) => part.startsWith(".") && !(kind === "plugin" && depth === 0 && (part === ".claude-plugin" || part === ".mcp.json"))));
+        if (blobs.length === 0)
+          continue;
+        if (blobs.length > LIMITS.files)
+          throw new Error(`${skill.slug}: ${blobs.length} files is over the ${LIMITS.files}-file limit`);
+        const total = blobs.reduce((sum, blob) => sum + (blob.size ?? 0), 0);
+        if (total > LIMITS.totalBytes || blobs.some((blob) => (blob.size ?? 0) > LIMITS.fileBytes))
+          throw new Error(`${skill.slug}: the ${kind} is over the size limit`);
+        picked = { dir, blobs: blobs.map((item) => ({ path: item.path, size: item.size ?? 0 })) };
+        break;
+      }
+      if (!picked) {
+        const where = folder.dirs.map((dir) => dir || "the repository root").join(" or ");
+        throw new Error(`${skill.slug}: ${kind === "subagent" ? `no file ${where}` : `no ${entry} in ${where}`}`);
+      }
+      const local = join3(opts.cacheRoot, folder.owner, folder.repo, sha, cacheKey(kind, picked.dir));
+      const staging = `${local}.partial-${process.pid}`;
+      await rm2(staging, { recursive: true, force: true });
+      const hazards = [];
+      let name = null;
+      const prefix = picked.dir ? `${picked.dir}/` : "";
+      for (const blob of picked.blobs) {
+        const relative2 = kind === "subagent" ? "agent.md" : blob.path.slice(prefix.length);
+        const raw = `https://raw.githubusercontent.com/${folder.owner}/${folder.repo}/${sha}/${blob.path.split("/").map(encodeURIComponent).join("/")}`;
+        const bytes = new Uint8Array(await (await github(raw, "*/*", fetcher)).arrayBuffer());
+        if (bytes.byteLength > LIMITS.fileBytes)
+          throw new Error(`${skill.slug}: ${relative2} is over the size limit`);
+        hazards.push(...screenFile(relative2, bytes));
+        const text = kind !== "skill" || relative2 === "SKILL.md" ? new TextDecoder().decode(bytes) : "";
+        if (kind !== "skill")
+          hazards.push(...screenPart(relative2, text));
+        if (kind === "subagent" || kind === "skill" && relative2 === "SKILL.md")
+          name = frontmatterName(text);
+        if (relative2 === entry && kind === "plugin") {
+          let manifest;
+          try {
+            manifest = JSON.parse(text) ?? {};
+          } catch {
+            throw new Error(`${skill.slug}: ${entry} is not valid JSON`);
+          }
+          name = typeof manifest.name === "string" && SKILL_NAME.test(manifest.name) ? manifest.name : null;
+        }
+        await mkdir2(join3(staging, posix.dirname(relative2)), { recursive: true });
+        await writeFile2(join3(staging, relative2), bytes);
+      }
+      const base = posix.basename(picked.dir || folder.repo, ".md").toLowerCase();
+      const spellName = name ?? (SKILL_NAME.test(base) ? base : null);
+      if (!spellName)
+        throw new Error(`${skill.slug}: ${kind === "subagent" ? "the agent file" : entry} has no usable name`);
+      const files = await countFiles(staging);
+      await rm2(local, { recursive: true, force: true });
+      await mkdir2(join3(local, ".."), { recursive: true });
+      await rename2(staging, local);
+      await writeFile2(`${local}.json`, `${JSON.stringify({ name: spellName, files, hazards }, null, 2)}
+`);
+      equipped.push({ slug: skill.slug, kind, name: spellName, dir: local, ref: sha, files, hazards });
+    }
+  const names = equipped.map((spell) => spell.name);
+  const duplicate = names.find((name, i) => names.indexOf(name) !== i);
+  if (duplicate)
+    throw new Error(`Two equipped spells are both named "${duplicate}"; a harness can load only one`);
+  return equipped;
+}
+
+// src/trials/heroes.ts
+function refuseUnequippable(hero, entries) {
+  const entry = entries.find((item) => !hero.kinds.includes(item.kind));
+  if (!entry)
+    return;
+  throw new Error(EQUIPPABLE.includes(entry.kind) ? `${entry.slug} is a ${entry.kind}; only Claude Code can equip ${entry.kind}s in trials` : `${entry.slug} is a ${entry.kind}; trials equip skills, plugins and subagents only`);
+}
 function runProcess(argv, opts) {
   const { promise: promise2, resolve: resolve3 } = Promise.withResolvers();
   const started = performance.now();
@@ -21107,11 +21485,11 @@ async function summaries(root, agent, parse5) {
   if (!existsSync2(root))
     return [];
   const results = [];
-  for (const entry of await readdir3(root, { recursive: true, withFileTypes: true })) {
+  for (const entry of await readdir4(root, { recursive: true, withFileTypes: true })) {
     if (!entry.isFile() || !entry.name.endsWith(".jsonl"))
       continue;
-    const path = join3(entry.parentPath, entry.name);
-    const info = await stat2(path);
+    const path = join4(entry.parentPath, entry.name);
+    const info = await stat3(path);
     results.push(await parse5({ agent, path, size: info.size, mtimeMs: info.mtimeMs, root }));
   }
   return results;
@@ -21152,19 +21530,21 @@ var codex = {
   id: "codex",
   containment: "sealed",
   focusLevels: ["default", "minimal", "low", "medium", "high", "xhigh"],
+  kinds: ["skill"],
   async start({ arena, spells, caster, focus, timeLimitMs }) {
+    refuseUnequippable(codex, spells);
     const realHome = homedir3();
-    const codexHome = join3(arena.home, ".codex");
-    await mkdir2(join3(codexHome, "skills"), { recursive: true });
-    const shared = join3(dirname3(arena.root), ".codex-shared", "chatgpt-meetings");
-    await mkdir2(shared, { recursive: true });
-    await symlink(shared, join3(codexHome, "chatgpt-meetings"));
+    const codexHome = join4(arena.home, ".codex");
+    await mkdir3(join4(codexHome, "skills"), { recursive: true });
+    const shared = join4(dirname3(arena.root), ".codex-shared", "chatgpt-meetings");
+    await mkdir3(shared, { recursive: true });
+    await symlink(shared, join4(codexHome, "chatgpt-meetings"));
     for (const spell of spells)
-      await cp2(spell.dir, join3(codexHome, "skills", spell.name), { recursive: true });
-    const auth = join3(realHome, ".codex", "auth.json");
+      await cp2(spell.dir, join4(codexHome, "skills", spell.name), { recursive: true });
+    const auth = join4(realHome, ".codex", "auth.json");
     if (existsSync2(auth))
-      await symlink(auth, join3(codexHome, "auth.json"));
-    await writeFile2(join3(codexHome, "config.toml"), codexConfig(caster, focus, realHome));
+      await symlink(auth, join4(codexHome, "auth.json"));
+    await writeFile3(join4(codexHome, "config.toml"), codexConfig(caster, focus, realHome));
     const base = baseEnv(arena.home, arena.tmp);
     const env = { ...base, PATH: [...await cloneOutOfHome(["codex", "node"]), base.PATH].join(":"), CODEX_HOME: codexHome };
     let thread = null;
@@ -21176,11 +21556,14 @@ var codex = {
         const result = await runProcess(argv, { cwd: arena.workspace, env, timeoutMs: timeLimitMs });
         let failure2 = "";
         let completed = false;
+        let reply = "";
         for (const event of jsonLines(result.stdout)) {
           if (event.type === "thread.started" && typeof event.thread_id === "string")
             thread = event.thread_id;
           else if (event.type === "item.completed" && CODEX_TOOL_ITEMS.has(event.item?.type))
             toolCalls++;
+          else if (event.type === "item.completed" && event.item?.type === "agent_message" && typeof event.item.text === "string")
+            reply = event.item.text;
           else if (event.type === "turn.completed") {
             completed = true;
             const usage = event.usage ?? {};
@@ -21191,14 +21574,14 @@ var codex = {
             failure2 += ` ${event.message ?? ""}`;
         }
         const mishap = result.timedOut || completed ? null : mishapFrom(`${failure2} ${result.stderr}`);
-        return { durationMs: result.durationMs, timedOut: result.timedOut, mishap };
+        return { durationMs: result.durationMs, timedOut: result.timedOut, mishap, reply };
       },
       async finish() {
-        const files = await summaries(join3(codexHome, "sessions"), "codex", parseCodexFile);
+        const files = await summaries(join4(codexHome, "sessions"), "codex", parseCodexFile);
         let model = null;
         let effort = null;
         for (const file2 of files) {
-          for (const event of jsonLines(await readFile2(file2.path, "utf8"))) {
+          for (const event of jsonLines(await readFile3(file2.path, "utf8"))) {
             if (event.type !== "turn_context")
               continue;
             model = typeof event.payload?.model === "string" ? event.payload.model : model;
@@ -21253,22 +21636,24 @@ var omp = {
   id: "omp",
   containment: WARD_AVAILABLE ? "warded" : "open",
   focusLevels: ["default", "off", "minimal", "low", "medium", "high", "xhigh", "max"],
+  kinds: ["skill"],
   async start({ arena, spells, caster, focus, timeLimitMs }) {
+    refuseUnequippable(omp, spells);
     const realHome = homedir3();
-    const loadout = join3(arena.home, "loadout");
-    const sessions = join3(arena.home, "sessions");
-    await mkdir2(loadout, { recursive: true });
-    await mkdir2(sessions, { recursive: true });
+    const loadout = join4(arena.home, "loadout");
+    const sessions = join4(arena.home, "sessions");
+    await mkdir3(loadout, { recursive: true });
+    await mkdir3(sessions, { recursive: true });
     for (const spell of spells)
-      await cp2(spell.dir, join3(loadout, spell.name), { recursive: true });
-    const overlay = join3(arena.home, "omp.yml");
-    await writeFile2(overlay, ompOverlay(loadout, spells.map((spell) => spell.name)));
-    const ompDir = join3(realHome, ".omp");
-    const locked = ["config.yml", "config.yaml", "models.yml", "AGENTS.md", "RULES.md", "SYSTEM.md", ".env", "extensions", "skills", "managed-skills", "agents", "hooks", "rules", "commands", "prompts"].map((name) => join3(ompDir, "agent", name));
+      await cp2(spell.dir, join4(loadout, spell.name), { recursive: true });
+    const overlay = join4(arena.home, "omp.yml");
+    await writeFile3(overlay, ompOverlay(loadout, spells.map((spell) => spell.name)));
+    const ompDir = join4(realHome, ".omp");
+    const locked = ["config.yml", "config.yaml", "models.yml", "AGENTS.md", "RULES.md", "SYSTEM.md", ".env", "extensions", "skills", "managed-skills", "agents", "hooks", "rules", "commands", "prompts"].map((name) => join4(ompDir, "agent", name));
     const prefix = await ward(arena, "omp", {
-      read: [join3(realHome, ".bun"), ompDir, ...await commandReadPaths("node")],
+      read: [join4(realHome, ".bun"), ompDir, ...await commandReadPaths("node")],
       write: [ompDir],
-      locked: [...locked, join3(ompDir, "plugins"), join3(ompDir, "profiles")],
+      locked: [...locked, join4(ompDir, "plugins"), join4(ompDir, "profiles")],
       network: true
     });
     const env = { ...baseEnv(realHome, arena.tmp), PI_NO_TITLE: "1" };
@@ -21305,6 +21690,7 @@ var omp = {
         const result = await runProcess(argv, { cwd: arena.workspace, env, timeoutMs: timeLimitMs });
         let failure2 = "";
         let answered = false;
+        let reply = "";
         for (const event of jsonLines(result.stdout)) {
           const message = event.message;
           if (event.type !== "message_end" || message?.role !== "assistant")
@@ -21320,9 +21706,12 @@ var omp = {
             model = message.provider ? `${message.provider}/${message.model}` : message.model;
           if (message.stopReason === "error")
             failure2 += ` ${message.errorMessage ?? message.error ?? "provider error"}`;
+          const text = (message.content ?? []).filter((part) => part.type === "text").map((part) => part.text ?? "").join("").trim();
+          if (text)
+            reply = text;
         }
         const mishap = result.timedOut ? null : failure2 ? mishapFrom(failure2) : result.code !== 0 || !answered ? mishapFrom(result.stderr) : null;
-        return { durationMs: result.durationMs, timedOut: result.timedOut, mishap };
+        return { durationMs: result.durationMs, timedOut: result.timedOut, mishap, reply };
       },
       async finish() {
         return {
@@ -21342,10 +21731,34 @@ var claudeCode = {
   id: "claude-code",
   containment: "sealed",
   focusLevels: ["default", "low", "medium", "high", "xhigh", "max"],
+  kinds: EQUIPPABLE,
   async start({ arena, spells, caster, focus, timeLimitMs }) {
     const realHome = homedir3();
-    for (const spell of spells)
-      await cp2(spell.dir, join3(arena.workspace, ".claude", "skills", spell.name), { recursive: true });
+    const owners = new Map;
+    const pluginSkills = new Map;
+    const pluginDirs = [];
+    for (const spell of spells) {
+      if (spell.kind === "skill")
+        await cp2(spell.dir, join4(arena.workspace, ".claude", "skills", spell.name), { recursive: true });
+      else if (spell.kind === "subagent")
+        await cp2(join4(spell.dir, "agent.md"), join4(arena.workspace, ".claude", "agents", `${spell.name}.md`));
+      else {
+        const dir = join4(arena.home, "plugins", spell.name);
+        await cp2(spell.dir, dir, { recursive: true });
+        pluginDirs.push("--plugin-dir", dir);
+        owners.set(`${spell.name}:`, spell.name);
+        for (const entry of await readdir4(join4(dir, "skills")).catch(() => []))
+          pluginSkills.set(`plugins/${spell.name}/skills/${entry}`, spell.name);
+        continue;
+      }
+      owners.set(spell.name, spell.name);
+    }
+    const owner = (id) => {
+      if (typeof id !== "string")
+        return;
+      const clean = id.replace(/^\//, "").split(/\s/)[0];
+      return owners.get(clean) ?? (clean.includes(":") ? owners.get(clean.slice(0, clean.indexOf(":") + 1)) : undefined);
+    };
     const settings = {
       sandbox: {
         enabled: true,
@@ -21378,6 +21791,7 @@ var claudeCode = {
       "none",
       "--settings",
       JSON.stringify(settings),
+      ...pluginDirs,
       ...caster ? ["--model", caster] : [],
       ...focus !== "default" ? ["--effort", focus] : []
     ];
@@ -21420,7 +21834,7 @@ var claudeCode = {
       async send(prompt) {
         const started = performance.now();
         if (ended)
-          return { durationMs: 0, timedOut: false, mishap: mishapFrom(stderr) };
+          return { durationMs: 0, timedOut: false, mishap: mishapFrom(stderr), reply: "" };
         const result = Promise.withResolvers();
         const ready = backlog.shift();
         if (ready)
@@ -21436,15 +21850,15 @@ var claudeCode = {
         const durationMs = Math.round(performance.now() - started);
         if (outcome === "timeout") {
           killGroup(child.pid, "SIGTERM");
-          return { durationMs, timedOut: true, mishap: null };
+          return { durationMs, timedOut: true, mishap: null, reply: "" };
         }
         if (outcome === null)
-          return { durationMs, timedOut: false, mishap: mishapFrom(stderr) };
+          return { durationMs, timedOut: false, mishap: mishapFrom(stderr), reply: "" };
         const turnUsage = outcome.usage ?? {};
         const turnTokens = ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"].reduce((sum, key) => sum + (Number(turnUsage[key]) || 0), 0);
         usage = { tokens: (usage.tokens ?? 0) + turnTokens, cost: typeof outcome.total_cost_usd === "number" ? outcome.total_cost_usd : usage.cost };
         const failed = outcome.is_error === true || outcome.subtype === "error_during_execution";
-        return { durationMs, timedOut: false, mishap: failed ? mishapFrom(`${outcome.result ?? ""} ${outcome.terminal_reason ?? ""} ${stderr}`) : null };
+        return { durationMs, timedOut: false, mishap: failed ? mishapFrom(`${outcome.result ?? ""} ${outcome.terminal_reason ?? ""} ${stderr}`) : null, reply: typeof outcome.result === "string" ? outcome.result : "" };
       },
       async finish() {
         child.stdin.end();
@@ -21456,11 +21870,9 @@ var claudeCode = {
         const grace = setTimeout(() => killGroup(child.pid, "SIGKILL"), 1e4);
         await closed.promise;
         clearTimeout(grace);
-        const file2 = join3(arena.home, "claude-stream.jsonl");
-        await writeFile2(file2, `${transcript.join(`
+        await writeFile3(join4(arena.home, "claude-stream.jsonl"), `${transcript.join(`
 `)}
 `);
-        const parsed = await parseClaudeFile({ agent: "claude-code", path: file2, size: (await stat2(file2)).size, mtimeMs: Date.now(), root: arena.home });
         let model = null;
         let version2 = null;
         let toolCalls = 0;
@@ -21477,10 +21889,18 @@ var claudeCode = {
             if (part?.type !== "tool_use")
               continue;
             toolCalls++;
+            const used = part.name === "Skill" ? part.input?.skill ?? part.input?.command : part.name === "SlashCommand" ? part.input?.command : part.name === "Task" || part.name === "Agent" ? part.input?.subagent_type : null;
+            const name = owner(used);
+            if (name)
+              read.add(name);
             const target = part.name === "Read" ? part.input?.file_path : part.name === "Bash" ? part.input?.command : null;
-            if (typeof target === "string")
-              for (const match of target.matchAll(SKILL_PATH))
-                read.add(match[1]);
+            if (typeof target !== "string")
+              continue;
+            for (const match of target.matchAll(SKILL_PATH)) {
+              const name2 = owners.get(match[1]) ?? [...pluginSkills].find(([path]) => target.replaceAll("\\", "/").includes(`${path}/SKILL.md`))?.[1];
+              if (name2)
+                read.add(name2);
+            }
           }
         }
         return {
@@ -21490,7 +21910,7 @@ var claudeCode = {
           tokens: usage.tokens,
           toolCalls,
           costUsd: usage.cost === null ? null : Math.round(usage.cost * 1e4) / 1e4,
-          opened: [...new Set([...skillNames([parsed]), ...read])].sort()
+          opened: [...read].sort()
         };
       }
     };
@@ -21499,17 +21919,21 @@ var claudeCode = {
 var HEROES = { codex, omp, "claude-code": claudeCode };
 
 // src/trials/results.ts
-import { appendFile, mkdir as mkdir3, readFile as readFile3, writeFile as writeFile3 } from "node:fs/promises";
-import { dirname as dirname4, join as join4 } from "node:path";
+import { appendFile, mkdir as mkdir4, readdir as readdir5, readFile as readFile4, stat as stat4, unlink, writeFile as writeFile4 } from "node:fs/promises";
+import { dirname as dirname4, join as join5 } from "node:path";
 async function appendRun(run, file2) {
-  await mkdir3(dirname4(file2), { recursive: true });
+  await mkdir4(dirname4(file2), { recursive: true });
   await appendFile(file2, `${JSON.stringify(run)}
 `);
+}
+async function saveOutput(output2, dir) {
+  await mkdir4(dir, { recursive: true });
+  await writeFile4(join5(dir, `${output2.runId}.json`), JSON.stringify(output2));
 }
 async function readRuns(file2) {
   let text;
   try {
-    text = await readFile3(file2, "utf8");
+    text = await readFile4(file2, "utf8");
   } catch (error62) {
     if (error62 instanceof Error && "code" in error62 && error62.code === "ENOENT")
       return [];
@@ -21546,7 +21970,7 @@ function cellsFromRuns(runs, quests, content) {
       continue;
     if (run.loadout.kind === "workflow" && !workflows.has(run.loadout.slug ?? ""))
       continue;
-    const key = JSON.stringify([run.quest, run.questVersion, run.loadout, run.cast, run.hero, run.heroVersion, run.caster, run.focus, run.containment, run.environment.os, run.environment.arch]);
+    const key = setupKey(run);
     const group = groups.get(key);
     if (group)
       group.push(run);
@@ -21593,15 +22017,19 @@ function cellsFromRuns(runs, quests, content) {
   const kindOrder = { unarmed: 0, spell: 1, workflow: 2, combo: 3 };
   return cells.sort((a, b) => a.quest.localeCompare(b.quest) || kindOrder[a.loadout.kind] - kindOrder[b.loadout.kind] || a.loadout.spells.join().localeCompare(b.loadout.spells.join()) || a.hero.localeCompare(b.hero) || a.caster.localeCompare(b.caster) || a.focus.localeCompare(b.focus) || (a.heroVersion ?? "").localeCompare(b.heroVersion ?? ""));
 }
+function setupKey(item) {
+  return JSON.stringify([item.quest, item.questVersion, item.loadout, item.cast, item.hero, item.heroVersion, item.caster, item.focus, item.containment, item.environment.os, item.environment.arch]);
+}
 
 // src/trials/run.ts
 import { randomUUID } from "node:crypto";
-import { join as join6 } from "node:path";
+import { realpath as realpath3 } from "node:fs/promises";
+import { join as join8 } from "node:path";
 
 // src/trials/checks.ts
 import { spawn as spawn2 } from "node:child_process";
-import { cp as cp3, lstat as lstat3, mkdir as mkdir4, mkdtemp as mkdtemp2, readdir as readdir4, readFile as readFile4, rm as rm2 } from "node:fs/promises";
-import { basename as basename2, join as join5 } from "node:path";
+import { cp as cp3, lstat as lstat3, mkdir as mkdir5, mkdtemp as mkdtemp2, readdir as readdir6, readFile as readFile5, rm as rm3 } from "node:fs/promises";
+import { basename as basename2, join as join6 } from "node:path";
 var OUTPUT_LIMIT = 1e6;
 function nodeRunner(prefix = []) {
   return (args, { cwd, timeoutMs }) => {
@@ -21661,13 +22089,13 @@ async function copyWorkspace(source, dest) {
   await cp3(source, dest, { recursive: true, filter: async (path) => !OMIT.has(basename2(path)) && !(await lstat3(path)).isSymbolicLink() });
 }
 async function testFiles(root, dir) {
-  const folder = join5(root, dir);
-  const entries = await readdir4(folder, { withFileTypes: true }).catch(() => []);
+  const folder = join6(root, dir);
+  const entries = await readdir6(folder, { withFileTypes: true }).catch(() => []);
   const files = [];
   for (const entry of entries) {
     if (OMIT.has(entry.name))
       continue;
-    const path = join5(dir, entry.name);
+    const path = join6(dir, entry.name);
     if (entry.isDirectory())
       files.push(...await testFiles(root, path));
     else if (entry.isFile() && /\.test\.(?:mjs|cjs|js)$/.test(entry.name))
@@ -21768,18 +22196,18 @@ function words(text) {
 }
 async function checkOne(check2, quest, root, runner, timeoutMs) {
   const result = (ok, score, detail) => ({ id: check2.id, label: check2.label, ok, score, detail });
-  const text = (file2) => readFile4(join5(root, file2), "utf8");
-  const original = (file2) => readFile4(join5(quest.dir, "fixture", file2), "utf8");
+  const text = (file2) => readFile5(join6(root, file2), "utf8");
+  const original = (file2) => readFile5(join6(quest.dir, "fixture", file2), "utf8");
   if (check2.type === "node-test" || check2.type === "own-tests" || check2.type === "catches-original") {
     if (check2.type === "node-test") {
       for (const file2 of check2.files) {
-        await mkdir4(join5(root, file2, ".."), { recursive: true });
-        await cp3(join5(quest.dir, "hidden", file2), join5(root, file2));
+        await mkdir5(join6(root, file2, ".."), { recursive: true });
+        await cp3(join6(quest.dir, "hidden", file2), join6(root, file2));
       }
     } else if (check2.type === "catches-original") {
       for (const file2 of check2.restore) {
-        await mkdir4(join5(root, file2, ".."), { recursive: true });
-        await cp3(join5(quest.dir, "fixture", file2), join5(root, file2));
+        await mkdir5(join6(root, file2, ".."), { recursive: true });
+        await cp3(join6(quest.dir, "fixture", file2), join6(root, file2));
       }
     }
     const files = check2.type === "node-test" ? check2.files : await testFiles(root, check2.dir);
@@ -21800,8 +22228,8 @@ async function checkOne(check2, quest, root, runner, timeoutMs) {
   if (check2.type === "unchanged") {
     const changed = [];
     for (const path of check2.paths) {
-      const actual2 = await readFile4(join5(root, path)).catch(() => null);
-      if (!actual2 || !actual2.equals(await readFile4(join5(quest.dir, "fixture", path))))
+      const actual2 = await readFile5(join6(root, path)).catch(() => null);
+      if (!actual2 || !actual2.equals(await readFile5(join6(quest.dir, "fixture", path))))
         changed.push(path);
     }
     return result(changed.length === 0, (check2.paths.length - changed.length) / check2.paths.length, changed.length ? `Changed or missing files: ${changed.join(", ")}` : `${check2.paths.length} files unchanged.`);
@@ -21868,10 +22296,10 @@ async function checkOne(check2, quest, root, runner, timeoutMs) {
   }
 }
 async function gradeQuest(quest, workspace, opts) {
-  await mkdir4(opts.scratch, { recursive: true });
+  await mkdir5(opts.scratch, { recursive: true });
   const checks3 = [];
   for (const check2 of quest.checks) {
-    const root = await mkdtemp2(join5(opts.scratch, "grade-"));
+    const root = await mkdtemp2(join6(opts.scratch, "grade-"));
     try {
       await copyWorkspace(workspace, root);
       checks3.push(await checkOne(check2, quest, root, opts.runNode ?? runNode, opts.testTimeoutMs ?? 30000));
@@ -21879,10 +22307,149 @@ async function gradeQuest(quest, workspace, opts) {
       const detail = error62 instanceof SyntaxError ? "Invalid JSON in the submitted file." : "Required files could not be read or checked.";
       checks3.push({ id: check2.id, label: check2.label, ok: false, score: 0, detail });
     } finally {
-      await rm2(root, { recursive: true, force: true });
+      await rm3(root, { recursive: true, force: true });
     }
   }
   return { passed: checks3.every((check2) => check2.ok), score: checks3.length ? checks3.reduce((sum, check2) => sum + check2.score, 0) / checks3.length : 0, checks: checks3 };
+}
+
+// src/trials/diff.ts
+import { constants as constants3 } from "node:fs";
+import { open as open2, readdir as readdir7, realpath as realpath2 } from "node:fs/promises";
+import { join as join7, sep as sep3 } from "node:path";
+var SKIP = new Set([".claude", ".codex", ".agents", ".omp", "node_modules", ".git"]);
+var MAX_BYTES = 200000;
+var MAX_CELLS = 4000000;
+async function listFiles(root, dir = "") {
+  const found = [];
+  for (const entry of await readdir7(join7(root, dir), { withFileTypes: true }).catch(() => [])) {
+    const rel = dir ? `${dir}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      if (!SKIP.has(entry.name))
+        found.push(...await listFiles(root, rel));
+    } else if (entry.isFile())
+      found.push(rel);
+  }
+  return found;
+}
+function lineOps(a, b) {
+  let start = 0;
+  while (start < a.length && start < b.length && a[start] === b[start])
+    start++;
+  let endA = a.length, endB = b.length;
+  while (endA > start && endB > start && a[endA - 1] === b[endB - 1]) {
+    endA--;
+    endB--;
+  }
+  const x = a.slice(start, endA), y = b.slice(start, endB);
+  const middle = [];
+  if (x.length * y.length > MAX_CELLS) {
+    middle.push(...x.map((line) => ["-", line]), ...y.map((line) => ["+", line]));
+  } else {
+    const width = y.length + 1;
+    const lcs = new Uint32Array((x.length + 1) * width);
+    for (let i2 = x.length - 1;i2 >= 0; i2--) {
+      for (let j2 = y.length - 1;j2 >= 0; j2--) {
+        lcs[i2 * width + j2] = x[i2] === y[j2] ? lcs[(i2 + 1) * width + j2 + 1] + 1 : Math.max(lcs[(i2 + 1) * width + j2], lcs[i2 * width + j2 + 1]);
+      }
+    }
+    let i = 0, j = 0;
+    while (i < x.length && j < y.length) {
+      if (x[i] === y[j]) {
+        middle.push([" ", x[i]]);
+        i++;
+        j++;
+      } else if (lcs[(i + 1) * width + j] >= lcs[i * width + j + 1])
+        middle.push(["-", x[i++]]);
+      else
+        middle.push(["+", y[j++]]);
+    }
+    while (i < x.length)
+      middle.push(["-", x[i++]]);
+    while (j < y.length)
+      middle.push(["+", y[j++]]);
+  }
+  return [...a.slice(0, start).map((line) => [" ", line]), ...middle, ...a.slice(endA).map((line) => [" ", line])];
+}
+function hunks(ops, context) {
+  const aLine = [], bLine = [];
+  let a = 1, b = 1;
+  for (const [kind] of ops) {
+    aLine.push(a);
+    bLine.push(b);
+    if (kind !== "+")
+      a++;
+    if (kind !== "-")
+      b++;
+  }
+  const changes = ops.flatMap(([kind], index) => kind === " " ? [] : [index]);
+  const lines = [];
+  for (let first = 0;first < changes.length; ) {
+    let last = first;
+    while (last + 1 < changes.length && changes[last + 1] - changes[last] <= 2 * context + 1)
+      last++;
+    const from = Math.max(0, changes[first] - context), to = Math.min(ops.length, changes[last] + context + 1);
+    const slice = ops.slice(from, to);
+    const aCount = slice.filter(([kind]) => kind !== "+").length, bCount = slice.filter(([kind]) => kind !== "-").length;
+    lines.push(`@@ -${aCount > 0 ? aLine[from] : aLine[from] - 1},${aCount} +${bCount > 0 ? bLine[from] : bLine[from] - 1},${bCount} @@`, ...slice.map(([kind, text]) => kind + text));
+    first = last + 1;
+  }
+  return lines;
+}
+var textLines = (bytes) => {
+  if (!bytes)
+    return [];
+  const lines = bytes.toString("utf8").split(`
+`);
+  if (lines.at(-1) === "")
+    lines.pop();
+  return lines;
+};
+async function readContained(root, realRoot, rel) {
+  const path = join7(root, rel);
+  const handle = await open2(path, constants3.O_RDONLY | constants3.O_NOFOLLOW).catch((error62) => error62.code === "ENOENT" ? "absent" : "refused");
+  if (typeof handle === "string")
+    return handle;
+  try {
+    const info = await handle.stat();
+    if (!info.isFile() || info.nlink !== 1 || !(await realpath2(path)).startsWith(realRoot + sep3))
+      return "refused";
+    if (info.size > MAX_BYTES)
+      return "large";
+    const buffer = Buffer.alloc(info.size + 1);
+    let total = 0;
+    while (total < buffer.length) {
+      const { bytesRead } = await handle.read(buffer, total, buffer.length - total, total);
+      if (bytesRead === 0)
+        break;
+      total += bytesRead;
+    }
+    return total > MAX_BYTES ? "large" : buffer.subarray(0, total);
+  } finally {
+    await handle.close();
+  }
+}
+async function treeDiff(before, after, context = 2) {
+  const [realBefore, realAfter] = await Promise.all([realpath2(before), realpath2(after)]);
+  const paths = [...new Set([...await listFiles(before), ...await listFiles(after)])].sort();
+  const out = [];
+  for (const rel of paths) {
+    const [a, b] = await Promise.all([readContained(before, realBefore, rel), readContained(after, realAfter, rel)]);
+    if (a === "refused" || b === "refused") {
+      out.push(`Skipped ${rel}: not a regular file inside the workspace`);
+      continue;
+    }
+    if (Buffer.isBuffer(a) && Buffer.isBuffer(b) && a.equals(b))
+      continue;
+    const from = a === "absent" ? "/dev/null" : `a/${rel}`, to = b === "absent" ? "/dev/null" : `b/${rel}`;
+    if (a === "large" || b === "large" || [a, b].some((bytes) => Buffer.isBuffer(bytes) && bytes.subarray(0, 8000).includes(0))) {
+      out.push(`Binary files ${from} and ${to} differ`);
+      continue;
+    }
+    out.push(`--- ${from}`, `+++ ${to}`, ...hunks(lineOps(textLines(Buffer.isBuffer(a) ? a : null), textLines(Buffer.isBuffer(b) ? b : null)), context));
+  }
+  return out.join(`
+`);
 }
 
 // src/trials/run.ts
@@ -21891,6 +22458,11 @@ function followUp(grade, prompt, maxPrompts) {
   const lines = grade.checks.map((check2) => check2.ok ? `- PASSED: ${check2.label}` : `- FAILED: ${check2.label}: ${check2.detail}`);
   return ["Quest checks after your last attempt:", ...lines, "", `Keep working in this folder until every check passes. Prompt ${prompt} of ${maxPrompts}.`].join(`
 `);
+}
+var NOUNS = { skill: "skill", plugin: "plugin", subagent: "agent" };
+function invocation(spells) {
+  const groups = EQUIPPABLE.map((kind) => spells.filter((spell) => spell.kind === kind)).filter((group) => group.length > 0).map((group) => `the equipped ${NOUNS[group[0].kind]}${group.length === 1 ? "" : "s"}: ${group.map((spell) => spell.name).join(", ")}`);
+  return groups.length === 0 ? "" : `Use ${groups.join("; ")}.`;
 }
 async function runTrial(plan) {
   const hero = HEROES[plan.hero];
@@ -21912,16 +22484,24 @@ async function runTrial(plan) {
   let prompts = 0;
   let clearedAtPrompt = null;
   let durationMs = 0;
+  const replies = [];
+  const followUps = [];
+  let diff = "";
+  let roots = [arena.workspace, arena.root];
   try {
     const grader = nodeRunner(await ward(arena, "grade", { read: await commandReadPaths("node"), write: [], network: false, root: arena.scratch }));
     session = await hero.start({ arena, spells, caster: plan.caster, focus: plan.focus, timeLimitMs: plan.quest.timeLimitSec * 1000 });
     for (let n = 1;n <= plan.quest.maxPrompts; n++) {
-      const invocation = plan.cast === "invoked" && spells.length > 0 ? `
+      const invoked = plan.cast === "invoked" ? invocation(spells) : "";
+      const prompt = n === 1 ? `${PREAMBLE}
 
-Use ${spells.length === 1 ? "the equipped skill" : "the equipped skills"}: ${spells.map((spell) => spell.name).join(", ")}.` : "";
-      const turn = await session.send(n === 1 ? `${PREAMBLE}
+${plan.quest.prompt}${invoked ? `
 
-${plan.quest.prompt}${invocation}` : followUp(grade, n, plan.quest.maxPrompts));
+${invoked}` : ""}` : followUp(grade, n, plan.quest.maxPrompts);
+      if (n > 1)
+        followUps.push(prompt);
+      const turn = await session.send(prompt);
+      replies.push(turn.reply);
       prompts = n;
       durationMs += turn.durationMs;
       if (turn.mishap) {
@@ -21929,7 +22509,7 @@ ${plan.quest.prompt}${invocation}` : followUp(grade, n, plan.quest.maxPrompts));
         reason = turn.mishap;
         break;
       }
-      grade = await gradeQuest(plan.quest, arena.workspace, { scratch: join6(arena.scratch, String(n)), runNode: grader });
+      grade = await gradeQuest(plan.quest, arena.workspace, { scratch: join8(arena.scratch, String(n)), runNode: grader });
       if (turn.timedOut) {
         reason = "timeout";
         break;
@@ -21946,13 +22526,17 @@ ${plan.quest.prompt}${invocation}` : followUp(grade, n, plan.quest.maxPrompts));
     outcome = "mishap";
     reason = `harness error: ${error62 instanceof Error ? error62.message.slice(0, 200) : String(error62).slice(0, 200)}`;
   } finally {
+    diff = await treeDiff(join8(plan.quest.dir, "fixture"), arena.workspace).catch(() => "");
+    const resolved = [...roots, ...await Promise.all(roots.map((path) => realpath3(path).catch(() => path)))];
+    roots = [...new Set([...resolved, ...resolved.map((path) => path.replace(/^\/private(?=\/)/, ""))])];
     if (!plan.keep)
       await closeArena(arena);
   }
   const opened = new Set(report?.opened ?? []);
-  return {
+  const id = randomUUID();
+  const run = {
     v: 1,
-    id: randomUUID(),
+    id,
     startedAt,
     quest: plan.quest.id,
     questVersion: plan.quest.version,
@@ -21976,239 +22560,8 @@ ${plan.quest.prompt}${invocation}` : followUp(grade, n, plan.quest.maxPrompts));
     toolCalls: report?.toolCalls ?? null,
     costUsd: report?.costUsd ?? null
   };
-}
-
-// src/trials/spellbook.ts
-import { mkdir as mkdir5, readdir as readdir5, readFile as readFile5, rename as rename2, rm as rm3, stat as stat3, writeFile as writeFile4 } from "node:fs/promises";
-import { join as join7, posix } from "node:path";
-
-// src/shared/source-url.ts
-function parseSourceUrl(raw) {
-  const input2 = raw.trim();
-  if (!input2 || /[\u0000-\u001f\u007f\\]/.test(input2))
-    throw new Error("Enter a valid HTTP(S) source URL.");
-  let url2;
-  try {
-    url2 = new URL(/^[a-z][a-z\d+.-]*:/i.test(input2) ? input2 : `https:${input2.startsWith("//") ? input2 : `//${input2}`}`);
-  } catch {
-    throw new Error("Enter a valid HTTP(S) source URL.");
-  }
-  if (url2.protocol !== "http:" && url2.protocol !== "https:")
-    throw new Error("Source URLs must use HTTP or HTTPS.");
-  if (url2.username || url2.password || /^(?:https?:\/\/|\/\/)?[^/?#]*@/i.test(input2)) {
-    throw new Error("Source URLs must not contain credentials.");
-  }
-  url2.protocol = "https:";
-  const sourceUrl = url2.href;
-  if (url2.hostname !== "github.com" && url2.hostname !== "skills.sh")
-    return { type: "other", sourceUrl };
-  let segments;
-  try {
-    segments = url2.pathname.replace(/\/+$/, "").slice(1).split("/").map(decodeURIComponent);
-  } catch {
-    throw new Error("Source URL has invalid path encoding.");
-  }
-  const [owner, repo, view, ref, ...path] = segments;
-  if (!owner || !repo || !/^[a-z\d][a-z\d-]*$/i.test(owner) || !/^[a-z\d_.-]+$/i.test(repo) || repo === "." || repo === "..") {
-    throw new Error("Source URL must include a valid owner and repository.");
-  }
-  if (url2.hostname === "skills.sh") {
-    if (segments.length !== 3 || !view || !/^[a-z\d][a-z\d_.-]*$/i.test(view)) {
-      throw new Error("Use a skills.sh/owner/repository/skill URL.");
-    }
-    return { type: "skills.sh", sourceUrl, owner, repo, skill: view };
-  }
-  if (segments.length === 2)
-    return { type: "github", sourceUrl, owner, repo };
-  if (view !== "tree" && view !== "blob" || !ref || /[\u0000-\u001f\u007f\\]/.test(ref) || ref.split("/").some((part) => !part || part === "." || part === "..") || path.some((part) => !part || part === "." || part === ".." || /[\u0000-\u001f\u007f/\\]/.test(part))) {
-    throw new Error("Use a GitHub repository, tree, or blob URL with a valid ref and path.");
-  }
-  return { type: "github", sourceUrl, owner, repo, ref, ...path.length ? { path: path.join("/") } : {} };
-}
-
-// src/trials/spellbook.ts
-var LIMITS = { files: 300, fileBytes: 512 * 1024, totalBytes: 4 * 1024 * 1024 };
-var SKILL_NAME = /^[a-z0-9][a-z0-9._-]{0,63}$/;
-var HAZARDS = [
-  [/\b(?:curl|wget)\b[^\n|]*\|\s*(?:ba|z|da)?sh\b/i, "pipes a download into a shell"],
-  [/\brm\s+-[a-z]*r[a-z]*\s+(?:\/|~\/?|\$HOME\/?)(?=\s|$)/im, "deletes the root or home folder"],
-  [/(?:~|\$HOME|\/Users\/[^/\s]+|\/home\/[^/\s]+)\/\.(?:ssh|aws|gnupg|kube|docker|netrc)\b/i, "reads a credential folder"],
-  [/\bsecurity\s+(?:find|dump)-(?:generic|internet)-password\b|\bdump-keychain\b/i, "reads the keychain"],
-  [/\blaunchctl\s+(?:load|bootstrap)\b|\bcrontab\s+-[^l]|\/LaunchAgents\//i, "installs a background job"],
-  [/(?:^|[\s;&|`(])sudo\s+\S/m, "uses sudo"],
-  [/\bbase64\s+(?:-d|-D|--decode)\b[^\n]*\|\s*(?:ba|z)?sh\b/i, "runs decoded text in a shell"],
-  [/\beval\s*\(?\s*["'`]?\$\(\s*(?:curl|wget)\b/i, "evaluates downloaded code"],
-  [/\b(?:nc|ncat|netcat)\b[^\n]*\s-e\s/i, "opens a reverse shell"]
-];
-var EXECUTABLE_MAGIC = [[127, 69, 76, 70], [207, 250, 237, 254], [206, 250, 237, 254], [202, 254, 186, 190], [77, 90]];
-function skillFolder(sourceUrl) {
-  const source = parseSourceUrl(sourceUrl);
-  if (source.type === "skills.sh")
-    return { owner: source.owner, repo: source.repo, ref: undefined, dirs: [`skills/${source.skill}`, source.skill] };
-  if (source.type !== "github")
-    return null;
-  const path = source.path ?? "";
-  const dir = path === "SKILL.md" ? "" : path.endsWith("/SKILL.md") ? posix.dirname(path) : path;
-  return { owner: source.owner, repo: source.repo, ref: source.ref, dirs: [dir] };
-}
-function frontmatterName(text) {
-  const block = /^(?:\uFEFF)?---[\t ]*\r?\n([\s\S]*?)\r?\n---[\t ]*(?:\r?\n|$)/.exec(text)?.[1];
-  const name = block && /^name:[\t ]*["']?([^"'\r\n]+?)["']?[\t ]*$/m.exec(block)?.[1]?.trim().toLowerCase();
-  return name && SKILL_NAME.test(name) ? name : null;
-}
-function screenFile(path, bytes) {
-  if (EXECUTABLE_MAGIC.some((magic) => magic.every((byte, i) => bytes[i] === byte)))
-    return [`${path} is an executable binary`];
-  if (bytes.subarray(0, 8000).includes(0))
-    return [];
-  const text = new TextDecoder().decode(bytes);
-  const findings = [];
-  for (const [pattern, reason] of HAZARDS) {
-    const match = pattern.exec(text);
-    if (match)
-      findings.push(`${path}:${text.slice(0, match.index).split(`
-`).length} ${reason}`);
-  }
-  return findings;
-}
-async function github(url2, accept, fetcher) {
-  const token = url2.startsWith("https://api.github.com/") ? process.env.GITHUB_TOKEN : undefined;
-  const response = await fetcher(url2, {
-    headers: { Accept: accept, "User-Agent": "VibeRPGSimulator-trials", ...token ? { Authorization: `Bearer ${token}` } : {} },
-    signal: AbortSignal.timeout(20000)
-  });
-  if (!response.ok)
-    throw new Error(`GitHub answered ${response.status} for ${url2.replace(/\?.*$/, "")}`);
-  return response;
-}
-async function cachedSpell(dir) {
-  try {
-    return JSON.parse(await readFile5(`${dir}.json`, "utf8"));
-  } catch {
-    return null;
-  }
-}
-async function countFiles(dir) {
-  let total = 0;
-  for (const entry of await readdir5(dir, { withFileTypes: true, recursive: true }))
-    if (entry.isFile())
-      total++;
-  return total;
-}
-var REF_TTL_MS = 12 * 60 * 60 * 1000;
-async function resolveCommit(folder, cacheRoot, fetcher) {
-  const ref = folder.ref ?? "HEAD";
-  const file2 = join7(cacheRoot, "refs", `${folder.owner}__${folder.repo}__${ref.replaceAll("/", "__")}.json`);
-  try {
-    const cached2 = JSON.parse(await readFile5(file2, "utf8"));
-    if (Date.now() - cached2.at < REF_TTL_MS && /^[0-9a-f]{40}$/.test(cached2.sha))
-      return cached2.sha;
-  } catch {}
-  let sha;
-  try {
-    sha = (await (await github(`https://api.github.com/repos/${folder.owner}/${folder.repo}/commits/${encodeURIComponent(ref)}`, "application/vnd.github.sha", fetcher)).text()).trim();
-  } catch (error62) {
-    const repoDir = join7(cacheRoot, folder.owner, folder.repo);
-    const candidates = await readdir5(repoDir, { withFileTypes: true }).catch(() => []);
-    const usable = [];
-    for (const entry of candidates) {
-      if (!entry.isDirectory() || !/^[0-9a-f]{40}$/.test(entry.name))
-        continue;
-      for (const dir of folder.dirs) {
-        const meta3 = join7(repoDir, entry.name, `${dir || "_root"}.json`);
-        const info = await stat3(meta3).catch(() => null);
-        if (info)
-          usable.push({ sha: entry.name, at: info.mtimeMs });
-      }
-    }
-    const newest = usable.sort((a, b) => b.at - a.at)[0];
-    if (!newest)
-      throw error62;
-    console.warn(`${folder.owner}/${folder.repo}: ${error62 instanceof Error ? error62.message : String(error62)}; using cached commit ${newest.sha.slice(0, 7)}`);
-    return newest.sha;
-  }
-  if (!/^[0-9a-f]{40}$/.test(sha))
-    throw new Error(`GitHub did not return a commit for ${folder.owner}/${folder.repo}@${ref}`);
-  await mkdir5(join7(cacheRoot, "refs"), { recursive: true });
-  await writeFile4(file2, JSON.stringify({ sha, at: Date.now() }));
-  return sha;
-}
-async function equipSpells(skills, opts) {
-  const fetcher = opts.fetcher ?? fetch;
-  const equipped = [];
-  spells:
-    for (const skill of skills) {
-      if (skill.kind !== "skill")
-        throw new Error(`${skill.slug} is a ${skill.kind}; trials load skill folders only for now`);
-      const folder = skillFolder(skill.sourceUrl);
-      if (!folder)
-        throw new Error(`${skill.slug}: the source is not a GitHub skill folder (${skill.sourceUrl})`);
-      const api2 = `https://api.github.com/repos/${folder.owner}/${folder.repo}`;
-      const sha = await resolveCommit(folder, opts.cacheRoot, fetcher);
-      let picked = null;
-      let tree = null;
-      for (const dir of folder.dirs) {
-        const local2 = join7(opts.cacheRoot, folder.owner, folder.repo, sha, dir || "_root");
-        const cached2 = await cachedSpell(local2);
-        if (cached2) {
-          equipped.push({ slug: skill.slug, name: cached2.name, dir: local2, ref: sha, files: cached2.files, hazards: cached2.hazards });
-          continue spells;
-        }
-        if (!tree) {
-          const listing = await (await github(`${api2}/git/trees/${sha}?recursive=1`, "application/vnd.github+json", fetcher)).json();
-          if (listing.truncated)
-            throw new Error(`${skill.slug}: ${folder.owner}/${folder.repo} is too large to list`);
-          tree = listing.tree ?? [];
-        }
-        const prefix2 = dir ? `${dir}/` : "";
-        if (!tree.some((item) => item.type === "blob" && item.path === `${prefix2}SKILL.md`))
-          continue;
-        const blobs = tree.filter((item) => item.type === "blob" && item.mode !== "120000" && item.path.startsWith(prefix2) && !item.path.slice(prefix2.length).split("/").some((part) => part.startsWith("."))).map((item) => ({ path: item.path, size: item.size ?? 0 }));
-        if (blobs.length > LIMITS.files)
-          throw new Error(`${skill.slug}: ${blobs.length} files is over the ${LIMITS.files}-file limit`);
-        const total = blobs.reduce((sum, blob) => sum + blob.size, 0);
-        if (total > LIMITS.totalBytes || blobs.some((blob) => blob.size > LIMITS.fileBytes))
-          throw new Error(`${skill.slug}: the skill folder is over the size limit`);
-        picked = { dir, blobs };
-        break;
-      }
-      if (!picked)
-        throw new Error(`${skill.slug}: no SKILL.md in ${folder.dirs.map((dir) => dir || "the repository root").join(" or ")}`);
-      const local = join7(opts.cacheRoot, folder.owner, folder.repo, sha, picked.dir || "_root");
-      const staging = `${local}.partial-${process.pid}`;
-      await rm3(staging, { recursive: true, force: true });
-      const hazards = [];
-      let name = null;
-      const prefix = picked.dir ? `${picked.dir}/` : "";
-      for (const blob of picked.blobs) {
-        const relative2 = blob.path.slice(prefix.length);
-        const raw = `https://raw.githubusercontent.com/${folder.owner}/${folder.repo}/${sha}/${blob.path.split("/").map(encodeURIComponent).join("/")}`;
-        const bytes = new Uint8Array(await (await github(raw, "*/*", fetcher)).arrayBuffer());
-        if (bytes.byteLength > LIMITS.fileBytes)
-          throw new Error(`${skill.slug}: ${relative2} is over the size limit`);
-        hazards.push(...screenFile(relative2, bytes));
-        if (relative2 === "SKILL.md")
-          name = frontmatterName(new TextDecoder().decode(bytes));
-        await mkdir5(join7(staging, posix.dirname(relative2)), { recursive: true });
-        await writeFile4(join7(staging, relative2), bytes);
-      }
-      const base = posix.basename(picked.dir || folder.repo).toLowerCase();
-      const skillName = name ?? (SKILL_NAME.test(base) ? base : null);
-      if (!skillName)
-        throw new Error(`${skill.slug}: SKILL.md has no usable name`);
-      const files = await countFiles(staging);
-      await rm3(local, { recursive: true, force: true });
-      await mkdir5(join7(local, ".."), { recursive: true });
-      await rename2(staging, local);
-      await writeFile4(`${local}.json`, `${JSON.stringify({ name: skillName, files, hazards }, null, 2)}
-`);
-      equipped.push({ slug: skill.slug, name: skillName, dir: local, ref: sha, files, hazards });
-    }
-  const names = equipped.map((spell) => spell.name);
-  const duplicate = names.find((name, i) => names.indexOf(name) !== i);
-  if (duplicate)
-    throw new Error(`Two equipped spells are both named "${duplicate}"; a harness can load only one`);
-  return equipped;
+  const checks3 = (grade?.checks ?? []).map((check2) => ({ id: check2.id, label: check2.label, ok: check2.ok, detail: check2.detail }));
+  return { run, output: { v: 1, runId: id, replies, followUps, diff, checks: checks3, roots } };
 }
 
 // src/trials/batch.ts
@@ -22322,6 +22675,8 @@ async function runBatch(request, ctx) {
       return { kind: "combo", slug: null, skills, schools: [...new Set(skills.flatMap((item) => item.categories))] };
     })
   ];
+  for (const loadout of planned)
+    refuseUnequippable(hero, loadout.skills);
   if (request.unarmed || request.control)
     planned.push({ kind: "unarmed", slug: null, skills: [], schools: [] });
   if (planned.length === 0)
@@ -22350,10 +22705,20 @@ ${hazards.map((line) => `  ${line}`).join(`
   const results = [];
   let mishapsInRow = 0;
   for (const [index, job] of jobs.entries()) {
-    const result = await runTrial({ quest: job.quest, loadout: job.loadout, hero: request.hero, caster: request.caster, focus: request.focus, cast: request.cast, keep: request.keep });
+    const { run: result, output: output2 } = await runTrial({ quest: job.quest, loadout: job.loadout, hero: request.hero, caster: request.caster, focus: request.focus, cast: request.cast, keep: request.keep });
     await appendRun(result, ctx.runsFile);
+    if (ctx.outputsDir)
+      await saveOutput(output2, ctx.outputsDir);
+    let note = null;
+    if (ctx.scry && result.outcome !== "mishap") {
+      try {
+        note = await ctx.scry(result, output2, job.quest);
+      } catch (error62) {
+        note = `scrying failed: ${error62 instanceof Error ? error62.message : String(error62)}`;
+      }
+    }
     results.push(result);
-    ctx.log(`[${index + 1}/${jobs.length}] ${runLine(result, job.quest)}`);
+    ctx.log(`[${index + 1}/${jobs.length}] ${runLine(result, job.quest)}${note ? ` · ${note}` : ""}`);
     mishapsInRow = result.outcome === "mishap" ? mishapsInRow + 1 : 0;
     if (result.outcome === "mishap" && (result.reason === "sign-in" || result.reason?.startsWith("harness error") || mishapsInRow >= 3)) {
       throw new Error(`Stopped: ${HARNESS_NAMES[request.hero]} ${result.reason}${mishapsInRow >= 3 ? " three times in a row" : ""}. Check the hero with doctor and rerun.`);
@@ -22402,8 +22767,8 @@ function doctorLines() {
 }
 
 // src/trials/quest.ts
-import { readdir as readdir6, readFile as readFile6, stat as stat4 } from "node:fs/promises";
-import { join as join8, resolve as resolve3 } from "node:path";
+import { readdir as readdir8, readFile as readFile6, stat as stat5 } from "node:fs/promises";
+import { join as join9, resolve as resolve3 } from "node:path";
 var RelPath = exports_external.string().regex(/^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]{1,200}$/, "Use a relative path without ..");
 var CheckId = exports_external.string().regex(/^[a-z][a-z0-9-]{0,39}$/);
 var Label = exports_external.string().min(5).max(80);
@@ -22447,10 +22812,9 @@ var QuestSchema = exports_external.object({
   timeLimitSec: exports_external.number().int().min(30).max(1800),
   checks: exports_external.array(CheckSchema).min(1).max(12)
 });
-var RANK_ORDER = { apprentice: 0, journeyman: 1, master: 2 };
 async function isFile(path) {
   try {
-    return (await stat4(path)).isFile();
+    return (await stat5(path)).isFile();
   } catch {
     return false;
   }
@@ -22459,14 +22823,16 @@ async function loadQuests(dir = "quests") {
   const root = resolve3(dir);
   const problems = [];
   const quests = [];
-  const entries = await readdir6(root, { withFileTypes: true }).catch(() => []);
+  const entries = await readdir8(root, { withFileTypes: true }).catch(() => []);
   for (const entry of entries) {
     if (!entry.isDirectory())
       continue;
-    const questDir = join8(root, entry.name);
+    const questDir = join9(root, entry.name);
+    if ((await readdir8(questDir)).length === 0)
+      continue;
     let raw;
     try {
-      raw = JSON.parse(await readFile6(join8(questDir, "quest.json"), "utf8"));
+      raw = JSON.parse(await readFile6(join9(questDir, "quest.json"), "utf8"));
     } catch (error62) {
       problems.push(`${entry.name}/quest.json: ${error62 instanceof Error ? error62.message : String(error62)}`);
       continue;
@@ -22484,9 +22850,9 @@ async function loadQuests(dir = "quests") {
       if (ids.has(check2.id))
         problems.push(`${entry.name}: duplicate check id "${check2.id}"`);
       ids.add(check2.id);
-      const needed = check2.type === "node-test" ? check2.files.map((file2) => join8("hidden", file2)) : check2.type === "catches-original" ? check2.restore.map((file2) => join8("fixture", file2)) : check2.type === "unchanged" ? check2.paths.map((file2) => join8("fixture", file2)) : ("source" in check2) ? [join8("fixture", check2.source)] : [];
+      const needed = check2.type === "node-test" ? check2.files.map((file2) => join9("hidden", file2)) : check2.type === "catches-original" ? check2.restore.map((file2) => join9("fixture", file2)) : check2.type === "unchanged" ? check2.paths.map((file2) => join9("fixture", file2)) : ("source" in check2) ? [join9("fixture", check2.source)] : [];
       for (const file2 of needed) {
-        if (!await isFile(join8(questDir, file2)))
+        if (!await isFile(join9(questDir, file2)))
           problems.push(`${entry.name}: check "${check2.id}" needs ${file2}`);
       }
     }
@@ -22496,12 +22862,446 @@ async function loadQuests(dir = "quests") {
     throw new Error(`Invalid quests:
 ${problems.join(`
 `)}`);
-  return quests.sort((a, b) => a.school.localeCompare(b.school) || RANK_ORDER[a.rank] - RANK_ORDER[b.rank] || a.id.localeCompare(b.id));
+  return quests.sort((a, b) => a.school.localeCompare(b.school) || RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank) || a.id.localeCompare(b.id));
+}
+
+// src/trials/scrying.ts
+import { mkdir as mkdir6, readdir as readdir9, readFile as readFile7, writeFile as writeFile5 } from "node:fs/promises";
+import { hostname as hostname3, userInfo } from "node:os";
+import { join as join10 } from "node:path";
+import { deflateSync } from "node:zlib";
+var FONT_CHARS = `${Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join("")}·×→─★✓`;
+var FONT_HEX = [
+  "00000000000000000000000000000000001818181818181818000018180000000066666600000000000000000000000000006C6C6CFE6C6C6CFE6C6C6C0000000018183C666030180C06663C18180000000006C6CCCC181830306666C6C000000000386C6C38307ADECCCCCC7600000000181818300000000000000000000000",
+  "000C18183030303030303018180C0000003018180C0C0C0C0C0C0C18183000000000000066663CFF3C66660000000000000000001818187E181818000000000000000000000000000000381818306000000000000000007E000000000000000000000000000000000000181818000000030306060C0C181830306060C0C00000",
+  "0000386CC6C6CED6E6C6C66C380000000000183878181818181818187E00000000003C666606060C183060607E00000000003C666606061C060666663C00000000000C1C3C6CCCCCFE0C0C0C0C00000000007E6060607C06060666663C00000000001C3060607C66666666663C00000000007E0606060C0C1818181818000000",
+  "00003C666666763C6E6666663C00000000003C666666663E0606060C380000000000001818180000000018181800000000000018181800000000381818306000000000060C18306030180C060000000000000000007E0000007E0000000000000000006030180C060C18306000000000003C6666060C18181800001818000000",
+  "00007CC6C6C6DEDEDEDCC0C07C0000000000183C6666667E666666666600000000007C6666666C786C6666667C00000000003C6666606060606066663C0000000000786C666666666666666C7800000000007E606060607C606060607E00000000007E6060607C60606060606000000000003C666660606E666666663E000000",
+  "000066666666667E666666666600000000007E1818181818181818187E0000000000060606060606060666663C0000000000C6C6CCCCD8F0D8CCCCC6C60000000000606060606060606060607E0000000000C6EEEEFED6D6C6C6C6C6C60000000000C6C6E6E6F6FEDECECEC6C600000000003C6666666666666666663C000000",
+  "00007C666666667C606060606000000000003C6666666666666666663C0C060000007C666666667C6C6666666600000000003C66666030180C0666663C00000000007E181818181818181818180000000000666666666666666666663C0000000000666666666666663C3C18180000000000C6C6C6C6C6D6D6FEEEEEC6000000",
+  "0000C3C3663C1818183C66C3C30000000000C3C366663C18181818181800000000007E06060C0C18303060607E000000003C30303030303030303030303C0000C0C06060303018180C0C060603030000003C0C0C0C0C0C0C0C0C0C0C0C3C00000010386C6CC6C6000000000000000000000000000000000000000000000000FF",
+  "0018180C0600000000000000000000000000000000003C063E6666663E0000000000606060607C66666666667C0000000000000000003C66606060663C0000000000060606063E66666666663E0000000000000000003C66667E60603C00000000001E3030307E3030303030300000000000000000003E66666666663E06067C",
+  "0000606060607C6666666666660000000000181800007818181818181E00000000000C0C00000C0C0C0C0C0C0C0C0C7800006060606066666C786C66660000000000781818181818181818181E000000000000000000CCFED6D6D6D6C60000000000000000007C6666666666660000000000000000003C66666666663C000000",
+  "0000000000007C66666666667C6060600000000000003E66666666663E0606060000000000007C6666606060600000000000000000003E60603C06067C0000000000003030307E30303030301E0000000000000000006666666666663E00000000000000000066666666663C18000000000000000000C6C6D6D6D67C6C000000",
+  "000000000000C6C66C386CC6C60000000000000000006666666666663E06063C0000000000007E060C1830607E000000000E1818181818F018181818180E00001818181818181818181818181818000000E030303030301E3030303030E000000072D69C00000000000000000000000000000000000000180000000000000000",
+  "0000000082C66C386CC68200000000000000000000080CFEFE0C08000000000000000000000000FFFF00000000000000000010103838FEFE38386C6C82820000020206060C0CD8D8F0F0E0E0C0C00000"
+].join("");
+var GLYPHS = new Map([...FONT_CHARS].map((char, i) => [char, FONT_HEX.slice(i * 32, i * 32 + 32)]));
+var CREDENTIAL_MARK = "";
+var SENSITIVE_MARK = "";
+var FINDINGS = ["credential", "local path", "user name", "host name", "email address", "IP address", "id", "URL secret"];
+var PLURAL = {
+  credential: "credentials",
+  "local path": "local paths",
+  "user name": "user names",
+  "host name": "host names",
+  "email address": "email addresses",
+  "IP address": "IP addresses",
+  id: "ids",
+  "URL secret": "URL secrets"
+};
+var COMMON_NAMES = new Set(["root", "user", "admin", "runner", "ubuntu", "node", "localhost", "home", "test"]);
+function localIdentity() {
+  let user = null;
+  try {
+    user = userInfo().username;
+  } catch {}
+  return { user, host: hostname3() || null };
+}
+var escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+var sensitive = (length) => SENSITIVE_MARK.repeat(Math.min(40, Math.max(3, length)));
+var CREDENTIAL = CREDENTIAL_MARK.repeat(12);
+function looksSecret(value) {
+  if (value.length < 8 || /\s/.test(value) || /^[$<{%]/.test(value))
+    return false;
+  return [/[a-z]/, /[A-Z]/, /\d/, /[^A-Za-z0-9]/].filter((pattern) => pattern.test(value)).length >= 2;
+}
+var NAMED = "[A-Za-z0-9_.-]*(?:secret|token|passw(?:or)?d|api[_-]?key|private[_-]?key|access[_-]?key)[A-Za-z0-9_.-]*";
+var CREDENTIAL_PATTERNS = [
+  /\bsk-(?:ant-|proj-)?[A-Za-z0-9_-]{16,}/g,
+  /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})/g,
+  /\bxox[abprs]-[A-Za-z0-9-]{10,}/g,
+  /\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g,
+  /\bAIza[0-9A-Za-z_-]{35}/g,
+  /\b[sr]k_live_[0-9A-Za-z]{16,}/g,
+  /\bnpm_[A-Za-z0-9]{36}\b/g,
+  /\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/g
+];
+function redact(input2, roots, identity = localIdentity()) {
+  const found = {};
+  const count = (kind) => {
+    found[kind] = (found[kind] ?? 0) + 1;
+  };
+  let text = input2;
+  for (const root of [...new Set(roots)].filter((item) => item.length >= 4).sort((a, b) => b.length - a.length)) {
+    text = text.replace(new RegExp(`${escape(root.replace(/\/+$/, ""))}(/|(?![\\w-]|\\.\\w))`, "g"), (_, slash) => slash ? "./" : ".");
+  }
+  text = text.replace(/-----BEGIN[A-Z0-9 ]*PRIVATE KEY-----[\s\S]*?(?:-----END[A-Z0-9 ]*PRIVATE KEY-----|$)/g, (match) => {
+    count("credential");
+    return match.split(`
+`).map((line, i) => `${i > 0 && /^[+\- ]/.test(line) ? line[0] : ""}${CREDENTIAL}`).join(`
+`);
+  });
+  for (const pattern of CREDENTIAL_PATTERNS)
+    text = text.replace(pattern, () => {
+      count("credential");
+      return CREDENTIAL;
+    });
+  text = text.replace(/\b(Bearer\s+)([A-Za-z0-9._~+/=-]{16,})/gi, (_, lead) => {
+    count("credential");
+    return `${lead}${CREDENTIAL}`;
+  });
+  text = text.replace(new RegExp(`(["']?)(${NAMED})\\1(\\s*[:=]\\s*)(["'\`])([^"'\`\\s]+)\\4`, "gi"), (match, q1, name, op, q2, value) => {
+    if (!looksSecret(value))
+      return match;
+    count("credential");
+    return `${q1}${name}${q1}${op}${q2}${CREDENTIAL}${q2}`;
+  });
+  text = text.replace(/\b([A-Z0-9_]*(?:SECRET|TOKEN|PASSWORD|PASSWD|API_?KEY|PRIVATE_KEY|ACCESS_KEY)[A-Z0-9_]*=)([^\s"'`]{8,})/g, (match, lead, value) => {
+    if (!looksSecret(value))
+      return match;
+    count("credential");
+    return `${lead}${CREDENTIAL}`;
+  });
+  text = text.replace(/\b([a-z][a-z0-9+.-]*:\/\/)([^\s/@:]+:[^\s/@]+)@/gi, (_, scheme, info) => {
+    count("URL secret");
+    return `${scheme}${sensitive(info.length)}@`;
+  });
+  text = text.replace(/([?&](?:access_token|refresh_token|id_token|token|api_key|apikey|key|secret|client_secret|password|auth|sig|signature|code|x-amz-signature|x-amz-credential|x-amz-security-token)=)([^&\s#"'`<>]+)/gi, (_, lead, value) => {
+    count("URL secret");
+    return `${lead}${sensitive(value.length)}`;
+  });
+  text = text.replace(/(?<![\w.~/-])(?:\/(?:Users|home|private|var\/folders|tmp)\/|~\/|[A-Za-z]:\\Users\\)[^\s"'`<>()[\]{},;|*]*/g, (match) => {
+    count("local path");
+    return sensitive(match.length);
+  });
+  text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}\b/g, (match) => {
+    count("email address");
+    return sensitive(match.length);
+  });
+  const names = [["user name", identity.user], ["host name", identity.host], ["host name", identity.host?.split(".")[0] ?? null]];
+  for (const [kind, name] of names) {
+    if (!name || name.length < 3 || COMMON_NAMES.has(name.toLowerCase()))
+      continue;
+    text = text.replace(new RegExp(`(?<![A-Za-z0-9_])${escape(name)}(?![A-Za-z0-9_])`, "gi"), (match) => {
+      count(kind);
+      return sensitive(match.length);
+    });
+  }
+  text = text.replace(/(?<![\w.])(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?![\w]|\.\d)/g, (match, a, ...rest) => {
+    if ([a, ...rest.slice(0, 3)].some((octet) => Number(octet) > 255) || a === "127")
+      return match;
+    count("IP address");
+    return sensitive(match.length);
+  });
+  text = text.replace(/(?<![\w:])(?:[0-9a-f]{1,4}:){1,6}:(?:[0-9a-f]{1,4}:){0,5}[0-9a-f]{1,4}(?![\w:])|(?<![\w:])(?:[0-9a-f]{1,4}:){7}[0-9a-f]{1,4}(?![\w:])/gi, (match) => {
+    if (!/[0-9a-f]{3}/i.test(match))
+      return match;
+    count("IP address");
+    return sensitive(match.length);
+  });
+  text = text.replace(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, (match) => {
+    count("id");
+    return sensitive(match.length);
+  });
+  text = text.replace(/\b(session[_-]?id["']?\s*[:=]\s*["']?)([A-Za-z0-9._-]{8,})/gi, (_, lead, value) => {
+    count("id");
+    return `${lead}${sensitive(value.length)}`;
+  });
+  return { text, found };
+}
+function sensitiveCount(found) {
+  return FINDINGS.reduce((sum, kind) => sum + (kind === "credential" ? 0 : found[kind] ?? 0), 0);
+}
+function listFindings(found, kinds = FINDINGS) {
+  const parts = kinds.flatMap((kind) => found[kind] ? [`${found[kind]} ${found[kind] === 1 ? kind : PLURAL[kind]}`] : []);
+  return parts.length <= 1 ? parts.join("") : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+}
+function describeFindings(found) {
+  const removed = listFindings(found, ["credential"]);
+  const blurred = listFindings(found, FINDINGS.filter((kind) => kind !== "credential"));
+  return [removed && `removed ${removed}`, blurred && `blurred ${blurred}`].filter(Boolean).join(", ");
+}
+var CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
+  let c = n;
+  for (let k = 0;k < 8; k++)
+    c = c & 1 ? 3988292384 ^ c >>> 1 : c >>> 1;
+  return c >>> 0;
+});
+function crc32(bytes) {
+  let c = 4294967295;
+  for (const byte of bytes)
+    c = CRC_TABLE[(c ^ byte) & 255] ^ c >>> 8;
+  return (c ^ 4294967295) >>> 0;
+}
+function chunk(type2, data) {
+  const out = Buffer.alloc(12 + data.length);
+  out.writeUInt32BE(data.length, 0);
+  out.write(type2, 4, "ascii");
+  out.set(data, 8);
+  out.writeUInt32BE(crc32(out.subarray(4, 8 + data.length)), 8 + data.length);
+  return out;
+}
+function encodePng(width, height, palette, pixels) {
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(width, 0);
+  header.writeUInt32BE(height, 4);
+  header.set([8, 3, 0, 0, 0], 8);
+  const plte = Buffer.alloc(palette.length * 3);
+  palette.forEach((rgb, i) => plte.set([rgb >> 16 & 255, rgb >> 8 & 255, rgb & 255], i * 3));
+  const raw = Buffer.alloc((width + 1) * height);
+  for (let y = 0;y < height; y++)
+    raw.set(pixels.subarray(y * width, (y + 1) * width), y * (width + 1) + 1);
+  return Buffer.concat([
+    Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
+    chunk("IHDR", header),
+    chunk("PLTE", plte),
+    chunk("IDAT", deflateSync(raw, { level: 9 })),
+    chunk("IEND", new Uint8Array(0))
+  ]);
+}
+var mix = (a, b, t) => [16, 8, 0].reduce((rgb, shift) => rgb | Math.round((a >> shift & 255) * (1 - t) + (b >> shift & 255) * t) << shift, 0);
+var BASE = [921639, 723996, 3095951, 2238830, 1514572, 15265023, 8884424, 1119807, 16777215, 13095152, 16765773, 9425919, 15219515, 5086182, 9558889, 4856366];
+var [NIGHT, INK, TOP, MID, BOTTOM, EDGE, LINE, WELL, TEXT, MUTED, GOLD, LINK, HP, MP, XP, CRED_BG] = BASE.map((_, i) => i);
+var RAMPS = { sensitive: [TOP, 16, 17, 18, MUTED], credential: [CRED_BG, 19, 20, 21, HP] };
+var PALETTE = [...BASE, ...[0.25, 0.5, 0.75].map((t) => mix(BASE[TOP], BASE[MUTED], t)), ...[0.25, 0.5, 0.75].map((t) => mix(BASE[CRED_BG], BASE[HP], t))];
+var WIDTH = 800;
+var COLS = 94;
+var LEFT = 24;
+var LH = 18;
+var CAPS = { reply: 12, diff: 36, checks: 12 };
+var PLACEHOLDER = "aeonsrtilcuhdm";
+var QUOTES = { "‘": "'", "’": "'", "‚": "'", "“": '"', "”": '"', "„": '"', "–": "-", "—": "-", "−": "-", "…": "...", " ": " ", "\t": "  ", "•": "*", "\r": "" };
+function toGlyphs(text) {
+  let out = "";
+  for (const char of text.normalize("NFKD")) {
+    if (GLYPHS.has(char) || char === `
+` || char === CREDENTIAL_MARK || char === SENSITIVE_MARK)
+      out += char;
+    else if (QUOTES[char] !== undefined)
+      out += QUOTES[char];
+    else if (!/\p{M}/u.test(char))
+      out += "?";
+  }
+  return out;
+}
+function wrap(text, width) {
+  const lines = [];
+  for (const raw of text.split(`
+`)) {
+    let line = "";
+    for (const word of raw.split(/(?<= )/)) {
+      if (line.length + word.trimEnd().length > width && line) {
+        lines.push(line.trimEnd());
+        line = "";
+      }
+      let rest = word;
+      while (rest.length > width) {
+        lines.push(rest.slice(0, width));
+        rest = rest.slice(width);
+      }
+      line += rest;
+    }
+    lines.push(line.trimEnd());
+  }
+  return lines;
+}
+var clip = (text, width) => text.length > width ? `${text.slice(0, width - 1)}→` : text;
+function loadoutLabel(run) {
+  const name = run.loadout.kind === "unarmed" ? "Unarmed" : run.loadout.kind === "workflow" ? `Workflow ${run.loadout.slug}` : `${run.loadout.kind === "combo" ? "Combo" : "Spell"} ${run.loadout.spells.join(" + ")}`;
+  return `${name}${run.cast ? ` (${run.cast} cast)` : ""}`;
+}
+function scry(run, output2, quest, identity = localIdentity()) {
+  const found = {};
+  const clean = (text) => {
+    const result = redact(text, output2.roots, identity);
+    for (const [kind, n] of Object.entries(result.found))
+      found[kind] = (found[kind] ?? 0) + n;
+    return toGlyphs(result.text);
+  };
+  const rows = [];
+  const gap = (height2) => rows.push({ segments: [], bg: null, height: height2 });
+  const row = (segments, bg = null) => rows.push({ segments, bg, height: LH });
+  const title = (text) => {
+    gap(6);
+    row([{ text: toGlyphs(text), color: GOLD }]);
+    rows.push({ segments: [], bg: null, height: 4, rule: true });
+    gap(4);
+  };
+  const rank = quest ? `${RANK_NAMES[quest.rank]} ${"★".repeat(RANKS.indexOf(quest.rank) + 1)}` : "";
+  const name = clip(toGlyphs(quest?.name ?? run.quest), COLS - rank.length - 12);
+  row([{ text: "SCRYING  ", color: GOLD }, { text: name, color: TEXT }, { text: " ".repeat(Math.max(1, COLS - 9 - name.length - rank.length)), color: TEXT }, { text: rank, color: GOLD }]);
+  rows.push({ segments: [], bg: null, height: 4, rule: true });
+  gap(4);
+  const outcome = run.outcome === "cleared" ? `Cleared, ${run.clearedAtPrompt === 1 ? "instant cast" : `channeled (${run.clearedAtPrompt} prompts)`}` : run.outcome === "fizzled" ? `Fizzled${run.reason ? ` (${run.reason})` : ""}` : "Mishap";
+  const fields = [
+    ["Loadout", loadoutLabel(run)],
+    ["Hero", `${HARNESS_NAMES[run.hero]} ${run.heroVersion ?? "(version not reported)"}`],
+    ["Weapon", run.caster],
+    ["Charge", run.focus],
+    ["Arena", run.containment],
+    ["Outcome", outcome, run.outcome === "cleared" ? XP : run.outcome === "fizzled" ? HP : MUTED],
+    ["Prompts", `${run.prompts}${quest ? ` of ${quest.maxPrompts}` : ""}`],
+    ["Score", `${Math.round(run.score * 100)}%`],
+    ["Cast time", formatDuration(run.durationMs)],
+    ["Mana", run.tokens === null ? "not reported" : `${formatTokens(run.tokens)} tokens`]
+  ];
+  for (let i = 0;i < fields.length; i += 2) {
+    const segments = [];
+    for (const [index, [label, value, color]] of fields.slice(i, i + 2).entries()) {
+      const text = clip(toGlyphs(value), 47 - 11 - 1);
+      segments.push({ text: `${label.padEnd(11)}`, color: GOLD }, { text: index === 0 ? text.padEnd(47 - 11) : text, color: color ?? TEXT });
+    }
+    row(segments);
+  }
+  title("Final reply");
+  const reply = [...output2.replies].reverse().find((text) => text.trim()) ?? "";
+  const replyLines = reply ? wrap(clean(reply.replace(/\*\*|__/g, "").trim()), COLS - 2) : [toGlyphs("(The hero reported no final message.)")];
+  for (const line of replyLines.slice(0, CAPS.reply))
+    row([{ text: ` ${line}`, color: reply ? TEXT : MUTED }], WELL);
+  if (replyLines.length > CAPS.reply)
+    row([{ text: ` ... ${replyLines.length - CAPS.reply} more lines`, color: MUTED }], WELL);
+  title("Changes");
+  const diffLines = output2.diff.trim() ? clean(output2.diff.replace(/\n$/, "")).split(`
+`) : [];
+  if (diffLines.length === 0)
+    row([{ text: " (No file changes.)", color: MUTED }], WELL);
+  for (const line of diffLines.slice(0, CAPS.diff)) {
+    const color = /^(\+\+\+|---) /.test(line) ? GOLD : line.startsWith("+") ? XP : line.startsWith("-") ? HP : line.startsWith("@@") ? LINK : line.startsWith("Binary files") ? MUTED : MUTED;
+    row([{ text: ` ${clip(line, COLS - 2)}`, color }], WELL);
+  }
+  if (diffLines.length > CAPS.diff)
+    row([{ text: ` ... ${diffLines.length - CAPS.diff} more lines`, color: MUTED }], WELL);
+  title(`Checks: ${output2.checks.filter((check2) => check2.ok).length} of ${output2.checks.length} passed`);
+  for (const check2 of output2.checks.slice(0, CAPS.checks)) {
+    row([{ text: check2.ok ? " ✓ " : " × ", color: check2.ok ? XP : HP }, { text: clip(toGlyphs(check2.label), COLS - 4), color: TEXT }], WELL);
+  }
+  if (output2.checks.length > CAPS.checks)
+    row([{ text: ` ... ${output2.checks.length - CAPS.checks} more checks`, color: MUTED }], WELL);
+  if (output2.checks.length === 0)
+    row([{ text: " (No checks were graded.)", color: MUTED }], WELL);
+  gap(8);
+  const note = describeFindings(found);
+  row([{ text: toGlyphs(`VibeRPG Proving Grounds · ${quest?.id ?? run.quest} v${run.questVersion} · ${run.startedAt.slice(0, 10)}`), color: MUTED }]);
+  if (note)
+    row([{ text: clip(`${note[0].toUpperCase()}${note.slice(1)}.`, COLS), color: MUTED }]);
+  const top = 24;
+  const height = top + rows.reduce((sum, item) => sum + item.height, 0) + 24;
+  const pixels = new Uint8Array(WIDTH * height).fill(NIGHT);
+  const fill = (x, y2, w, h, color) => {
+    for (let yy = Math.max(0, y2);yy < Math.min(height, y2 + h); yy++)
+      pixels.fill(color, yy * WIDTH + Math.max(0, x), yy * WIDTH + Math.min(WIDTH, x + w));
+  };
+  for (let y2 = 0;y2 < height; y2 += 4)
+    for (let x = y2 / 4 % 2 ? 2 : 0;x < WIDTH; x += 4)
+      pixels[y2 * WIDTH + x] = 7;
+  const [wx, wy, ww, wh] = [8, 8, WIDTH - 16, height - 16];
+  fill(wx + 1, wy, ww - 2, wh, INK);
+  fill(wx, wy + 1, ww, wh - 2, INK);
+  fill(wx + 1, wy + 1, ww - 2, wh - 2, EDGE);
+  fill(wx + 3, wy + 3, ww - 6, wh - 6, LINE);
+  const inner = [wx + 4, wy + 4, ww - 8, wh - 8];
+  const band = Math.ceil(inner[3] / 3);
+  [TOP, MID, BOTTOM].forEach((color, i) => fill(inner[0], inner[1] + i * band, inner[2], Math.min(band, inner[3] - i * band), color));
+  const blurs = [];
+  let y = top;
+  for (const item of rows) {
+    if (item.bg !== null)
+      fill(LEFT - 4, y, COLS * 8 + 8, item.height, item.bg);
+    if (item.rule)
+      fill(LEFT, y + 1, COLS * 8, 1, LINE);
+    let col = 0;
+    for (const segment of item.segments) {
+      for (const char of segment.text) {
+        const x = LEFT + col * 8;
+        const mark = char === CREDENTIAL_MARK ? "credential" : char === SENSITIVE_MARK ? "sensitive" : null;
+        if (col < COLS) {
+          if (mark) {
+            const ramp = RAMPS[mark];
+            fill(x, y, 8, LH, ramp[0]);
+            drawGlyph(pixels, x, y + 1, PLACEHOLDER[(col * 7 + y) % PLACEHOLDER.length], ramp[4]);
+            const last = blurs[blurs.length - 1];
+            if (last && last.y === y && last.x + last.w === x && last.ramp === ramp)
+              last.w += 8;
+            else
+              blurs.push({ x, y, w: 8, ramp });
+          } else
+            drawGlyph(pixels, x, y + 1, char, segment.color);
+        }
+        col++;
+      }
+    }
+    y += item.height;
+  }
+  for (const region of blurs)
+    blur(pixels, region.x, region.y, region.w, LH, region.ramp);
+  return { png: encodePng(WIDTH, height, PALETTE, pixels), width: WIDTH, height, found };
+  function drawGlyph(buffer, x, y0, char, color) {
+    const hex3 = GLYPHS.get(char) ?? GLYPHS.get("?");
+    for (let r = 0;r < 16; r++) {
+      const bits = Number.parseInt(hex3.slice(r * 2, r * 2 + 2), 16);
+      if (bits) {
+        for (let c = 0;c < 8; c++)
+          if (bits & 128 >> c)
+            buffer[(y0 + r) * WIDTH + x + c] = color;
+      }
+    }
+  }
+}
+function blur(pixels, x0, y0, w, h, ramp) {
+  const ink = new Float32Array(w * h);
+  for (let y = 0;y < h; y++)
+    for (let x = 0;x < w; x++)
+      ink[y * w + x] = pixels[(y0 + y) * WIDTH + x0 + x] === ramp[4] ? 1 : 0;
+  const radius = 3;
+  for (let y = 0;y < h; y++)
+    for (let x = 0;x < w; x++) {
+      let sum = 0, n = 0;
+      for (let dy = -radius;dy <= radius; dy++)
+        for (let dx = -radius;dx <= radius; dx++) {
+          const yy = y + dy, xx = x + dx;
+          if (yy >= 0 && yy < h && xx >= 0 && xx < w) {
+            sum += ink[yy * w + xx];
+            n++;
+          }
+        }
+      pixels[(y0 + y) * WIDTH + x0 + x] = ramp[Math.min(4, Math.round(sum / n * 6))];
+    }
+}
+async function saveScrying(png, runId, dir) {
+  if (!/^[A-Za-z0-9][A-Za-z0-9-]{0,79}$/.test(runId))
+    throw new Error("Unexpected run id for a screenshot file name.");
+  await mkdir6(dir, { recursive: true });
+  const file2 = join10(dir, `${runId}.png`);
+  await writeFile5(file2, png);
+  return file2;
+}
+function savedNote(found) {
+  const findings = describeFindings(found);
+  return `scrying saved${findings ? `, ${findings}` : ""}`;
+}
+async function scryPending(outputsDir, scryingDir, runs, render, log) {
+  const done = new Set(await readdir9(scryingDir).catch(() => []));
+  const pending = (await readdir9(outputsDir).catch(() => [])).filter((name) => name.endsWith(".json") && !done.has(name.replace(/\.json$/, ".png"))).sort();
+  const byId = new Map(runs.map((run) => [run.id, run]));
+  let rendered = 0;
+  for (const name of pending) {
+    const output2 = JSON.parse(await readFile7(join10(outputsDir, name), "utf8"));
+    const run = byId.get(output2.runId);
+    if (!run || run.outcome === "mishap")
+      continue;
+    const note = await render(run, output2);
+    if (note === null)
+      continue;
+    rendered++;
+    log(`${run.quest} ${run.outcome}: ${note}`);
+  }
+  return { rendered, skipped: pending.length - rendered };
 }
 
 // src/plugin/cli.ts
 var DEFAULT_ENDPOINT = "https://vibe-rpg-simulator.vercel.app/api/submit";
-var VERSION = "0.3.1";
+var VERSION = "0.4.0";
 var PARSERS = {
   codex: parseCodexFile,
   "claude-code": parseClaudeFile,
@@ -22514,14 +23314,18 @@ List local spell ids and root-session counts. Logs stay on this machine.`,
 List bundled quests by school, rank, id and summary.`,
   doctor: `doctor
 Check Node, sandbox support, installed heroes (harnesses) and sign-in state.`,
-  trial: `trial <batch options>
+  trial: `trial <batch options> [--scrying [--blur]]
 Run quests with your own plan allowance. Requires Node 22 or newer.
-${BATCH_HELP}`,
+${BATCH_HELP}
+  --scrying            Save a screenshot of each run's output (off by default; nothing is shared unless you attach screenshots to a report)
+  --blur               Also save screenshots that show sensitive details, with those details blurred (credentials are always removed)`,
   trials: `trials
 Show locally measured trial results: Steadiness (reliability) and Buff (effectiveness against Unarmed). Requires Node 22 or newer.`,
+  scry: `scry [--blur]
+Saves screenshots for runs made with trial --scrying that have none yet, such as ones withheld for sensitive details. Without --blur (or a yes at the prompt) those stay unsaved. Starts no new runs.`,
   new: `new <dir> --name <name> --kind <skill|plugin|mcp_server|subagent> --source <https-url> --match <id>...
-  [--version <version>] [--agent <claude-code|codex>]... [--submitter <name>] [--github <user>] [--email <address>] [--no-environment] [--trials <library-slug>]...
-Creates spell-report.md without overwriting. Records this machine's OS, CPU architecture and harness versions from local logs unless --no-environment is given. --trials adds matching loadouts and their Unarmed controls. Default agent: claude-code; submitter: Anonymous. Edit the draft before sending.`,
+  [--version <version>] [--agent <claude-code|codex>]... [--submitter <name>] [--github <user>] [--email <address>] [--no-environment] [--trials <library-slug>]... [--scrying]
+Creates spell-report.md without overwriting. Records this machine's OS, CPU architecture and harness versions from local logs unless --no-environment is given. --trials adds matching loadouts and their Unarmed controls; --scrying also attaches your saved screenshots of those trials (up to 6 files and 4 MB). Default agent: claude-code; submitter: Anonymous. Edit the draft before sending.`,
   attach: `attach <report.md> <file> --alt <text>
 Copies a chosen PNG, JPEG, GIF, WebP, MP4 or WebM next to the report and records its SHA-256. Maximum 6 files and 4 MB for the whole submission.`,
   check: `check <report.md>
@@ -22532,12 +23336,12 @@ Signs exact report bytes with ssh-keygen. Default key: first existing ~/.ssh/id_
 Without --yes: local preview only, exit 2, no network. With --yes: check, then send only the report, signature and chosen attachments. Endpoint: --endpoint, SPELL_REPORT_ENDPOINT, then the bundled site URL.`
 };
 async function readLocal(path, limit) {
-  if (resolve4(path).split(sep3).some((part) => SENSITIVE_NAME.test(part) || part.startsWith(".env") || part === ".ssh")) {
+  if (resolve4(path).split(sep4).some((part) => SENSITIVE_NAME.test(part) || part.startsWith(".env") || part === ".ssh")) {
     throw new Error("Refusing to read a sensitive path.");
   }
   if ((await lstat4(path)).isSymbolicLink())
     throw new Error("Refusing to read a symbolic link.");
-  const file2 = await open2(path, constants3.O_RDONLY | constants3.O_NOFOLLOW);
+  const file2 = await open3(path, constants4.O_RDONLY | constants4.O_NOFOLLOW);
   try {
     const info = await file2.stat();
     if (!info.isFile())
@@ -22578,7 +23382,7 @@ async function readReport(path, verify2, fetchFn) {
     }
     names.add(entry.file);
     try {
-      const bytes = await readLocal(join9(dirname5(path), entry.file), SUBMIT_LIMITS.totalBytes - total);
+      const bytes = await readLocal(join11(dirname5(path), entry.file), SUBMIT_LIMITS.totalBytes - total);
       total += bytes.length;
       attachments.push({ name: entry.file, bytes });
     } catch {
@@ -22651,7 +23455,7 @@ function endpointUrl(value) {
     throw new Error("Use HTTPS for submission (HTTP is allowed only on localhost).");
   return url2;
 }
-async function attach(path, source, alt, out) {
+async function attach(path, source, alt, out, as) {
   if (await optionalSignature(path))
     throw new Error("This report is signed. Create an unsigned copy before changing its attachments.");
   const report = await readLocal(path, SUBMIT_LIMITS.reportBytes);
@@ -22664,7 +23468,7 @@ async function attach(path, source, alt, out) {
   if (!type2)
     throw new Error("Unsupported attachment type. Use PNG, JPEG, GIF, WebP, MP4 or WebM.");
   const stem = basename3(source, extname(source)).normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^[^A-Za-z0-9]+/, "").slice(0, 100);
-  const name = `${stem || "attachment"}.${type2.ext}`;
+  const name = as ?? `${stem || "attachment"}.${type2.ext}`;
   const previous = parsed.meta.attachments.find((item) => item.file === name);
   const entry = { file: name, sha256: await sha256Hex(bytes), alt };
   const meta3 = ReportMetaSchema.parse({ ...parsed.meta, attachments: previous ? parsed.meta.attachments.map((item) => item.file === name ? entry : item) : [...parsed.meta.attachments, entry] });
@@ -22675,11 +23479,11 @@ async function attach(path, source, alt, out) {
   let total = reportSize + bytes.length;
   for (const item of meta3.attachments) {
     if (item.file !== name)
-      total += (await readLocal(join9(dirname5(path), item.file), SUBMIT_LIMITS.totalBytes)).length;
+      total += (await readLocal(join11(dirname5(path), item.file), SUBMIT_LIMITS.totalBytes)).length;
   }
   if (total > SUBMIT_LIMITS.totalBytes)
     throw new Error("Report, signature and attachments exceed 4 MB total.");
-  const target = join9(dirname5(path), name);
+  const target = join11(dirname5(path), name);
   if (resolve4(target) !== resolve4(source)) {
     if (previous) {
       try {
@@ -22690,9 +23494,9 @@ async function attach(path, source, alt, out) {
           throw error62;
       }
     }
-    await writeFile5(target, bytes, { flag: previous ? constants3.O_WRONLY | constants3.O_TRUNC | constants3.O_CREAT | constants3.O_NOFOLLOW : "wx" });
+    await writeFile6(target, bytes, { flag: previous ? constants4.O_WRONLY | constants4.O_TRUNC | constants4.O_CREAT | constants4.O_NOFOLLOW : "wx" });
   }
-  await writeFile5(path, text, { flag: constants3.O_WRONLY | constants3.O_TRUNC | constants3.O_NOFOLLOW });
+  await writeFile6(path, text, { flag: constants4.O_WRONLY | constants4.O_TRUNC | constants4.O_NOFOLLOW });
   out(`Attached ${name} (${bytes.length} bytes), SHA-256 ${entry.sha256}`);
 }
 async function sign(path, selectedKey, out, err) {
@@ -22705,7 +23509,7 @@ async function sign(path, selectedKey, out, err) {
   let key = selectedKey;
   if (!key) {
     for (const name of ["id_ed25519", "id_ecdsa", "id_rsa"]) {
-      const candidate = join9(homedir4(), ".ssh", name);
+      const candidate = join11(homedir4(), ".ssh", name);
       try {
         await access(candidate);
         key = candidate;
@@ -22741,6 +23545,39 @@ ${command}`);
   out(`Signed ${basename3(path)}. Signature: ${basename3(path)}.sig`);
   return 0;
 }
+async function terminalAsk(question) {
+  const prompt = createInterface2({ input: process.stdin, output: process.stdout });
+  try {
+    return /^y(es)?$/i.test((await prompt.question(question)).trim());
+  } finally {
+    prompt.close();
+  }
+}
+async function trialScrying(args, dir, ask, out) {
+  const rest = args.filter((arg) => arg !== "--scrying" && arg !== "--blur");
+  const blur2 = args.includes("--blur");
+  const consent = args.includes("--scrying") || ask !== null && await ask("Save a screenshot of each run's output (Scrying)? Nothing is shared unless you add screenshots to a report. [y/N] ");
+  if (!consent) {
+    if (blur2)
+      out("--blur has no effect without --scrying; no screenshots will be saved.");
+    return { args: rest, context: {} };
+  }
+  return { args: rest, context: {
+    outputsDir: join11(dir, "outputs"),
+    scry: async (run, output2, quest) => {
+      const shot = scry(run, output2, quest);
+      if (sensitiveCount(shot.found) > 0) {
+        const credentials = shot.found.credential ? ` ${listFindings(shot.found, ["credential"])} will be removed either way.` : "";
+        out(`Alert: the screenshot of run ${run.id.slice(0, 8)} (${quest.id}) shows sensitive details: ${listFindings(shot.found, FINDINGS.filter((kind) => kind !== "credential"))}.${credentials}`);
+        const allowed = blur2 || ask !== null && await ask("Save this screenshot with those details blurred? [y/N] ");
+        if (!allowed)
+          return "screenshot not saved (sensitive details; rerun with --blur to save it blurred)";
+      }
+      await saveScrying(shot.png, run.id, join11(dir, "scrying"));
+      return savedNote(shot.found);
+    }
+  } };
+}
 async function runCli(argv, options = {}) {
   const out = options.stdout ?? console.log;
   const err = options.stderr ?? console.error;
@@ -22752,7 +23589,7 @@ async function runCli(argv, options = {}) {
   if (!command || command === "--help" || command === "-h") {
     out(`spell-report ${VERSION} (Node 20+; trials need Node 22+)
 Usage: spell-report <command> [options]
-Commands: spells, quests, doctor, trial, trials, new, attach, check, sign, submit
+Commands: spells, quests, doctor, trial, trials, scry, new, attach, check, sign, submit
 Use <command> --help for details.${DEFAULT_ENDPOINT ? `
 Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
     return 0;
@@ -22770,10 +23607,10 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
       throw new Error(`spell-report ${command} requires Node 22 or newer; found Node ${process.versions.node}. Other report commands support Node 20.`);
     }
     const skillDir = dirname5(dirname5(fileURLToPath(import.meta.url)));
-    const questsDir = options.questsDir ?? join9(skillDir, "quests");
-    const dataDir = options.dataDir ?? process.env.VIBERPG_DATA_DIR ?? join9(homedir4(), ".viberpg");
-    const runsFile = join9(dataDir, "trials", "runs.jsonl");
-    const catalog = async () => options.catalog ?? exports_external.object({ skills: exports_external.array(SkillSchema), workflows: exports_external.array(WorkflowSchema) }).parse(JSON.parse(await readFile7(join9(skillDir, "catalog.json"), "utf8")));
+    const questsDir = options.questsDir ?? join11(skillDir, "quests");
+    const dataDir = options.dataDir ?? process.env.VIBERPG_DATA_DIR ?? join11(homedir4(), ".viberpg");
+    const runsFile = join11(dataDir, "trials", "runs.jsonl");
+    const catalog = async () => options.catalog ?? exports_external.object({ skills: exports_external.array(SkillSchema), workflows: exports_external.array(WorkflowSchema) }).parse(JSON.parse(await readFile8(join11(skillDir, "catalog.json"), "utf8")));
     switch (command) {
       case "quests":
         if (args.length)
@@ -22788,8 +23625,23 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
           out(line);
         return 0;
       case "trial": {
-        const request = parseBatchArgs(args);
-        await runBatch(request, { catalog: await catalog(), quests: await loadQuests(questsDir), cacheRoot: join9(dataDir, "trials", "cache"), runsFile, log: out });
+        const ask = options.ask !== undefined ? options.ask : process.stdin.isTTY && process.stdout.isTTY ? terminalAsk : null;
+        const scrying = await trialScrying(args, join11(dataDir, "trials"), ask, out);
+        const request = parseBatchArgs(scrying.args);
+        await runBatch(request, { catalog: await catalog(), quests: await loadQuests(questsDir), cacheRoot: join11(dataDir, "trials", "cache"), runsFile, log: out, ...scrying.context });
+        return 0;
+      }
+      case "scry": {
+        if (args.some((arg) => arg !== "--blur"))
+          throw new Error(HELP.scry);
+        const ask = options.ask !== undefined ? options.ask : process.stdin.isTTY && process.stdout.isTTY ? terminalAsk : null;
+        const { context } = await trialScrying(["--scrying", ...args], join11(dataDir, "trials"), ask, out);
+        const quests = await loadQuests(questsDir);
+        const counts = await scryPending(join11(dataDir, "trials", "outputs"), join11(dataDir, "trials", "scrying"), await readRuns(runsFile), async (run, output2) => {
+          const quest = quests.find((item) => item.id === run.quest && item.version === run.questVersion);
+          return quest ? context.scry(run, output2, quest) : null;
+        }, out);
+        out(`Checked ${counts.rendered} saved run output(s); ${counts.skipped} skipped (mishaps or quests no longer bundled).`);
         return 0;
       }
       case "trials": {
@@ -22829,13 +23681,14 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
           github: { type: "string" },
           email: { type: "string" },
           "no-environment": { type: "boolean" },
-          trials: { type: "string", multiple: true }
+          trials: { type: "string", multiple: true },
+          scrying: { type: "boolean" }
         } });
         const dir = positionals[0];
         if (!dir || positionals.length !== 1)
           throw new Error(HELP.new);
         try {
-          await lstat4(join9(dir, "spell-report.md"));
+          await lstat4(join11(dir, "spell-report.md"));
           throw new Error("spell-report.md already exists; choose a new directory.");
         } catch (error62) {
           if (!(error62 instanceof Error && ("code" in error62) && error62.code === "ENOENT"))
@@ -22869,7 +23722,8 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
           for (const slug of values.trials)
             if (!slugs.has(slug))
               throw new Error(`No spell or workflow "${slug}" in the library.`);
-          const cells = cellsFromRuns(await readRuns(runsFile), await loadQuests(questsDir), library);
+          const runs = await readRuns(runsFile);
+          const cells = cellsFromRuns(runs, await loadQuests(questsDir), library);
           const selected = cells.filter((cell) => cell.loadout.kind !== "unarmed" && (values.trials.includes(cell.loadout.slug ?? "") || cell.loadout.spells.some((slug) => values.trials.includes(slug))));
           meta3.trials = cells.filter((cell) => selected.includes(cell) || cell.loadout.kind === "unarmed" && selected.some((armed) => sameSetup(armed, cell))).map((cell) => ({ ...cell, source: { kind: "community", name: meta3.submitter.name } }));
         }
@@ -22878,12 +23732,50 @@ Default endpoint: ${DEFAULT_ENDPOINT}` : ""}`);
 <!-- Write your experience here; omit private details. -->`).join(`
 
 `);
-        await mkdir6(dir, { recursive: true });
-        await writeFile5(join9(dir, "spell-report.md"), formatReport(meta3, body), { flag: "wx" });
+        const shots = [];
+        let leftOut = 0;
+        if (values.scrying) {
+          if (!meta3.trials?.length)
+            throw new Error("--scrying attaches trial screenshots; add --trials <library-slug>.");
+          const runs = await readRuns(runsFile);
+          let total = Buffer.byteLength(formatReport(meta3, body)) + 2000 + SUBMIT_LIMITS.signatureBytes;
+          const armedFirst = [...meta3.trials].sort((a, b) => Number(a.loadout.kind === "unarmed") - Number(b.loadout.kind === "unarmed"));
+          for (const cell of armedFirst) {
+            const latest2 = runs.filter((run) => run.outcome !== "mishap" && setupKey(run) === setupKey(cell)).sort((a, b) => b.startedAt.localeCompare(a.startedAt));
+            for (const run of latest2) {
+              const source = join11(dataDir, "trials", "scrying", `${run.id}.png`);
+              let bytes;
+              try {
+                bytes = await readLocal(source, SUBMIT_LIMITS.totalBytes);
+              } catch {
+                continue;
+              }
+              const name = `${(await sha256Hex(bytes)).slice(0, 16)}.png`;
+              const outcome = run.outcome === "cleared" ? "cleared" : "fizzled";
+              if (!shots.some((shot) => shot.name === name)) {
+                if (shots.length >= SUBMIT_LIMITS.attachments || total + bytes.length > SUBMIT_LIMITS.totalBytes) {
+                  leftOut++;
+                  break;
+                }
+                total += bytes.length;
+                const loadout = cell.loadout.kind === "unarmed" ? "Unarmed" : cell.loadout.slug ?? cell.loadout.spells.join(" + ");
+                shots.push({ source, name, alt: `Scrying (screenshot) of a ${outcome} run of ${cell.quest} with ${loadout}` });
+              }
+              cell.scrying = { file: name, outcome };
+              break;
+            }
+          }
+        }
+        await mkdir7(dir, { recursive: true });
+        await writeFile6(join11(dir, "spell-report.md"), formatReport(meta3, body), { flag: "wx" });
+        for (const shot of shots)
+          await attach(join11(dir, "spell-report.md"), shot.source, shot.alt, out, shot.name);
         out(`Created spell-report.md. Evidence: ${stats.sessions} root sessions. Fill every section and the verdict before sending.`);
         out(`Environment: ${meta3.evidence.environment ? environmentLabel(meta3.evidence.environment) : "not recorded (--no-environment)"}`);
         if (meta3.trials)
           out(`Added ${meta3.trials.length} trial cells, including matching Unarmed controls (self-measured).`);
+        if (values.scrying)
+          out(shots.length ? `Attached ${shots.length} screenshot(s) of these trials${leftOut ? `; ${leftOut} left out to stay within ${SUBMIT_LIMITS.attachments} files and 4 MB` : ""}. View each one before sending.` : "No saved screenshots for these trials. Run trial with --scrying first.");
         return 0;
       }
       case "attach": {
@@ -22990,5 +23882,6 @@ if (process.argv[1] && resolve4(process.argv[1]) === fileURLToPath(import.meta.u
   process.exitCode = await runCli(process.argv.slice(2));
 }
 export {
+  trialScrying,
   runCli
 };

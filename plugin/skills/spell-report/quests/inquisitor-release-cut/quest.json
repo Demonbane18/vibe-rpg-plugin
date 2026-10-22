@@ -1,0 +1,15 @@
+{
+  "id": "inquisitor-release-cut",
+  "version": 3,
+  "name": "Inquisitor: cut the next release",
+  "school": "code-review",
+  "rank": "master",
+  "summary": "Read a conventional-commit log, choose the right semver bump and write the changelog entry in the project's format.",
+  "prompt": "Could you prepare the next tidepool-js release? This checkout has no .git folder, so I exported the recent history to COMMITS.txt. Work out the new version, bump it, and add the entry to CHANGELOG.md. I'll review, commit, tag and publish myself, so don't do any of that, and leave COMMITS.txt as it is.",
+  "maxPrompts": 3,
+  "timeLimitSec": 600,
+  "checks": [
+    { "id": "commit-log", "label": "Commit log export stays unchanged", "type": "unchanged", "paths": ["COMMITS.txt"] },
+    { "id": "release", "label": "Version and changelog match the commits", "type": "node-test", "files": ["quest-checks/release.test.mjs"] }
+  ]
+}

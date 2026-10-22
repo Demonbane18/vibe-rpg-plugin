@@ -1,0 +1,191 @@
+diff --git a/db/schema.sql b/db/schema.sql
+--- a/db/schema.sql
++++ b/db/schema.sql
+@@ -14,15 +14,29 @@ create table events (
+   venue text not null,
+   starts_at timestamptz not null,
+   price_cents integer not null check (price_cents >= 0),
++  booking_fee_cents bigint not null default 0 check (booking_fee_cents >= 0),
+   currency char(3) not null,
+   seats_left integer not null check (seats_left >= 0),
+   published boolean not null default false,
++  show_attendees boolean not null default false,
+   payout_account text,
+   organizer_notes text
+ );
+ 
++create table holds (
++  id uuid primary key,
++  event_id uuid not null references events(id),
++  buyer_id uuid not null references users(id),
++  seats integer not null check (seats between 1 and 8),
++  status text not null check (status in ('active', 'paid', 'released', 'expired')),
++  order_id uuid,
++  expires_at timestamptz not null
++);
++create index holds_active_expiry on holds (expires_at) where status = 'active';
++
+ create table orders (
+   id uuid primary key default gen_random_uuid(),
++  hold_id uuid unique references holds(id),
+   event_id uuid not null references events(id),
+   buyer_id uuid not null references users(id),
+   seats integer not null,
+diff --git a/src/checkout.mjs b/src/checkout.mjs
+--- a/src/checkout.mjs
++++ b/src/checkout.mjs
+@@ -1,21 +1,35 @@
+-// Checkout: charge the buyer and record the order.
+-import { NotFound, PaymentFailed } from './errors.mjs';
++// Checkout: charge the buyer for a seat hold and record the order.
++import { Gone, NotFound, PaymentFailed } from './errors.mjs';
++import { isExpired } from './holds.mjs';
+ 
+-export async function checkout(db, payments, mailer, logger, { eventId, buyerId, seats, paymentMethodId }) {
+-  const event = await db.oneOrNone('select id, title, price_cents, currency from events where id = $1 and published', [eventId]);
+-  if (!event) throw new NotFound('event');
+-  const totalCents = event.price_cents * seats;
++// Groups of five or more seats get 10% off.
++const GROUP_DISCOUNT_ABOVE = 4;
++
++export async function checkout(db, payments, mailer, logger, { holdId, buyerId, paymentMethodId }) {
++  const hold = await db.oneOrNone('select * from holds where id = $1', [holdId]);
++  if (!hold || hold.buyer_id !== buyerId) throw new NotFound('hold');
++  if (hold.status === 'paid') return { orderId: hold.order_id };
++  if (hold.status !== 'active' || isExpired(hold)) throw new Gone('hold');
++
++  const event = await db.one('select id, title, price_cents, booking_fee_cents, currency from events where id = $1', [hold.event_id]);
++  const ticketsCents = event.price_cents * hold.seats;
++  const discountCents = hold.seats > GROUP_DISCOUNT_ABOVE ? Math.floor(ticketsCents / 10) : 0;
++  const totalCents = ticketsCents - discountCents + event.booking_fee_cents;
+   let charge;
+   try {
+-    charge = await payments.charge({ amountCents: totalCents, currency: event.currency, paymentMethodId });
++    charge = await payments.charge({ amountCents: totalCents, currency: event.currency, paymentMethodId, idempotencyKey: `hold-${hold.id}` });
+   } catch (err) {
+-    logger.warn({ err, eventId }, 'charge failed');
++    logger.warn({ err, holdId }, 'charge failed');
+     throw new PaymentFailed(err.code);
+   }
+-  const order = await db.one(
+-    'insert into orders (event_id, buyer_id, seats, amount_cents, currency, charge_id) values ($1, $2, $3, $4, $5, $6) returning id',
+-    [event.id, buyerId, seats, totalCents, event.currency, charge.id],
+-  );
++  const order = await db.tx(async (tx) => {
++    const row = await tx.one(
++      'insert into orders (hold_id, event_id, buyer_id, seats, amount_cents, currency, charge_id) values ($1, $2, $3, $4, $5, $6, $7) on conflict (hold_id) do update set charge_id = excluded.charge_id returning id',
++      [hold.id, event.id, buyerId, hold.seats, totalCents, event.currency, charge.id],
++    );
++    await tx.none("update holds set status = 'paid', order_id = $1 where id = $2", [row.id, hold.id]);
++    return row;
++  });
+   mailer.sendReceipt({ buyerId, orderId: order.id, title: event.title, totalCents }).catch((err) => logger.warn({ err, orderId: order.id }, 'receipt failed'));
+   return { orderId: order.id };
+ }
+diff --git a/src/holds.mjs b/src/holds.mjs
+new file mode 100644
+--- /dev/null
++++ b/src/holds.mjs
+@@ -0,0 +1,58 @@
++// Seat holds: a buyer reserves seats for a few minutes while paying.
++import { randomUUID } from 'node:crypto';
++import { NotFound, SoldOut } from './errors.mjs';
++
++export const HOLD_MINUTES = 10;
++export const MAX_SEATS_PER_HOLD = 8;
++
++export function isExpired(hold, now = Date.now()) {
++  return hold.expires_at.getTime() <= now;
++}
++
++export async function createHold(db, { eventId, buyerId, seats }) {
++  if (!Number.isInteger(seats) || seats < 1 || seats > MAX_SEATS_PER_HOLD) {
++    throw new RangeError(`seats must be 1 to ${MAX_SEATS_PER_HOLD}`);
++  }
++  return db.tx(async (tx) => {
++    const event = await tx.oneOrNone('select seats_left from events where id = $1 and published for update', [eventId]);
++    if (!event) throw new NotFound('event');
++    if (event.seats_left < seats) throw new SoldOut(eventId);
++    await tx.none('update events set seats_left = $1 where id = $2', [event.seats_left - seats, eventId]);
++    const id = randomUUID();
++    const expiresAt = new Date(Date.now() + HOLD_MINUTES * 60_000);
++    await tx.none(
++      "insert into holds (id, event_id, buyer_id, seats, status, expires_at) values ($1, $2, $3, $4, 'active', $5)",
++      [id, eventId, buyerId, seats, expiresAt],
++    );
++    return { id, eventId, seats, expiresAt };
++  });
++}
++
++export async function releaseHold(db, { holdId, buyerId }) {
++  return db.tx(async (tx) => {
++    const hold = await tx.oneOrNone(
++      "update holds set status = 'released' where id = $1 and buyer_id = $2 and status = 'active' returning event_id, seats",
++      [holdId, buyerId],
++    );
++    if (!hold) return false;
++    await tx.none('update events set seats_left = seats_left + $1 where id = $2', [hold.seats, hold.event_id]);
++    return true;
++  });
++}
++
++// A checkout that starts just before expiry can still be paying, so the sweeper waits a little past expiry.
++const SWEEP_GRACE_MS = 2 * 60_000;
++
++// Gives seats from expired holds back to their events. Scheduled every minute on each API instance.
++export async function sweepExpiredHolds(db, now = Date.now()) {
++  return db.tx(async (tx) => {
++    const expired = await tx.any(
++      "update holds set status = 'expired' where status = 'active' and expires_at < $1 returning event_id, seats",
++      [new Date(now - SWEEP_GRACE_MS)],
++    );
++    for (const hold of expired) {
++      await tx.none('update events set seats_left = seats_left + $1 where id = $2', [hold.seats, hold.event_id]);
++    }
++    return expired.length;
++  });
++}
+diff --git a/src/jobs.mjs b/src/jobs.mjs
+new file mode 100644
+--- /dev/null
++++ b/src/jobs.mjs
+@@ -0,0 +1,19 @@
++// Background jobs, started once by every API instance.
++import { sweepExpiredHolds } from './holds.mjs';
++
++const SWEEP_EVERY_MS = 60_000;
++
++export function startJobs({ db, logger }) {
++  const timer = setInterval(sweepAndLog, SWEEP_EVERY_MS, db, logger, Date.now());
++  timer.unref();
++  return () => clearInterval(timer);
++}
++
++async function sweepAndLog(db, logger, now) {
++  try {
++    const count = await sweepExpiredHolds(db, now);
++    if (count > 0) logger.info({ count }, 'returned seats from expired holds');
++  } catch (err) {
++    logger.error({ err }, 'hold sweep failed');
++  }
++}
+diff --git a/src/routes/events.mjs b/src/routes/events.mjs
+--- a/src/routes/events.mjs
++++ b/src/routes/events.mjs
+@@ -1,9 +1,11 @@
+ // Public event pages. Anyone can read a published event without signing in.
+ export async function getEvent(req, { db }) {
+-  const event = await db.oneOrNone(
+-    'select id, title, starts_at, venue, seats_left from events where id = $1 and published',
+-    [req.params.id],
+-  );
++  const event = await db.oneOrNone('select * from events where id = $1 and published', [req.params.id]);
+   if (!event) return { status: 404, body: { error: 'Not found' } };
+-  return { status: 200, body: event };
++  if (!event.show_attendees) return { status: 200, body: event };
++  const rows = await db.any(
++    'select first_name from users where id in (select buyer_id from orders where event_id = $1) limit 50',
++    [event.id],
++  );
++  return { status: 200, body: { ...event, attendees: rows.map((row) => row.first_name) } };
+ }

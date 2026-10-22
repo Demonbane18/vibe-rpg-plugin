@@ -1,0 +1,20 @@
+{
+  "id": "ranger-orders-list",
+  "version": 4,
+  "name": "Ranger: orders screen performance pass",
+  "school": "mobile-development",
+  "rank": "journeyman",
+  "summary": "Fix a React Native orders screen that is slow, janky and crashes on large accounts.",
+  "prompt": "PERF-412 is mine this sprint and I'd like you to take it. The Orders screen in src/screens/OrdersScreen.tsx is slow and crashes on big accounts; the ticket is in PERF-412.md and our conventions are in README.md. Please fix what the ticket describes and keep everything the screen does today. There's no simulator or device here, and the dependencies in package.json are what the app has, so don't install anything or use the network.",
+  "maxPrompts": 3,
+  "timeLimitSec": 1200,
+  "checks": [
+    { "id": "identity", "label": "Search and currency stay correct across updates", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/identity.test.mjs"] },
+    { "id": "list", "label": "Large accounts open quickly and keep row identity", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/list.test.mjs"] },
+    { "id": "rows", "label": "Row updates stay local to the changed row", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/rows.test.mjs"] },
+    { "id": "render", "label": "Typing and scrolling stay smooth", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/render.test.mjs"] },
+    { "id": "images", "label": "Thumbnails load light and keep row heights", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/images.test.mjs"] },
+    { "id": "crash", "label": "Every order renders without crashing", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/crash.test.mjs"] },
+    { "id": "features", "label": "The screen keeps its current features", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/orders.mjs", "quest-checks/features.test.mjs"] }
+  ]
+}

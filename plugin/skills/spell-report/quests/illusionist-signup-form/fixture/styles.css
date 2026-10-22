@@ -1,0 +1,153 @@
+* { box-sizing: border-box; }
+*:focus { outline: none; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2b2420;
+  background: #faf6f1;
+}
+
+button, input, select { font: inherit; }
+
+a { color: #8a3f22; }
+
+.promo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #2b2420;
+  color: #faf6f1;
+  animation: slide-down 500ms ease-out;
+}
+.promo p { margin: 0; }
+.promo a { color: #ffd9c2; }
+.invite-link { font-family: ui-monospace, monospace; white-space: nowrap; }
+
+@keyframes slide-down {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.promo-close { font-size: 20px; line-height: 1; }
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e6dccf;
+}
+.logo { font-weight: 700; text-decoration: none; color: #2b2420; white-space: nowrap; }
+.site-nav { display: flex; gap: 4px; }
+.site-nav a {
+  font-size: 0.875rem;
+  padding: 4px 8px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.site-nav a:hover { text-decoration: underline; }
+
+.page { padding: 24px; }
+.hero-art { display: block; margin: 0 auto 24px; }
+
+.page-title { font-size: 2rem; font-weight: 700; text-align: center; }
+.intro { max-width: 36rem; margin: 8px auto 24px; text-align: center; }
+
+.error-summary {
+  max-width: 520px;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+  border-left: 4px solid #b3261e;
+  background: #fdecea;
+}
+
+.form-card {
+  width: 520px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(43, 36, 32, 0.08);
+}
+.form-card h3 { margin: 24px 0 8px; font-size: 1.125rem; }
+.form-card h3:first-child { margin-top: 0; }
+
+.row {
+  display: grid;
+  grid-template-columns: 220px 220px;
+  gap: 16px;
+}
+
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+.field input[type="text"], .field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbbfb1;
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 200ms;
+}
+.field input:focus, .field select:focus { border-color: #cbbfb1; }
+
+.password-wrap { position: relative; }
+.password-wrap input { padding-right: 44px; }
+.password-wrap .icon-btn { position: absolute; right: 6px; top: 50%; margin-top: -14px; }
+
+.hint { font-size: 0.875rem; color: #857870; }
+.error { display: none; font-size: 0.875rem; color: #d64a3a; }
+.error.show { display: block; }
+
+.choices { margin-bottom: 16px; }
+.choices-title { margin: 0 0 4px; font-weight: 600; }
+.choice { display: block; padding: 4px 0; }
+
+.btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border: 1px solid #8a3f22;
+  border-radius: 999px;
+  background: #8a3f22;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms, background-color 150ms;
+}
+.btn:hover { background: #6f311a; transform: translateY(-1px); }
+.btn:focus { box-shadow: none; }
+
+.success {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #e5f3ea;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  50% { transform: scale(1.03); }
+}
+
+.site-footer {
+  padding: 24px;
+  font-size: 0.875rem;
+  text-align: center;
+  color: #80746c;
+}
+
+.help { max-width: 520px; margin: 24px auto 0; text-align: center; }

@@ -27,6 +27,10 @@ Commands below go after that same `node` invocation. Read the sibling [spell-rep
    Use `trial --help` for supported flags. A workflow or combo takes the place of `--spell`. `--control` interleaves Unarmed runs with no skills under the same setup. An invoked cast names the equipped skills in the prompt; an ambient cast leaves the choice to the agent. Results and fetched spells stay under `VIBERPG_DATA_DIR`, or `~/.viberpg` by default.
 
    The arena is the sandbox. Codex and Claude Code run sealed: agent commands have no network, the home folder is hidden and writes stay in the arena; in Claude Code, hooks and skills' inline shell commands are turned off. OMP runs warded: the home folder is hidden except OMP's own folders, so its agent can read OMP's sign-in files and reach the network. An OMP trial therefore needs `--allow-open-arena`; ask the tester first and never add that flag silently. Trials refuse to start outside macOS, because grading runs the agent's code and needs the Seatbelt sandbox. Read safety-screen findings before asking whether to use `--allow-hazards`.
+
+   Screenshots (Scrying) are off by default. Before the batch, ask the tester whether to save a screenshot of each run's output: the agent's final reply, its file changes and which checks passed. Tell them the images stay under their data folder and nothing is shared unless they attach screenshots to a report. Add `--scrying` only after a clear yes. Credentials are always removed from screenshots.
+
+   When a screenshot shows sensitive details (local paths, the user or host name, emails, IP addresses, ids or secrets in URLs), the helper prints an alert naming the run and what it found, and does not save that screenshot. Show the tester the alert word for word. Ask again whether to save such screenshots with those details blurred. Only after a second yes, run `scry --blur`: it saves the withheld screenshots from the runs already made, blurred, without starting new runs. For later batches the tester can also agree up front, and then you pass `--scrying --blur` to `trial`. In a terminal the helper asks both questions itself, with No as the default.
 4. Run `trials` to read aggregate results. These are self-measured, not independently verified. Compare the same quest version, hero/version, weapon, charge, arena and machine; a different setup is not a control. Published commands fetch current upstream commits, so check recorded versions and commits before comparing an older result.
 
 ## Read results
@@ -48,6 +52,8 @@ new "<report-directory>" --name "<spell name>" --kind skill --source "<public HT
 ```
 
 Repeat `--trials` for more library slugs. It includes cells whose spell, workflow or combo equips that slug, plus matching Unarmed controls. The helper prints how many cells were added and marks their source with the submitter's name. Only aggregates go into the header, never run logs, prompts or local paths. Trial cells include OS and CPU architecture; `--no-environment` only omits the separate local-session environment evidence.
+
+Add `--scrying` to `new` only if the tester wants their saved screenshots in the report. It attaches the latest screenshot of each included cell, up to 6 files and 4 MB in total, and links each one to its cell so the site can show it after the owner imports the report. Open every attached PNG with the tester before sending and remove any they do not want to share.
 
 Fill the report's sections and verdict with the tester's findings. Run `check "<report-directory>/spell-report.md"`, review all cells, files, destination and warnings, then optionally sign following the spell-report skill. A signature attributes the exact report bytes; it does not prove the measurements. Show a local preview with `submit` without `--yes`. Ask explicitly whether to send these files to that destination. Only an explicit yes authorizes `submit ... --yes`; do not silently retry a possibly delivered email.
 

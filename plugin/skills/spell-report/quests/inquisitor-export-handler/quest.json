@@ -1,0 +1,17 @@
+{
+  "id": "inquisitor-export-handler", "version": 2,
+  "name": "Inquisitor: export endpoints security review", "school": "code-review", "rank": "journeyman",
+  "summary": "Security review of new export, share-link and hook endpoints whose flaws only show across files.",
+  "prompt": "This Quillstone change adds invoice exports, share links, a billing webhook and an ops reindex hook, and it needs a security review before it ships. change.diff is the diff and PULL_REQUEST.md is the author's description; src/exports.mjs, src/shares.mjs, src/hooks.mjs and src/routes.mjs are the post-change files, and the rest of the repository is there for context. Write review.json as {\"findings\":[{\"file\":\"src/exports.mjs\",\"line\":1,\"severity\":\"high\",\"title\":\"Describe the vulnerability and its impact\"}]}, replacing the example and using line numbers from the post-change files. List only vulnerabilities this change introduces that an attacker could actually use; we already track general hardening ideas elsewhere, so leave those out. Don't edit the source files, install packages or use the network.",
+  "maxPrompts": 2, "timeLimitSec": 900,
+  "checks": [
+    { "id": "review", "label": "Find the exploitable vulnerabilities", "type": "findings", "file": "review.json", "expected": [
+      { "id": "private-export-read", "file": "src/exports.mjs", "lines": [51, 55] },
+      { "id": "title-path-traversal", "file": "src/exports.mjs", "lines": [28, 42] },
+      { "id": "headers-logged", "file": "src/exports.mjs", "lines": [62, 63] },
+      { "id": "share-never-expires", "file": "src/shares.mjs", "lines": [21, 33] },
+      { "id": "admin-token-empty", "file": "src/hooks.mjs", "lines": [29, 31] }
+    ], "minFound": 4, "maxExtra": 1 },
+    { "id": "preserve-source", "label": "Leave the reviewed files unchanged", "type": "unchanged", "paths": ["src/exports.mjs", "src/shares.mjs", "src/hooks.mjs", "src/routes.mjs"] }
+  ]
+}

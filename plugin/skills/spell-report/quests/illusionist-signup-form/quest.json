@@ -1,0 +1,85 @@
+{
+  "id": "illusionist-signup-form",
+  "version": 4,
+  "name": "Illusionist: booking form repair",
+  "school": "frontend-design",
+  "rank": "master",
+  "summary": "Bring a class booking form up to an accessibility and small-screen review without changing its look.",
+  "prompt": "Our class booking page failed its accessibility and mobile review. The findings are in REVIEW.md. Fix index.html, styles.css and app.js so the page meets everything the review asks for, keeping the current look and the field names the booking API reads. Plain HTML, CSS and JavaScript only; do not install packages or use the network.",
+  "maxPrompts": 2,
+  "timeLimitSec": 900,
+  "checks": [
+    {
+      "id": "forms",
+      "label": "Form controls are labelled and errors reach assistive tech",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/forms.test.mjs"
+      ]
+    },
+    {
+      "id": "autofill",
+      "label": "Inputs help phones and browsers fill them in",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/autofill.test.mjs"
+      ]
+    },
+    {
+      "id": "structure",
+      "label": "Page structure works for screen reader navigation",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/structure.test.mjs"
+      ]
+    },
+    {
+      "id": "focus",
+      "label": "Keyboard focus is clearly visible everywhere",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/focus.test.mjs"
+      ]
+    },
+    {
+      "id": "contrast",
+      "label": "Text has enough contrast",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/contrast.test.mjs"
+      ]
+    },
+    {
+      "id": "motion",
+      "label": "Reduced motion setting is respected",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/motion.test.mjs"
+      ]
+    },
+    {
+      "id": "touch",
+      "label": "Buttons and navigation links are easy to tap",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/touch.test.mjs"
+      ]
+    },
+    {
+      "id": "small-screen",
+      "label": "Page fits small screens and can be zoomed",
+      "type": "node-test",
+      "files": [
+        "quest-checks/lib.mjs",
+        "quest-checks/layout.test.mjs"
+      ]
+    }
+  ]
+}

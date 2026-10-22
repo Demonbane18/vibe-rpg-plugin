@@ -1,0 +1,15 @@
+{
+  "id": "ranger-recipe-router",
+  "version": 5,
+  "name": "Ranger: Pantry navigation migration",
+  "school": "mobile-development",
+  "rank": "journeyman",
+  "summary": "Move a recipe app to Expo Router while preserving nested tabs, headers, modal navigation and old deep links.",
+  "prompt": "Please migrate Pantry to Expo Router as described in NAVIGATION.md. The current app starts in App.tsx, with screens and recipe data in src/. Keep the current screen content while moving navigation to the URL structure in the spec. Dependencies are already listed in package.json; do not install packages or use the network. No simulator or device is available here.",
+  "maxPrompts": 2,
+  "timeLimitSec": 1200,
+  "checks": [
+    { "id": "routes", "label": "Routes and navigator structure match the spec", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/router.mjs", "quest-checks/routes.test.mjs"] },
+    { "id": "links", "label": "App entry, links and modal behavior survive migration", "type": "node-test", "files": ["quest-checks/rn.mjs", "quest-checks/router.mjs", "quest-checks/links.test.mjs"] }
+  ]
+}

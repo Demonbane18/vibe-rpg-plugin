@@ -1,0 +1,198 @@
+diff --git a/src/exports.mjs b/src/exports.mjs
+new file mode 100644
+--- /dev/null
++++ b/src/exports.mjs
+@@ -0,0 +1,77 @@
++// Invoice exports for signed-in users: list, create, download and delete.
++import { createReadStream } from 'node:fs';
++import { mkdir, stat, writeFile } from 'node:fs/promises';
++import { join } from 'node:path';
++import { sendJson } from './http.mjs';
++import { displayName } from './names.mjs';
++
++const SORTS = new Map([['created', 'created_at'], ['size', 'size_bytes'], ['title', 'title']]);
++const DIRECTIONS = new Set(['asc', 'desc']);
++const AFTER_DELETE = new Set(['/exports', '/settings/exports']);
++
++// GET /exports?sort=created&dir=desc
++export async function listExports(req, res, { db, session, logger }) {
++  const url = new URL(req.url, 'http://localhost');
++  const column = SORTS.get(url.searchParams.get('sort')) ?? 'created_at';
++  const direction = DIRECTIONS.has(url.searchParams.get('dir')) ? url.searchParams.get('dir') : 'desc';
++  const { rows } = await db.query(
++    `select id, title, visibility, size_bytes, created_at from exports
++     where account_id = $1 and (visibility = 'account' or created_by = $2)
++     order by ${column} ${direction} limit 100`,
++    [session.accountId, session.userId],
++  );
++  logger.info({ req, count: rows.length }, 'exports listed');
++  sendJson(res, 200, { exports: rows });
++}
++
++// POST /exports { title, visibility }
++export async function createExport(req, res, { db, session, config, body }) {
++  const title = displayName(body.title ?? 'Invoices');
++  const visibility = body.visibility === 'account' ? 'account' : 'private';
++  const { rows: invoices } = await db.query(
++    'select number, issued_on, total_cents, status from invoices where account_id = $1 order by issued_on',
++    [session.accountId],
++  );
++  const csv = ['number,issued_on,total_cents,status']
++    .concat(invoices.map((i) => [i.number, i.issued_on.toISOString().slice(0, 10), i.total_cents, i.status].join(',')))
++    .join('\n');
++  const id = await db.nextId('exports_id_seq');
++  const fileName = `${id}-${title}.csv`;
++  const dir = join(config.exportRoot, String(session.accountId));
++  await mkdir(dir, { recursive: true });
++  await writeFile(join(dir, fileName), csv);
++  await db.query(
++    'insert into exports (id, account_id, created_by, visibility, title, file_name, size_bytes) values ($1, $2, $3, $4, $5, $6, $7)',
++    [id, session.accountId, session.userId, visibility, title, fileName, Buffer.byteLength(csv)],
++  );
++  sendJson(res, 201, { id });
++}
++
++// GET /exports/:id/download
++export async function downloadExport(req, res, { db, session, config, logger, params }) {
++  const { rows: [row] } = await db.query(
++    'select id, file_name from exports where id = $1 and account_id = $2',
++    [params.id, session.accountId],
++  );
++  if (!row) return sendJson(res, 404, { error: 'Not found' });
++  const path = join(config.exportRoot, String(session.accountId), row.file_name);
++  try {
++    const info = await stat(path);
++    res.writeHead(200, { 'content-type': 'text/csv', 'content-length': info.size, 'content-disposition': `attachment; filename="export-${row.id}.csv"` });
++    createReadStream(path).on('error', () => res.destroy()).pipe(res);
++  } catch (err) {
++    logger.error({ err, exportId: row.id, headers: req.headers }, 'export file missing');
++    sendJson(res, 404, { error: 'Not found' });
++  }
++}
++
++// POST /exports/:id/delete?next=/exports (form post from the exports page)
++export async function deleteExport(req, res, { db, session, params }) {
++  await db.query(
++    "delete from exports where id = $1 and account_id = $2 and (created_by = $3 or $4 = 'owner')",
++    [params.id, session.accountId, session.userId, session.role],
++  );
++  const next = new URL(req.url, 'http://localhost').searchParams.get('next');
++  res.writeHead(303, { location: AFTER_DELETE.has(next) ? next : '/exports' });
++  res.end();
++}
+diff --git a/src/hooks.mjs b/src/hooks.mjs
+new file mode 100644
+--- /dev/null
++++ b/src/hooks.mjs
+@@ -0,0 +1,43 @@
++// Billing provider webhook and the ops reindex hook.
++import { execFile } from 'node:child_process';
++import { createHmac, timingSafeEqual } from 'node:crypto';
++import { sendJson } from './http.mjs';
++
++function safeEqual(a, b) {
++  const left = Buffer.from(a);
++  const right = Buffer.from(b);
++  return left.length === right.length && timingSafeEqual(left, right);
++}
++
++// POST /webhooks/billing. The provider signs `${timestamp}.${body}` with the shared secret; timestamps are in seconds.
++export async function billingWebhook(req, res, { db, config, rawBody }) {
++  const timestamp = Number(req.headers['x-billing-timestamp']);
++  if (!Number.isInteger(timestamp) || Math.abs(nowSeconds() - timestamp) > 300) return sendJson(res, 400, { error: 'Stale request' });
++  const expected = createHmac('sha256', config.billingWebhookSecret).update(`${timestamp}.${rawBody}`).digest('hex');
++  if (!safeEqual(String(req.headers['x-billing-signature'] ?? ''), expected)) return sendJson(res, 401, { error: 'Bad signature' });
++  const event = JSON.parse(rawBody);
++  await db.tx(async (tx) => {
++    const { rowCount } = await tx.query('insert into billing_events (id) values ($1) on conflict do nothing', [event.id]);
++    if (rowCount === 1 && event.type === 'plan.changed') {
++      await tx.query('update accounts set plan = $1 where billing_customer_id = $2', [event.plan, event.customerId]);
++    }
++  });
++  sendJson(res, 204);
++}
++
++// POST /admin/reindex?account=41. Ops use this to rebuild one account's search index.
++export async function reindex(req, res, { config, logger }) {
++  const token = String(req.headers.authorization ?? '').replace(/^Bearer /, '');
++  if (!safeEqual(token, config.adminToken ?? '')) return sendJson(res, 403, { error: 'Forbidden' });
++  const account = new URL(req.url, 'http://localhost').searchParams.get('account') ?? '';
++  if (!/^\d+$/.test(account)) return sendJson(res, 400, { error: 'account must be numeric' });
++  logger.info({ account }, 'reindex requested');
++  execFile('quill-index', ['--account', account], { timeout: 10 * 60_000 }, (err) => {
++    if (err) logger.error({ err, account }, 'reindex failed');
++  });
++  sendJson(res, 202, { status: 'started' });
++}
++
++function nowSeconds() {
++  return Math.floor(Date.now() / 1000);
++}
+diff --git a/src/routes.mjs b/src/routes.mjs
+--- a/src/routes.mjs
++++ b/src/routes.mjs
+@@ -2,10 +2,21 @@
+ // Handlers get ctx = { db, logger, config, params, body, rawBody }. requireSession rejects requests without a valid
+ // session cookie (HttpOnly, SameSite=Lax) and cross-origin POSTs, then adds ctx.session = { userId, accountId, role },
+ // where role is 'owner' or 'member'.
++import { createExport, deleteExport, downloadExport, listExports } from './exports.mjs';
++import { billingWebhook, reindex } from './hooks.mjs';
+ import { getProfile, updateProfile } from './profile.mjs';
+ import { requireSession } from './session.mjs';
++import { createShare, openShare } from './shares.mjs';
+ 
+ export const routes = [
+   ['GET', '/profile', requireSession(getProfile)],
+   ['POST', '/profile', requireSession(updateProfile)],
++  ['GET', '/exports', requireSession(listExports)],
++  ['POST', '/exports', requireSession(createExport)],
++  ['GET', '/exports/:id/download', requireSession(downloadExport)],
++  ['POST', '/exports/:id/delete', requireSession(deleteExport)],
++  ['POST', '/exports/:id/share', requireSession(createShare)],
++  ['GET', '/s/:id', openShare],
++  ['POST', '/webhooks/billing', billingWebhook],
++  ['POST', '/admin/reindex', reindex],
+ ];
+diff --git a/src/shares.mjs b/src/shares.mjs
+new file mode 100644
+--- /dev/null
++++ b/src/shares.mjs
+@@ -0,0 +1,38 @@
++// Share links: a signed URL that lets anyone with the link download one export for a week.
++import { createHmac, timingSafeEqual } from 'node:crypto';
++import { createReadStream } from 'node:fs';
++import { join } from 'node:path';
++import { sendJson } from './http.mjs';
++
++const SHARE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
++const nowSeconds = () => Math.floor(Date.now() / 1000);
++
++function sign(secret, exportId, expires) {
++  return createHmac('sha256', secret).update(`${exportId}.${expires}`).digest('hex');
++}
++
++// POST /exports/:id/share
++export async function createShare(req, res, { db, session, config, params }) {
++  const { rows: [row] } = await db.query(
++    "select id from exports where id = $1 and account_id = $2 and (visibility = 'account' or created_by = $3)",
++    [params.id, session.accountId, session.userId],
++  );
++  if (!row) return sendJson(res, 404, { error: 'Not found' });
++  const expires = Date.now() + SHARE_TTL_MS;
++  const sig = sign(config.shareSecret, row.id, expires);
++  sendJson(res, 201, { url: `${config.appOrigin}/s/${row.id}?expires=${expires}&sig=${sig}` });
++}
++
++// GET /s/:id?expires=...&sig=... No session: the signature is the credential.
++export async function openShare(req, res, { db, config, params }) {
++  const url = new URL(req.url, 'http://localhost');
++  const expires = Number(url.searchParams.get('expires'));
++  const given = Buffer.from(url.searchParams.get('sig') ?? '', 'hex');
++  const wanted = Buffer.from(sign(config.shareSecret, params.id, expires), 'hex');
++  if (given.length !== wanted.length || !timingSafeEqual(given, wanted)) return sendJson(res, 403, { error: 'Invalid link' });
++  if (expires < nowSeconds()) return sendJson(res, 410, { error: 'This link has expired' });
++  const { rows: [row] } = await db.query('select id, account_id, file_name from exports where id = $1', [params.id]);
++  if (!row) return sendJson(res, 404, { error: 'Not found' });
++  res.writeHead(200, { 'content-type': 'text/csv', 'content-disposition': `attachment; filename="export-${row.id}.csv"` });
++  createReadStream(join(config.exportRoot, String(row.account_id), row.file_name)).on('error', () => res.destroy()).pipe(res);
++}

@@ -1,0 +1,79 @@
+/* Fieldnote design tokens. Generated from the design system; do not edit by hand. */
+:root {
+  /* Colour */
+  --color-page: #ffffff;
+  --color-surface: #eef1f6;
+  --color-surface-raised: #ffffff;
+  --color-line: #dde1e8;
+  --color-ink: #172033;
+  --color-ink-soft: #4a5263;
+  --color-ink-muted: #6b7385;
+  --color-ink-subtle: #98a0b0;
+  --color-brand: #5468ff;
+  --color-brand-strong: #3341c2;
+  --color-brand-tint: #eceeff;
+  --color-on-brand: #ffffff;
+  --color-accent: #ff7a33;
+  --color-accent-tint: #fff0e6;
+  --color-accent-ink: #9a3a05;
+  --color-on-accent: #ffffff;
+  --color-focus: #8b9dff;
+
+  /* Type */
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.75rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Shape and depth */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --border-width: 1px;
+  --shadow-card: 0 1px 2px rgb(23 32 51 / 0.06), 0 6px 16px rgb(23 32 51 / 0.08);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-page: #10141f;
+    --color-surface: #181d2b;
+    --color-surface-raised: #1f2535;
+    --color-line: #2e3548;
+    --color-ink: #e9ecf3;
+    --color-ink-soft: #b9bfcc;
+    --color-ink-muted: #8a92a3;
+    --color-ink-subtle: #5d6577;
+    --color-brand: #7c8cff;
+    --color-brand-strong: #a9b4ff;
+    --color-brand-tint: #232a4d;
+    --color-accent: #ff9a5c;
+    --color-accent-tint: #3a2414;
+    --color-accent-ink: #ffb98a;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 16px rgb(0 0 0 / 0.3);
+  }
+}

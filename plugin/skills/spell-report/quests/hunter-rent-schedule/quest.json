@@ -1,0 +1,17 @@
+{
+  "id": "hunter-rent-schedule",
+  "version": 2,
+  "name": "Hunter: Month-End Schedule Repair",
+  "school": "testing-debugging",
+  "rank": "grandmaster",
+  "summary": "Fix a month-end recurrence bug and the latent date bugs beside it, proven with regression tests.",
+  "prompt": "A tenant's monthly rent reminder skipped February. ISSUE.md has the report and README.md describes how schedules are meant to work. Please track down the cause in src/, fix it, and add regression tests under test/ that would have caught it. Keep test/schedule.test.mjs as it is. Use only Node.js built-ins; do not install packages or use the network.",
+  "maxPrompts": 1,
+  "timeLimitSec": 1200,
+  "checks": [
+    { "id": "existing-tests", "label": "Existing schedule tests stay unchanged", "type": "unchanged", "paths": ["test/schedule.test.mjs"] },
+    { "id": "own-tests", "label": "Test suite passes with new regression tests", "type": "own-tests", "dir": "test", "minTests": 7 },
+    { "id": "catches-original", "label": "Regression tests fail on the original code", "type": "catches-original", "dir": "test", "restore": ["src/dates.mjs", "src/schedule.mjs"] },
+    { "id": "schedule-contract", "label": "Schedules follow the README", "type": "node-test", "files": ["quest-checks/schedule.test.mjs"] }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "inquisitor-seat-holds",
+  "version": 8,
+  "name": "Inquisitor: seat holds pull request",
+  "school": "code-review",
+  "rank": "grandmaster",
+  "summary": "Review a multi-file seat-hold checkout change for real defects without flagging the safe parts.",
+  "prompt": "Could you review this Fernhollow pull request before I merge it? change.diff is the diff, PULL_REQUEST.md is the author's description, and src/holds.mjs, src/checkout.mjs, src/jobs.mjs and src/routes/events.mjs are the post-change files; the rest of the repository is there for context. Put your findings in review.json as {\"findings\":[{\"file\":\"src/checkout.mjs\",\"line\":1,\"severity\":\"high\",\"title\":\"Describe the bug and its impact\"}]}, replacing the example and using line numbers from the post-change files. I triage every finding by hand, so only include bugs introduced by this change that you would block the merge on: no style notes, nice-to-haves, speculative hardening or pre-existing issues. Please leave the source files unchanged, and don't install packages or use the network.",
+  "maxPrompts": 1,
+  "timeLimitSec": 900,
+  "checks": [
+    {"id": "review", "label": "Find the defects the change introduces", "type": "findings", "file": "review.json", "expected": [{"id": "frozen-sweep-time", "file": "src/jobs.mjs", "lines": [7, 14]}, {"id": "fee-string-concat", "file": "src/checkout.mjs", "lines": [14, 17]}, {"id": "decline-replayed", "file": "src/checkout.mjs", "lines": [18, 23]}, {"id": "paid-without-claim", "file": "src/checkout.mjs", "lines": [25, 30]}, {"id": "event-columns-exposed", "file": "src/routes/events.mjs", "lines": [3, 10]}], "minFound": 5, "maxExtra": 1},
+    {"id": "preserve-source", "label": "Leave the reviewed files unchanged", "type": "unchanged", "paths": ["src/holds.mjs", "src/checkout.mjs", "src/jobs.mjs", "src/routes/events.mjs"]}
+  ]
+}

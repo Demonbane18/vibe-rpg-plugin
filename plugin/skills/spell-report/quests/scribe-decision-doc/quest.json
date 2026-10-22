@@ -1,0 +1,70 @@
+{
+  "id": "scribe-decision-doc",
+  "version": 4,
+  "name": "Scribe's record: decision document",
+  "school": "documents-productivity",
+  "rank": "master",
+  "summary": "Turn meeting notes, a chat thread and a metrics table into a decision record with current owners, dates and open questions.",
+  "prompt": "Last week we decided to move product search off Postgres, and the discussion carried on in chat afterwards. Can you write it up as DECISION.md using TEMPLATE.md? The raw material is in notes/meeting.md, notes/thread.txt and notes/metrics.csv. The leads will treat it as the record of what we agreed, so the decisions, owners and dates have to be right, and it shouldn't contain any number that isn't in the notes. Leave the notes and the template as they are.",
+  "maxPrompts": 2,
+  "timeLimitSec": 900,
+  "checks": [
+    {
+      "id": "inputs-unchanged",
+      "label": "Leave the notes and template unchanged",
+      "type": "unchanged",
+      "paths": [
+        "TEMPLATE.md",
+        "notes/meeting.md",
+        "notes/thread.txt",
+        "notes/metrics.csv"
+      ]
+    },
+    {
+      "id": "record-facts",
+      "label": "Keep the people, options and figures",
+      "type": "contains",
+      "file": "DECISION.md",
+      "values": [
+        "Typesense",
+        "Elasticsearch",
+        "Marek Lind",
+        "Ines Duarte",
+        "Sol Abara",
+        "Hana Brooks",
+        "Rui Tan",
+        "840",
+        "95",
+        "18.4%",
+        "9.1%"
+      ]
+    },
+    {
+      "id": "plain-record",
+      "label": "Read as plain, human writing",
+      "type": "avoids",
+      "file": "DECISION.md",
+      "patterns": [
+        "[—–]| -- ",
+        "\\b(?:delve|tapestry|testament|pivotal|seamless(?:ly)?|showcas\\w*|underscor\\w*|crucial(?:ly)?|vibrant|meticulous\\w*|game[ -]changer|elevate|unlock)\\b",
+        "\\bnot\\s+(?:just|only|merely)\\b",
+        "^\\s*(?:[-*+]|\\d+[.)])\\s+\\*\\*"
+      ],
+      "skip": [
+        "code",
+        "inline-code",
+        "quote",
+        "table",
+        "link-url"
+      ]
+    },
+    {
+      "id": "decision-record",
+      "label": "Record the decisions as they stand",
+      "type": "node-test",
+      "files": [
+        "quest-checks/record.test.mjs"
+      ]
+    }
+  ]
+}

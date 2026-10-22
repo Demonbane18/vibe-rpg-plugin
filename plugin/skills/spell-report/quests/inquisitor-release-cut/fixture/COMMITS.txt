@@ -1,0 +1,141 @@
+$ git log -18 --decorate --date=short
+
+commit a91c3e7 (HEAD -> main, origin/main)
+Author: Mira Holt
+Date:   2026-10-17
+
+    docs: fix typo in the retry section of the README
+
+commit 3be7f02
+Author: Tobin Vale
+Date:   2026-10-16
+
+    fix(pagination): stop listAll() looping when the API returns an empty cursor
+
+    An empty string cursor was treated as "more pages". It now ends the
+    iteration like a missing cursor does.
+
+    Fixes #231
+
+commit c4d18a9
+Author: Mira Holt
+Date:   2026-10-15
+
+    revert: pull device-code sign-in until the endpoint is live
+
+    This reverts commit 5e0b2d4. The flow fails for everyone who tries it
+    because the API does not serve it yet.
+
+commit 8f6a1d3
+Author: Ansel Brook
+Date:   2026-10-14
+
+    feat(export): add exportCsv() for query results
+
+    Streams rows as RFC 4180 CSV so large result sets don't have to be
+    held in memory.
+
+commit 5c9e0a2
+Merge: 2d9e4b8 b6e1f40
+Author: Mira Holt
+Date:   2026-10-13
+
+    Merge pull request #226 from tidepool-labs/decimal-filters
+
+    fix(query): keep trailing zeros in decimal filters
+
+commit 2d9e4b8
+Author: Tobin Vale
+Date:   2026-10-12
+
+    perf(client): reuse keep-alive connections across requests
+
+commit 61c0f5a
+Author: Ansel Brook
+Date:   2026-10-10
+
+    refactor(client): use milliseconds for every duration option
+
+    createClient() mixed seconds (timeout) and milliseconds (retryDelay).
+    Everything is milliseconds now.
+
+    BREAKING-CHANGE: the `timeout` option of createClient() is now read as
+    milliseconds instead of seconds. Multiply existing values by 1000.
+
+commit 6e3b9d1
+Author: Tobin Vale
+Date:   2026-10-09
+
+    fix(stations): reject when a station does not exist
+
+    getStation() resolved to null on a 404, which hid typos in station
+    ids. It now rejects with a TidepoolError whose status is 404, the
+    same as every other failed request.
+
+commit 5e0b2d4
+Author: Ansel Brook
+Date:   2026-10-08
+
+    feat(auth): add device-code sign-in
+
+commit 4a7d0c3
+Author: Tobin Vale
+Date:   2026-10-07
+
+    build: compile for Node 20 and drop the Node 18 build
+
+    BREAKING CHANGE: Node 18 is no longer supported. tidepool-js now needs
+    Node 20 or newer.
+
+commit e7a2c90
+Author: dependabot[bot]
+Date:   2026-10-07
+
+    chore(deps): bump undici from 6.19.8 to 6.21.1
+
+commit 7c2e5a0
+Author: Mira Holt
+Date:   2026-10-06
+
+    feat(client): accept an AbortSignal through the `signal` option
+
+    Refs #219
+
+commit 0b5d7f1
+Author: Tobin Vale
+Date:   2026-10-03
+
+    fix(errors): include the request id in TidepoolError messages
+
+commit 9c3f6e2
+Author: Tobin Vale
+Date:   2026-10-02
+
+    test(pagination): cover empty result pages
+
+commit f12a8b4 (tag: v2.3.1)
+Author: Mira Holt
+Date:   2026-09-30
+
+    chore(release): 2.3.1
+
+commit 4f2a9c1
+Author: Tobin Vale
+Date:   2026-09-29
+
+    fix(retry): retry idempotent requests on 503
+
+commit b6e1f40
+Author: Ansel Brook
+Date:   2026-09-28
+
+    fix(query): keep trailing zeros in decimal filters
+
+    Decimal strings such as '10.50' were parsed into numbers before they
+    were sent, so exact matches on decimal columns missed rows.
+
+commit d83b1e6
+Author: Mira Holt
+Date:   2026-09-26
+
+    ci: run the test matrix on Node 22
