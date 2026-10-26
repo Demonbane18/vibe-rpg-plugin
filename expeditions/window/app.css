@@ -1,0 +1,169 @@
+/* Expeditions window. Tokens copied from src/site/site.css :root; the frame is drawn with borders and shadows because
+   the helper's CSP (default-src 'self') blocks the site's data: URL frame. */
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("/assets/fonts/pixelify-sans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --night: #0e1027;
+  --ink: #0b0c1c;
+  --win-top: #2f3d8f;
+  --win-mid: #22296e;
+  --win-bottom: #171c4c;
+  --win-edge: #e8ecff;
+  --win-line: #8790c8;
+  --well: #11163f;
+  --text: #ffffff;
+  --muted: #c7d0f0;
+  --gold: #ffd34d;
+  --link: #8fd3ff;
+  --hp: #e83b3b;
+  --xp: #91db69;
+  --focus: #ffd34d;
+  --font-pixel: "Pixelify Sans", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--night);
+  text-size-adjust: 100%;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0 auto; max-width: 60rem; padding: 0 .75rem 2rem; overflow-wrap: anywhere; }
+[hidden] { display: none !important; }
+a { color: var(--link); text-underline-offset: .2em; text-decoration-thickness: 2px; }
+p { margin: 0 0 .75rem; }
+p:last-child { margin-bottom: 0; }
+h1, h2, h3 { font-family: var(--font-pixel); font-weight: 700; line-height: 1.15; text-shadow: 2px 2px 0 var(--ink); }
+h1 { margin: 0; font-size: 1.5rem; }
+h2 { margin: 0 0 .6rem; font-size: 1.25rem; color: var(--gold); }
+h3 { margin: 1rem 0 .5rem; font-size: 1.05rem; }
+button, input, select, textarea { font: inherit; font-size: 1rem; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+fieldset { min-width: 0; margin: 0 0 1rem; padding: 0; border: 0; }
+legend { margin-bottom: .4rem; font-family: var(--font-pixel); color: var(--gold); }
+summary { cursor: pointer; display: flex; align-items: center; min-height: 2.75rem; font-family: var(--font-pixel); color: var(--gold); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.skip-link { position: absolute; z-index: 20; left: 1rem; top: -6rem; padding: .75rem 1rem; background: var(--gold); color: var(--ink); font-family: var(--font-pixel); font-weight: 700; }
+.skip-link:focus { top: 1rem; }
+.muted { color: var(--muted); }
+.note { padding: .75rem 1rem; background: var(--well); border-left: 4px solid var(--gold); color: var(--muted); }
+
+/* Windows */
+.window {
+  margin-top: 1rem;
+  padding: .9rem 1rem 1rem;
+  border: 2px solid var(--win-edge);
+  box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--win-line);
+  background: linear-gradient(180deg, var(--win-top), var(--win-mid) 45%, var(--win-bottom));
+}
+
+/* Buttons and chips (as on the site) */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-width: 2.75rem; min-height: 2.75rem; padding: .45rem 1rem;
+  font: 700 1rem/1.2 var(--font-pixel); color: var(--text); text-decoration: none; text-shadow: 2px 2px 0 var(--ink);
+  background: #3442a0; border: 2px solid var(--ink); border-radius: 0;
+  box-shadow: inset 2px 2px 0 #6f7fe0, inset -2px -2px 0 #1f2766; cursor: pointer;
+}
+.btn:active, .btn[aria-pressed="true"] { box-shadow: inset 2px 2px 0 #1f2766, inset -2px -2px 0 #6f7fe0; }
+.btn-gold { background: #f9c22b; color: var(--ink); text-shadow: none; box-shadow: inset 2px 2px 0 #fff0a8, inset -2px -2px 0 #b8860b; }
+.btn-small { padding: .3rem .7rem; font-size: .9rem; }
+.button-row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: .75rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.chip {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; padding: .35rem .8rem;
+  font: 1rem/1.2 var(--font-pixel); color: var(--muted); background: var(--well); border: 2px solid #4c57a8; border-radius: 0; cursor: pointer;
+}
+.chip[aria-pressed="true"], .chip:has(input:checked) { color: var(--text); background: var(--win-top); border-color: var(--gold); box-shadow: inset 0 -3px 0 var(--gold); }
+.chip input { width: 1.25rem; height: 1.25rem; margin: 0; accent-color: var(--gold); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: #3d4cb8; }
+  .btn-gold:hover { background: #ffd34d; }
+  .chip:hover { color: var(--text); border-color: var(--win-line); }
+}
+
+/* Header */
+.top { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: .75rem 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: .5rem; }
+.tools { display: flex; gap: .5rem; margin-left: auto; }
+.status:empty { display: none; }
+.status { padding: .5rem .75rem; background: var(--well); border-left: 4px solid var(--gold); }
+
+/* Island strip: every session as a chip, the ones that need you first */
+.island { margin-top: .25rem; }
+.island-chip { align-items: flex-start; max-width: 24rem; text-align: left; }
+.island-chip[data-phase="approval"], .island-chip[data-phase="waiting"] { color: var(--text); border-color: var(--gold); }
+.island-chip[aria-current="true"] { color: var(--text); background: var(--win-top); border-color: var(--gold); box-shadow: inset 0 -3px 0 var(--gold); }
+.chip-text { display: flex; flex-direction: column; min-width: 0; }
+.chip-phase { font: .9rem/1.3 var(--font-body); }
+.dot { flex: none; width: .75rem; height: .75rem; margin-top: .3rem; background: var(--xp); border: 2px solid var(--ink); }
+.island-chip[data-phase="approval"] .dot { background: var(--gold); }
+.island-chip[data-phase="waiting"] .dot { background: var(--link); }
+.island-chip[data-phase="compacting"] .dot { background: var(--win-line); }
+.island-chip[data-phase="quiet"] .dot, .island-chip[data-phase="ending"] .dot { background: transparent; border-color: var(--win-line); }
+/* A few blinks when a chip is drawn needing approval, only with full motion (app.ts sets data-motion from the setting
+   and the device), and nothing that keeps running. */
+html[data-motion="full"] .island-chip[data-phase="approval"] .dot { animation: island-pulse .5s steps(2, jump-none) 6; }
+@keyframes island-pulse { to { opacity: .2; } }
+
+/* Battle */
+.run-head h2 { margin-top: .5rem; }
+.facts { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0; }
+.facts div { display: flex; gap: .4rem; }
+.facts dt { color: var(--muted); }
+.facts dt::after { content: ":"; }
+.facts dd { margin: 0; }
+.pips { color: var(--gold); }
+.stage { display: flex; justify-content: center; margin-top: .75rem; }
+canvas { display: block; image-rendering: pixelated; background: var(--night); }
+.meters { margin-top: .75rem; }
+.meter-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+.meter-row meter { flex: 1 1 12rem; height: 1rem; }
+.ask { border-color: var(--gold); }
+.change-class { margin-top: .75rem; }
+.field { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .75rem; }
+.field label { font-family: var(--font-pixel); color: var(--gold); }
+select, textarea { min-height: 2.75rem; padding: .4rem .6rem; color: var(--text); background: var(--well); border: 2px solid var(--win-line); border-radius: 0; }
+select { max-width: 100%; }
+textarea.code { display: block; width: 100%; margin-top: .4rem; font: .875rem/1.5 var(--font-code); }
+.card-lines { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.card-lines li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; padding: .5rem .75rem; background: var(--well); }
+.card-lines span { flex: 1 1 18rem; }
+.copy-status { margin: .5rem 0 0; font-family: var(--font-pixel); color: var(--xp); }
+.copy-status:empty { display: none; }
+.log { max-height: 14rem; overflow-y: auto; margin: 0; padding-left: 1.5rem; font-size: .95rem; color: var(--muted); }
+.log li:last-child { color: var(--text); }
+
+/* Collection */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: .4rem .5rem; text-align: left; border-bottom: 1px solid #4c57a8; }
+.table thead th { font-family: var(--font-pixel); color: var(--gold); }
+.stars { color: var(--gold); letter-spacing: .1em; }
+.caught { display: grid; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+.caught li { display: flex; align-items: center; gap: .6rem; }
+.sprite { image-rendering: pixelated; }
+.agents { margin: 0; padding-left: 1.25rem; }
+
+/* Pinned window: the compact island, a fixed-height row the canvas fits under, then the canvas centered */
+body.pinned { display: flex; flex-direction: column; max-width: none; height: 100vh; margin: 0; padding: 0; overflow: hidden; }
+body.pinned canvas { margin: auto; }
+.island-compact { flex: none; height: 3.5rem; margin: 0; padding: .25rem .5rem; overflow: auto hidden; background: var(--well); }
+.island-compact .island-chips { flex-wrap: nowrap; }
+.island-compact .island-chip { align-items: center; max-width: none; padding: .2rem .6rem; white-space: nowrap; }
+.island-compact .chip-text { flex-direction: row; gap: .4rem; }
+.island-compact .chip-phase { color: var(--muted); }
+.island-compact .dot { margin-top: 0; }
+.island-compact > p { margin: 0; line-height: 3rem; }
+
+@media (forced-colors: active) {
+  .window, .chip, .btn, .dot { border-color: CanvasText; }
+  .chip[aria-pressed="true"], .chip[aria-current="true"], .btn[aria-pressed="true"], .chip:has(input:checked) { outline: 3px solid Highlight; }
+}

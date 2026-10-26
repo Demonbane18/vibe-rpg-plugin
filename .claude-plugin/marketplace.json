@@ -1,6 +1,6 @@
 {
   "name": "viberpg",
-  "description": "Test-report tools for the VibeRPGSimulator spell library.",
+  "description": "Spell reports and local Expeditions for the VibeRPGSimulator spell library.",
   "owner": {
     "name": "VibeRPGSimulator"
   },
@@ -10,6 +10,12 @@
       "source": "./plugin",
       "description": "Write, check, sign and send test reports on agent skills, plugins and MCP servers.",
       "version": "0.7.2"
+    },
+    {
+      "name": "expeditions",
+      "source": "./expeditions",
+      "description": "A local pixel-art battle window that follows your agent sessions. Requires Node 22 or newer.",
+      "version": "0.1.0"
     }
   ]
 }

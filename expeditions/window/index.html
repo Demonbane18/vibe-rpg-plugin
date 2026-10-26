@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0e1027">
+  <title>Expeditions</title>
+  <link rel="stylesheet" href="/app.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#log-panel">Skip to the battle log</a>
+  <header class="top">
+    <h1 class="brand">Expeditions</h1>
+    <nav class="tabs" aria-label="Screens">
+      <button type="button" class="chip" id="tab-battle" aria-pressed="true">Battle</button>
+      <button type="button" class="chip" id="tab-collection" aria-pressed="false">Collection</button>
+      <button type="button" class="chip" id="tab-settings" aria-pressed="false">Settings</button>
+    </nav>
+    <div class="tools">
+      <button type="button" class="btn btn-small" id="pin" aria-pressed="false">Pin</button>
+      <button type="button" class="btn btn-small" id="sound" data-control="sound" aria-pressed="false">Sound</button>
+    </div>
+  </header>
+  <p id="status" class="status" role="status"></p>
+  <nav id="runs" class="island" aria-label="Sessions" hidden></nav>
+  <p id="island-news" class="sr-only" role="status"></p>
+  <main id="main">
+    <section id="view-battle" aria-label="Battle">
+      <div id="run-head" class="run-head"></div>
+      <div id="stage" class="stage"><canvas id="screen" width="320" height="180" role="img" aria-label="Battle screen"></canvas></div>
+      <p id="pinned-note" class="note" hidden>The battle is in the pinned window. <button type="button" class="btn btn-small" id="unpin">Bring it back</button></p>
+      <div id="meters" class="meters" hidden></div>
+      <div id="asks" class="asks"></div>
+      <details id="card" class="window card-panel" hidden></details>
+      <section id="manual" class="window" aria-labelledby="manual-h"></section>
+      <section id="log-panel" class="window" aria-labelledby="log-h" tabindex="-1">
+        <h2 id="log-h">Battle log</h2>
+        <ol id="log" class="log" aria-live="polite" aria-relevant="additions"></ol>
+      </section>
+    </section>
+    <section id="view-collection" class="window" aria-labelledby="collection-h" hidden>
+      <h2 id="collection-h">Collection</h2>
+      <p class="muted">Your guild hall: progress across sessions, kept on this device.</p>
+      <div id="collection-body"></div>
+    </section>
+    <section id="view-settings" class="window" aria-labelledby="settings-h" hidden>
+      <h2 id="settings-h">Settings</h2>
+      <div id="settings-body"></div>
+    </section>
+  </main>
+  <noscript><p class="note">Expeditions needs JavaScript to draw the battle.</p></noscript>
+</body>
+</html>
