@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/expeditions/cli.ts; Expeditions 0.1.0. Node 22+. Rebuild with bun run build:expeditions.
+// Generated from src/expeditions/cli.ts; Expeditions 0.1.1. Node 22+. Rebuild with bun run build:expeditions.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -6741,8 +6741,10 @@ function applyEvent(previous, event, data) {
         beats.push({ kind: "rally", actor: event.actor });
       }
       if (event.tool === "subagent") {
-        state.summons++;
-        beats.push({ kind: "summon", actor: event.actor });
+        if (!state.caps.subagents) {
+          state.summons++;
+          beats.push({ kind: "summon", actor: state.summons });
+        }
       } else
         hit(state, data, beats, event.actor, event.tool, toolRow(event.tool, phase));
       break;
