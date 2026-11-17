@@ -425,7 +425,7 @@
       "evidenceUrl": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security",
       "install": "/plugin install claude-security@claude-plugins-official\n/reload-plugins",
       "publisher": "Anthropic",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-09-25",
       "verifiedOn": "2026-10-22",
       "notes": "Version 0.12.0. Proprietary Anthropic license: internal use with Anthropic products only. Run /claude-security to scan the codebase, scan changes, or suggest patches. A scan asks you to confirm its time and token cost. Results go to CLAUDE-SECURITY-<timestamp>/ as Markdown, JSONL and SARIF. Patches are never applied for you. Needs Python 3.9+. Meant for code you control; for repos you do not trust, the README suggests running inside sandbox-runtime. Sends usage counts unless telemetry is off.",
@@ -486,7 +486,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills: ticket-triage, customer-research, draft-response, customer-escalation and kb-article. Bundled connectors are Slack, Intercom, HubSpot, Guru, Notion, Atlassian and Microsoft 365, each needing its own account; without them you paste in the customer context. No Codex setup is documented.",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills: ticket-triage, customer-research, draft-response, customer-escalation and kb-article. Bundled connectors are Slack, Intercom, HubSpot, Guru, Notion, Atlassian and Microsoft 365, each needing its own account; without them you paste in the customer context. Gmail and Google Calendar ship with empty URLs in .mcp.json. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -565,7 +565,7 @@
       "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/docx/SKILL.md",
       "install": null,
       "publisher": "Anthropic",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-07-17",
       "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. It creates and edits .docx and .dotx files with the docx library, pandoc, and XML edits, including tracked changes and comments. It expects `docx` to already be installed, then renders a PDF to check the pages.",
@@ -623,7 +623,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include journal-entry, reconciliation, financial-statements, variance-analysis, close-management and sox-testing. The README says it gives no financial, tax or audit advice and its output needs review by qualified professionals. Connectors: Snowflake, Databricks, BigQuery, Slack and Microsoft 365, each with its own account. No Codex setup is documented.",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include journal-entry, reconciliation, financial-statements, variance-analysis, close-management and sox-testing. The README says it gives no financial, tax or audit advice and its output needs review by qualified professionals. Connectors: Snowflake, Databricks, BigQuery, Slack and Microsoft 365, each with its own account. Snowflake, Databricks, Gmail and Google Calendar ship with empty URLs. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -737,7 +737,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Put your negotiation playbook in .claude/legal.local.md so reviews compare against your standard positions. Skills include review-contract, triage-nda, compliance-check, legal-risk-assessment and vendor-check. Not legal advice; the README says licensed attorneys should review its analysis. Connectors: Slack, Box, Egnyte, Atlassian, DocuSign, Google Calendar, Gmail and Microsoft 365. No Codex setup is documented.",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Put your negotiation playbook in .claude/legal.local.md so reviews compare against it. Skills include review-contract, triage-nda, compliance-check, legal-risk-assessment and vendor-check. Not legal advice; the README says licensed attorneys should review its analysis. Connectors: Slack, Box, Egnyte, Atlassian, DocuSign, Google Calendar, Gmail and Microsoft 365 (Gmail and Google Calendar ship with empty URLs). No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -765,7 +765,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Built mainly for Claude Cowork; the README says it also works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include draft-content, campaign-plan, brand-review, competitive-brief, seo-audit, email-sequence and performance-report. It works from what you give it; connectors such as HubSpot, Canva, Ahrefs, Klaviyo and SimilarWeb need their own accounts. No Codex setup is documented.",
+      "notes": "Built mainly for Claude Cowork; the README says it also works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include draft-content, campaign-plan, brand-review, competitive-brief, seo-audit, email-sequence and performance-report. It works from what you give it; connectors such as HubSpot, Canva, Ahrefs, Klaviyo and SimilarWeb need their own accounts. Gmail and Google Calendar ship with empty URLs in .mcp.json. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -818,7 +818,7 @@
       "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/pdf/SKILL.md",
       "install": null,
       "publisher": "Anthropic",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-02-04",
       "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. It uses pypdf, pdfplumber, and reportlab to read, merge, split, create, and fill PDFs, and the skill description also covers image extraction and OCR. Form filling follows FORMS.md in the skill.",
@@ -844,7 +844,7 @@
       "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/pptx/SKILL.md",
       "install": null,
       "publisher": "Anthropic",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-07-17",
       "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. New decks use pptxgenjs. Existing decks and .potx templates are edited as unzipped XML. It reads slides with markitdown and checks the file with scripts/office/validate.py.",
@@ -927,7 +927,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include write-spec, roadmap-update, stakeholder-update, synthesize-research, competitive-brief, metrics-review and sprint-planning, plus a brainstorm command. Connectors include Linear, Asana, Jira, monday, ClickUp, Notion, Figma, Amplitude and Intercom, each with its own account. No Codex setup is documented.",
+      "notes": "Built mainly for Claude Cowork; works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Skills include write-spec, roadmap-update, stakeholder-update, synthesize-research, competitive-brief, metrics-review and sprint-planning, plus a brainstorm command. Connectors include Linear, Asana, Jira, monday, ClickUp, Notion, Figma, Amplitude and Intercom, each with its own account. Gmail and Google Calendar ship with empty URLs in .mcp.json. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -956,7 +956,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-10-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Made mainly for Claude Cowork but works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Works with your CRM, email, calendar, chat and call recorder through connectors (HubSpot, Close, Clay, ZoomInfo, Fireflies and others, each needing an account), or with uploaded files. It can update CRM records, send email and book meetings when you ask; changes it suggests on its own are shown to you first. No Codex setup is documented.",
+      "notes": "Made mainly for Claude Cowork but works in Claude Code. Add the marketplace first with claude plugin marketplace add anthropics/knowledge-work-plugins. Works with your CRM, email, calendar, chat and call recorder through connectors (HubSpot, Close, Clay, ZoomInfo, Fireflies and others, each needing an account), or with uploaded files. It can update CRM records, send email and book meetings when you ask; changes it suggests on its own are shown to you first. Gmail, Google Calendar and Google Drive ship with empty URLs in .mcp.json. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1040,7 +1040,7 @@
       "evidenceUrl": "https://github.com/anthropics/skills/blob/main/skills/xlsx/SKILL.md",
       "install": null,
       "publisher": "Anthropic",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-07-17",
       "verifiedOn": "2026-10-22",
       "notes": "Source-available, not open source. LICENSE.txt limits copying, keeping copies, making derivatives, and distribution, so this listing has no install command and does not tell you to copy the skill files. Workbooks use openpyxl formulas, not hardcoded totals. scripts/recalc.py runs LibreOffice and rewrites the file in place. Do not use XLOOKUP, FILTER, SORT, UNIQUE, or SEQUENCE; this pass cannot evaluate them.",
@@ -1599,7 +1599,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-09-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Add the marketplace first: claude plugin marketplace add anthropics/financial-services. financial-analysis is the core plugin with the shared skills and all data connectors; add verticals (investment-banking, equity-research, private-equity, fund-admin) or named agents such as pitch-agent and gl-reconciler. Data connectors (FactSet, Morningstar, S&P Global, PitchBook and others) may need a subscription or API key. Drafts analyst work for professional review; not investment advice. No Codex setup is documented.",
+      "notes": "Add the marketplace first: claude plugin marketplace add anthropics/financial-services. financial-analysis is the core plugin with the shared skills and all data connectors; add verticals (investment-banking, equity-research, private-equity, fund-admin) or named agents such as pitch-agent and gl-reconciler. Data connectors (FactSet, Morningstar, S&P Global, PitchBook and others) may need a subscription or API key. The financial-analysis .mcp.json is not valid JSON. Drafts analyst work for professional review; not investment advice. No Codex setup is documented.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1686,7 +1686,7 @@
       "license": "MIT",
       "lastActivity": "2026-08-24",
       "verifiedOn": "2026-10-22",
-      "notes": "Listed as cloudinary in Anthropic's claude-plugins-official marketplace; the README only says to install it in Cursor or Claude Code. Codex setup is not documented. Adds five MCP servers: asset management, environment config, structured metadata, AI analysis and MediaFlows. The first four sign in with OAuth; MediaFlows needs cloud_name, api_key and api_secret in mcp.json. claimable-cloud makes a free cloud with no signup that you claim by email within 24 hours. No LICENSE file; the manifest says MIT.",
+      "notes": "Listed as cloudinary in Anthropic's claude-plugins-official marketplace; the README only says to install it in Cursor or Claude Code. Codex setup is not documented. Adds five MCP servers: asset management, environment config, structured metadata, AI analysis and MediaFlows. The first four sign in with OAuth; MediaFlows ships the placeholder strings cloud_name, api_key and api_secret as its mcp.json headers, so replace them with your credentials. claimable-cloud makes a free cloud with no signup that you claim by email within 24 hours. No LICENSE file; the manifest says MIT.",
       "verdict": {
         "tier": null,
         "note": null
@@ -1862,7 +1862,7 @@
         "data-analysis"
       ],
       "summary": "Databricks skills for data discovery, SQL, jobs, pipelines, apps, Lakebase and model serving, with setup hooks.",
-      "sourceUrl": "https://github.com/databricks/databricks-agent-skills",
+      "sourceUrl": "https://github.com/databricks/databricks-agent-skills/tree/main/plugins/databricks/claude",
       "evidenceUrl": "https://github.com/databricks/databricks-agent-skills",
       "install": "/plugin marketplace add databricks/databricks-agent-skills\n/plugin install databricks@databricks-agent-skills",
       "publisher": "Databricks",
@@ -2862,7 +2862,7 @@
       "license": "Apache-2.0",
       "lastActivity": "2026-10-21",
       "verifiedOn": "2026-10-22",
-      "notes": "Needs Python 3.10+ and uv (or pipx). Install the PyPI package graphifyy. Other graphify* packages are not affiliated. Codex invokes the skill as $graphify, and parallel extraction needs multi_agent = true under [features] in ~/.codex/config.toml. Code is parsed on the machine with tree-sitter and needs no API key. Docs, PDFs, images, and video use the assistant, or Gemini if GEMINI_API_KEY or GOOGLE_API_KEY is already set. PDF and video need an extra such as uv tool install \"graphifyy[pdf]\".",
+      "notes": "Needs Python 3.10+ and uv (or pipx). Install the PyPI package graphifyy. Other graphify* packages are not affiliated. Codex invokes the skill as $graphify, and parallel extraction needs multi_agent = true under [features] in ~/.codex/config.toml. Code is parsed on the machine with tree-sitter and needs no API key. Docs, PDFs, images, and video use the assistant, or Gemini if GEMINI_API_KEY or GOOGLE_API_KEY is already set. PDF and video need an extra such as uv tool install \"graphifyy[pdf]\". Use graphify install, which writes the linked lowercase skill.md as SKILL.md.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3010,7 +3010,7 @@
         "ai-engineering"
       ],
       "summary": "Official Hub server: search models, datasets, Spaces and papers, and call Gradio apps on Spaces as tools.",
-      "sourceUrl": "https://github.com/huggingface/hf-mcp-server",
+      "sourceUrl": "https://github.com/huggingface/hf-mcp-server/tree/main/packages/app",
       "evidenceUrl": "https://huggingface.co/docs/hub/agents-mcp",
       "install": "claude mcp add hf-mcp-server -t http https://huggingface.co/mcp?login",
       "publisher": "Hugging Face",
@@ -3304,7 +3304,7 @@
       "categories": [
         "ai-engineering"
       ],
-      "summary": "Langfuse skills to set up tracing, query traces, prompts and datasets through the API, and migrate from other tools.",
+      "summary": "A Langfuse skill for tracing setup, prompt management, datasets, evaluations and API queries.",
       "sourceUrl": "https://github.com/langfuse/skills/tree/main/skills/langfuse",
       "evidenceUrl": "https://github.com/langfuse/skills",
       "install": "npx skills add langfuse/skills --skill \"langfuse\"",
@@ -3312,7 +3312,7 @@
       "license": "MIT",
       "lastActivity": "2026-10-17",
       "verifiedOn": "2026-10-22",
-      "notes": "Two skills: langfuse (tracing setup, instrumentation audits, prompt management, API queries and docs lookup) and migrate-to-langfuse (moves tracing, traces, datasets and prompts from LangSmith, Arize, Braintrust and others). Needs a Langfuse Cloud or self-hosted project and LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL. Also listed as langfuse@claude-plugins-official.",
+      "notes": "The install command selects langfuse (tracing setup, instrumentation audits, prompt management, API queries and docs lookup). The repository also has a separate migrate-to-langfuse skill for moving from other tools. Needs a Langfuse Cloud or self-hosted project and LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and LANGFUSE_BASE_URL. Also listed as langfuse@claude-plugins-official.",
       "verdict": {
         "tier": null,
         "note": null
@@ -3568,7 +3568,7 @@
         "game-development"
       ],
       "summary": "Community MCP that drives the Unity Editor: scenes, assets, scripts, tests and builds.",
-      "sourceUrl": "https://github.com/CoplayDev/unity-mcp",
+      "sourceUrl": "https://github.com/CoplayDev/unity-mcp/tree/main/Server",
       "evidenceUrl": "https://coplaydev.github.io/unity-mcp/getting-started/install",
       "install": null,
       "publisher": "CoplayDev / Aura",
@@ -4120,10 +4120,10 @@
       "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/creative-production/.codex-plugin/plugin.json",
       "install": null,
       "publisher": "OpenAI",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-08-27",
       "verifiedOn": "2026-10-22",
-      "notes": "Codex only, version 0.1.25. The manifest license is Proprietary, so license is left empty. Install it from /plugins in the Codex CLI or the Plugins tab in the ChatGPT desktop app, then start a new session; sign-in happens on first use. Two skills: intake opens a starter board, produce builds and refines visuals on it. A bundled local MCP server runs the board. It can use whatever image generation, Figma and Canva tools you already have.",
+      "notes": "Codex only, version 0.1.25. The manifest license is Proprietary. Install it from /plugins in the Codex CLI or the Plugins tab in the ChatGPT desktop app, then start a new session; sign-in happens on first use. Two skills: intake opens a starter board, produce builds and refines visuals on it. A bundled local MCP server runs the board. It can use whatever image generation, Figma and Canva tools you already have.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4148,10 +4148,10 @@
       "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/data-analytics/.codex-plugin/plugin.json",
       "install": null,
       "publisher": "OpenAI",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-08-27",
       "verifiedOn": "2026-10-22",
-      "notes": "Codex only, through the plugin browser (/plugins in Codex CLI or the Plugins tab in the ChatGPT desktop app). Manifest version 0.2.8, license field Proprietary, so license is left empty. Skills include metric-diagnostics, design-kpis, build-dashboard, jupyter-notebooks, market-sizing, validate-data and analyze-data-quality. Uses connected warehouses (Databricks, BigQuery, Snowflake) and BI tools such as Mixpanel, PostHog and Metabase when available, or uploads and pasted results.",
+      "notes": "Codex only, through the plugin browser (/plugins in Codex CLI or the Plugins tab in the ChatGPT desktop app). Manifest version 0.2.8, license field Proprietary. Skills include metric-diagnostics, design-kpis, build-dashboard, jupyter-notebooks, market-sizing, validate-data and analyze-data-quality. Uses connected warehouses (Databricks, BigQuery, Snowflake) and BI tools such as Mixpanel, PostHog and Metabase when available, or uploads and pasted results.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4176,10 +4176,10 @@
       "evidenceUrl": "https://github.com/openai/plugins/blob/main/plugins/openai-developers/README.md",
       "install": null,
       "publisher": "OpenAI",
-      "license": null,
+      "license": "Proprietary",
       "lastActivity": "2026-06-17",
       "verifiedOn": "2026-10-22",
-      "notes": "Codex only, from the plugin browser (/plugins). Manifest version 1.2.3; license field Proprietary, so license is left empty. Skills: agents-sdk, build-chatgpt-app, chatgpt-app-submission, openai-api-troubleshooting and openai-platform-api-key. The key skill creates a Platform API key through the OpenAI Platform connector and asks you to confirm the env file before writing it. Needs an OpenAI Platform account.",
+      "notes": "Codex only, from the plugin browser (/plugins). Manifest version 1.2.3; license field Proprietary. Skills: agents-sdk, build-chatgpt-app, chatgpt-app-submission, openai-api-troubleshooting and openai-platform-api-key. The key skill creates a Platform API key through the OpenAI Platform connector and asks you to confirm the env file before writing it. Needs an OpenAI Platform account.",
       "verdict": {
         "tier": null,
         "note": null
@@ -4995,7 +4995,7 @@
       "evidenceUrl": "https://github.com/SonarSource/sonarqube-agent-plugins/blob/master/README.md",
       "install": "/plugin install sonarqube@claude-plugins-official",
       "publisher": "SonarSource",
-      "license": null,
+      "license": "SSAL-1.0",
       "lastActivity": "2026-10-19",
       "verifiedOn": "2026-10-22",
       "notes": "Needs a SonarQube Cloud, Server or Community Build account, the SonarQube CLI (sonar), Node.js for the SessionStart hook, and Docker, Podman or Nerdctl for the MCP server image. After install run /sonarqube:sonar-integrate, or sonar auth login then sonar integrate claude. In Codex, install sonarqube@sonar from the SonarSource marketplace, then run sonar integrate codex. Vortex analysis after each edit depends on your SonarQube Cloud org. License: Sonar Source-Available License v1.0.",
@@ -5076,7 +5076,7 @@
         "security-testing"
       ],
       "summary": "Skills that configure and run HawkScan DAST against your running app, turn findings into fix tasks, and rescan.",
-      "sourceUrl": "https://github.com/stackhawk/agent-skills",
+      "sourceUrl": "https://github.com/stackhawk/agent-skills/tree/main/plugins/hawkscan",
       "evidenceUrl": "https://github.com/stackhawk/agent-skills/blob/main/README.md",
       "install": "/plugin marketplace add stackhawk/agent-skills\n/plugin install wingman@stackhawk",
       "publisher": "StackHawk",

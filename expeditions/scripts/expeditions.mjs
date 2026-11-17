@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generated from src/expeditions/cli.ts; Expeditions 0.1.1. Node 22+. Rebuild with bun run build:expeditions.
+// Generated from src/expeditions/cli.ts; Expeditions 0.1.2. Node 22+. Rebuild with bun run build:expeditions.
 var __defProp = Object.defineProperty;
 var __returnValue = (v) => v;
 function __exportSetter(name, newValue) {
@@ -7605,6 +7605,24 @@ var PopularitySchema = object({
     downloads: object({ registry: _enum(REGISTRIES), package: string2().min(1).max(214), weekly: Count2 }).nullable()
   })),
   overrides: record(SlugSchema, object({ repo: RepoSchema.nullable().optional(), npm: string2().min(1).max(214).nullable().optional(), pypi: string2().min(1).max(214).nullable().optional() }))
+});
+var TOOL_TYPES = ["app", "cli", "library", "mcp_server", "model"];
+var PLATFORMS = ["macos", "windows", "linux", "web"];
+var ToolSchema = object({
+  slug: SlugSchema,
+  name: string2().min(2).max(80),
+  type: _enum(TOOL_TYPES),
+  categories: array(SlugSchema).min(1),
+  summary: string2().min(10).max(200),
+  note: string2().min(10).max(400),
+  siteUrl: Https.nullable(),
+  repoUrl: Https,
+  license: string2().min(2).max(80),
+  openSource: boolean2(),
+  platforms: array(_enum(PLATFORMS)),
+  spell: SlugSchema.nullable(),
+  verifiedOn: Day2,
+  approved: boolean2()
 });
 
 // src/expeditions/content.ts
